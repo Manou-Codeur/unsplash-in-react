@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, Fragment } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Home from "./components/home/home";
+import Userprofile from "./components/user-profile/userProfile";
+import Search from "./components/search/search";
+import Fullimage from "./components/full-image/fullImage";
+import Login from "./components/login/login";
+import Singup from "./components/singup/singup";
+import Notfound from "./components/not-found/notFound";
+
+import "./App.css";
+
+class App extends Component {
+  render() {
+    return (
+      <Fragment>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/profile" component={Userprofile} />
+          <Route path="/search" component={Search} />
+          <Route path="/picture/:id" component={Fullimage} />
+          <Route path="/login" component={Login} />
+          <Route path="/singup" component={Singup} />
+          <Route path="notFound" component={Notfound} />
+          <Redirect component="/notFound" />
+        </Switch>
+      </Fragment>
+    );
+  }
 }
 
 export default App;
