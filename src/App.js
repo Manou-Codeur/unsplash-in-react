@@ -9,8 +9,6 @@ import Login from "./components/login/login";
 import Singup from "./components/singup/singup";
 import Notfound from "./components/not-found/notFound";
 
-import "./App.css";
-
 class App extends Component {
   render() {
     return (
@@ -23,7 +21,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/singup" component={Singup} />
           <Route path="notFound" component={Notfound} />
-          <Redirect component="/notFound" />
+          <Redirect to="/notFound" />
         </Switch>
       </Fragment>
     );
