@@ -1,5 +1,9 @@
 .home {
   background-color: #f6f6f6;
-  height: 100vh;
-  //don't forget the height property
+
+  .picture-grid {
+    width: 85%;
+    border: 1px solid red;
+    margin: 0 auto;
+  }
 }

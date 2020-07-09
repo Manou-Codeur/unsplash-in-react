@@ -27,8 +27,12 @@ class Home extends Component {
           value={{ askForMenu: this.askForMenu, closeMenu: this.closeMenu }}
         >
           <Headerhome />
+          <div className="picture-grid">
+            <Picture />
+            <Picture />
+            <Picture />
+          </div>
           <Menu menuAsked={this.state.menuAsked} />
-          <Picture />
         </Context.Provider>
       </div>
     );
