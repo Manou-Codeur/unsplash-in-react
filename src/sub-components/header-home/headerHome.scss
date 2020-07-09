@@ -18,6 +18,11 @@
       width: 9.19rem;
     }
 
+    .author {
+      font-weight: 400;
+      color: gray;
+    }
+
     .links .link {
       color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
@@ -48,11 +53,6 @@
       &:last-child {
         margin-right: 0;
       }
-    }
-
-    .author {
-      font-weight: 400;
-      color: gray;
     }
   }
 
@@ -103,6 +103,11 @@
         font-size: 1rem;
         font-weight: 100;
         cursor: pointer;
+        border-radius: 3px;
+
+        &:hover {
+          color: white;
+        }
       }
     }
   }
