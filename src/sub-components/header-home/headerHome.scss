@@ -25,7 +25,6 @@
       font-weight: 400;
       position: relative;
       padding: 5px;
-      animation: border-animation 1s;
 
       &::before {
         content: "";
@@ -33,22 +32,17 @@
         left: 0;
         bottom: 0;
         width: 0;
-        border-top: 1.3px solid gray;
-        transition: 0.8s all;
-      }
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 0;
-        border-bottom: 1.3px solid gray;
+        border-top: 1.8px solid white;
         transition: 0.8s all;
       }
 
       &:hover::before,
       &:hover::after {
         width: 100%;
+      }
+
+      &:hover {
+        color: white;
       }
 
       &:last-child {
