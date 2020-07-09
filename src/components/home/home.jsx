@@ -14,7 +14,6 @@ class Home extends Component {
 
   askForMenu = () => {
     this.setState({ menuAsked: !this.state.menuAsked });
-    //some styles on the home
   };
 
   closeMenu = () => {
