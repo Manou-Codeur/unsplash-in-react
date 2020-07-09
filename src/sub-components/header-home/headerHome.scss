@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: relative;
 
     .fake-div {
       width: 9.19rem;
@@ -22,6 +23,33 @@
       text-decoration: none;
       margin: 0 0.9375rem;
       font-weight: 400;
+      position: relative;
+      padding: 5px;
+      animation: border-animation 1s;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        border-top: 1.3px solid gray;
+        transition: 0.8s all;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        border-bottom: 1.3px solid gray;
+        transition: 0.8s all;
+      }
+
+      &:hover::before,
+      &:hover::after {
+        width: 100%;
+      }
 
       &:last-child {
         margin-right: 0;
