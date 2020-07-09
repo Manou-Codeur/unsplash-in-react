@@ -31,6 +31,7 @@ class Home extends Component {
             <Picture />
             <Picture />
             <Picture />
+            <Picture />
           </div>
           <Menu menuAsked={this.state.menuAsked} />
         </Context.Provider>

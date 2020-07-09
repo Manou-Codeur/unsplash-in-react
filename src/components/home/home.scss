@@ -3,7 +3,10 @@
 
   .picture-grid {
     width: 85%;
-    border: 1px solid red;
     margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }
