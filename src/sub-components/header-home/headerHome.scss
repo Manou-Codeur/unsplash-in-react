@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  margin-bottom: 12rem;
 
   nav {
     width: 85%;
@@ -74,8 +75,8 @@
     align-items: flex-start;
     padding: 1.5rem 1.3rem;
 
-    .menu,
-    .search {
+    .menu-icon,
+    .search-icon {
       height: 2rem;
       cursor: pointer;
     }
