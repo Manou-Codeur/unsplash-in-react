@@ -7,10 +7,24 @@ import Context from "./../../services/contextApi";
 
 import "./home.scss";
 
+import axios from "axios";
+
 class Home extends Component {
   state = {
     menuAsked: false,
+    pictures: [],
   };
+
+  async componentDidMount() {
+    const data = await axios({
+      headers: {
+        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
+      },
+      url: "https://api.unsplash.com/search/photos?query=rain",
+    });
+    this.setState({ pictures: data.data.results });
+    console.log(data.data.results[0]);
+  }
 
   askForMenu = () => {
     this.setState({ menuAsked: !this.state.menuAsked });
@@ -28,10 +42,9 @@ class Home extends Component {
         >
           <Headerhome />
           <div className="picture-grid">
-            <Picture />
-            <Picture />
-            <Picture />
-            <Picture />
+            {this.state.pictures.map(picture => (
+              <Picture key={picture.id} data={picture} />
+            ))}
           </div>
           <Menu menuAsked={this.state.menuAsked} />
         </Context.Provider>

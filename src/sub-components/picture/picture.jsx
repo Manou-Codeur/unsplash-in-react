@@ -7,21 +7,28 @@ import downloadIcon from "../../assets/img/download.png";
 import addIcon from "../../assets/img/add-btn.png";
 import "./picture.scss";
 
-const Picture = props => {
+const Picture = ({ data }) => {
+  const userPP = data.user.profile_image.large;
+
   return (
     <div className="picture">
-      <img className="background" src={test} alt="test" />
+      <img className="background" src={data.urls.regular} alt="test" />
 
       <div className="picture-owner">
-        <div className="img-containner"></div>
+        <div
+          className="img-containner"
+          style={{ background: `url(${userPP})`, backgroundSize: "cover" }}
+        ></div>
         <p className="by">Photo by</p>
-        <p className="user-name">Ayache Salim</p>
+        <p className="user-name">
+          {data.user.first_name + " " + data.user.last_name}
+        </p>
       </div>
 
       <div className="controls">
         <div className="imgg-containner one">
           <img src={likeRed} alt="ds" />
-          <p>445</p>
+          <p>{data.likes}</p>
         </div>
         <div className="imgg-containner">
           <img src={addIcon} alt="ds" />
