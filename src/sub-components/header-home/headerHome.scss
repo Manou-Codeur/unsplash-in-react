@@ -18,6 +18,12 @@
       width: 9.19rem;
     }
 
+    @media only screen and (max-width: 500px) {
+      .fake-div {
+        display: none;
+      }
+    }
+
     .author {
       font-weight: 400;
       color: gray;
