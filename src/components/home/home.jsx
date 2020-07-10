@@ -50,11 +50,21 @@ class Home extends Component {
     this.setState({ menuAsked: false });
   };
 
+  handlePictureClick = (id, { target }) => {
+    console.log(target.className);
+    if (!target.className.includes("heart"))
+      this.props.history.push("/picture/" + id);
+  };
+
   render() {
     return (
       <div className="home">
         <Context.Provider
-          value={{ askForMenu: this.askForMenu, closeMenu: this.closeMenu }}
+          value={{
+            askForMenu: this.askForMenu,
+            closeMenu: this.closeMenu,
+            handlePictureClick: this.handlePictureClick,
+          }}
         >
           <Headerhome />
           <div className="picture-grid">

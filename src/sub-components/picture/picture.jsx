@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+import Context from "./../../services/contextApi";
 import likeBlack from "../../assets/img/favorite.png";
 import likeRed from "../../assets/img/favorite-red.png";
 import downloadIcon from "../../assets/img/download.png";
@@ -19,12 +20,30 @@ class Picture extends Component {
     this.picture.className = "background no-blur";
   };
 
+  handleLike = ({ target }) => {
+    const likes = parseInt(target.nextElementSibling.textContent);
+    if (target.className === "black heart") {
+      target.src = likeRed;
+      target.className = "red heart";
+      target.nextElementSibling.textContent = likes + 1;
+    } else {
+      target.src = likeBlack;
+      target.className = "black heart";
+      target.nextElementSibling.textContent = likes - 1;
+    }
+  };
+
+  static contextType = Context;
+
   render() {
     const { data } = this.props;
     const userPP = data.user.profile_image.large;
 
     return (
-      <div className="picture">
+      <div
+        className="picture"
+        onClick={this.context.handlePictureClick.bind(this, data.id)}
+      >
         <img
           className="background no-blur"
           src={data.urls.regular}
@@ -50,7 +69,12 @@ class Picture extends Component {
 
           <div className="controls hide" ref={el => (this.controlsRef = el)}>
             <div className="imgg-containner one">
-              <img src={likeRed} alt="heart icon" />
+              <img
+                src={likeBlack}
+                className="black heart"
+                alt="heart icon"
+                onClick={this.handleLike}
+              />
               <p>{data.likes}</p>
             </div>
             <div className="imgg-containner">
