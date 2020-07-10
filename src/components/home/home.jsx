@@ -50,10 +50,9 @@ class Home extends Component {
     this.setState({ menuAsked: false });
   };
 
-  handlePictureClick = (id, { target }) => {
-    console.log(target.className);
+  handlePictureClick = (data, { target }) => {
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + id);
+      this.props.history.push("/picture/" + data.id);
   };
 
   render() {

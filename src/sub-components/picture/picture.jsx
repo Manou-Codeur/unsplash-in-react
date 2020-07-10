@@ -42,7 +42,7 @@ class Picture extends Component {
     return (
       <div
         className="picture"
-        onClick={this.context.handlePictureClick.bind(this, data.id)}
+        onClick={this.context.handlePictureClick.bind(this, data)}
       >
         <img
           className="background no-blur"
