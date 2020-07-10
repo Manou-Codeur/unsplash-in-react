@@ -1,5 +1,5 @@
 .picture {
-  width: 400px;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -10,78 +10,84 @@
     width: 100%;
   }
 
-  .picture-owner {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-
-    .img-containner {
-      width: 60px;
-      height: 60px;
-      border-radius: 100%;
-      display: flex;
-      flex-direction: column;
-
-      img {
-        width: 100%;
-      }
-    }
-
-    p.by {
-      color: white;
-      font-weight: 300;
-      font-size: 0.8rem;
-      margin: 0.4rem 0;
-    }
-
-    p.user-name {
-      color: white;
-      font-weight: 400;
-    }
-  }
-
-  .controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 1rem;
-
-    .imgg-containner {
-      width: 33%;
-      text-align: center;
-    }
-
-    .one {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      p {
-        color: white;
-        margin-left: 0.5rem;
-      }
-    }
-
-    img {
-      height: 2rem;
-      cursor: pointer;
-    }
-  }
-
-  .hide {
-    display: none;
-  }
-
   img.no-blur {
     filter: none;
     width: 100%;
+  }
+
+  .content-containner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .picture-owner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 2rem;
+
+      .img-containner {
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        display: flex;
+        flex-direction: column;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      p.by {
+        color: white;
+        font-weight: 300;
+        font-size: 0.8rem;
+        margin: 0.4rem 0;
+      }
+
+      p.user-name {
+        color: white;
+        font-weight: 400;
+      }
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 1rem;
+
+      .imgg-containner {
+        width: 33%;
+        text-align: center;
+      }
+
+      .one {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        p {
+          color: white;
+          margin-left: 0.5rem;
+        }
+      }
+
+      img {
+        height: 2rem;
+        cursor: pointer;
+      }
+    }
+
+    .hide {
+      display: none;
+    }
   }
 }

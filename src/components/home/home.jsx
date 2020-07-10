@@ -12,7 +12,7 @@ import axios from "axios";
 class Home extends Component {
   state = {
     menuAsked: false,
-    pictures: [],
+    pictures: [[], [], []],
   };
 
   async componentDidMount() {
@@ -20,10 +20,24 @@ class Home extends Component {
       headers: {
         Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
       },
-      url: "https://api.unsplash.com/search/photos?query=rain",
+      url: "https://api.unsplash.com/search/photos?query=programming",
     });
-    this.setState({ pictures: data.data.results });
+    const data2 = await axios({
+      headers: {
+        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
+      },
+      url: "https://api.unsplash.com/search/photos?query=girl",
+    });
+    const clone = [...this.state.pictures];
+    clone[0] = data.data.results;
+    clone[1] = data2.data.results;
+    this.setState({ pictures: clone });
     console.log(data.data.results[0]);
+
+    //hide the menu while the user scroll
+    window.onscroll = () => {
+      this.setState({ menuAsked: false });
+    };
   }
 
   askForMenu = () => {
@@ -42,9 +56,21 @@ class Home extends Component {
         >
           <Headerhome />
           <div className="picture-grid">
-            {this.state.pictures.map(picture => (
-              <Picture key={picture.id} data={picture} />
-            ))}
+            <div className="col-one col">
+              {this.state.pictures[0].map(picture => (
+                <Picture key={picture.id} data={picture} />
+              ))}
+            </div>
+            <div className="col-two col">
+              {this.state.pictures[1].map(picture => (
+                <Picture key={picture.id} data={picture} />
+              ))}
+            </div>
+            <div className="col-three col">
+              {this.state.pictures[2].map(picture => (
+                <Picture key={picture.id} data={picture} />
+              ))}
+            </div>
           </div>
           <Menu menuAsked={this.state.menuAsked} />
         </Context.Provider>
