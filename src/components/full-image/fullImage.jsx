@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import axios from "axios";
+import { callServer } from "../../services/httpService";
 
 import "./fullImage.scss";
 import likeWhitee from "../../assets/img/favorite-white.svg";
@@ -12,38 +12,16 @@ import infoIcon from "../../assets/img/info.svg";
 
 class Fullimage extends Component {
   state = {
-    pictures: [[], [], []],
     selectedPic: {},
   };
 
   async componentDidMount() {
-    const data = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=programming",
-    });
-    const data2 = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=travel",
-    });
-    const data3 = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=nature",
-    });
-    const clone = [...this.state.pictures];
-    clone[0] = data.data.results;
-    clone[1] = data2.data.results;
-    clone[2] = data3.data.results;
-    this.setState({ pictures: clone });
+    const { params } = this.props.match;
+    let data = await callServer(params.query);
 
-    const test = [...clone[0], ...clone[1], ...clone[2]];
-    const index = test.findIndex(el => el.id === this.props.match.params.id);
-    const selectedPic = test[index];
+    data = [...data[0], ...data[1], ...data[2]];
+    const index = data.findIndex(el => el.id === params.id);
+    const selectedPic = data[index];
 
     this.setState({ selectedPic });
   }
@@ -71,7 +49,6 @@ class Fullimage extends Component {
 
   render() {
     const { selectedPic } = this.state;
-    console.log(selectedPic);
 
     if (Object.keys(selectedPic).length > 0)
       return (

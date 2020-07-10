@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import { callServer } from "../../services/httpService";
+
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
@@ -7,39 +9,16 @@ import Context from "./../../services/contextApi";
 
 import "./home.scss";
 
-import axios from "axios";
-
 class Home extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
+    randomSearch: "cars",
   };
 
   async componentDidMount() {
-    const data = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=programming",
-    });
-    const data2 = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=travel",
-    });
-    const data3 = await axios({
-      headers: {
-        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
-      },
-      url: "https://api.unsplash.com/search/photos?query=nature",
-    });
-    const clone = [...this.state.pictures];
-    clone[0] = data.data.results;
-    clone[1] = data2.data.results;
-    clone[2] = data3.data.results;
-    this.setState({ pictures: clone });
-    console.log(data.data.results[0]);
+    const data = await callServer(this.state.randomSearch);
+    this.setState({ pictures: data });
   }
 
   askForMenu = () => {
@@ -52,7 +31,9 @@ class Home extends Component {
 
   handlePictureClick = (data, { target }) => {
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + data.id);
+      this.props.history.push(
+        "/picture/" + data.id + "/" + this.state.randomSearch
+      );
   };
 
   render() {
