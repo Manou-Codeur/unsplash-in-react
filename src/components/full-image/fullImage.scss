@@ -1,0 +1,76 @@
+.full-pic {
+  height: 100vh;
+  width: 100vw;
+  background: url("../../assets//img/test.jpg");
+  background-size: cover;
+
+  .filter {
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    .userANDclose {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+
+        .user-name {
+          margin-left: 1rem;
+          p.by {
+            font-weight: 300;
+          }
+
+          p.name {
+            font-size: 1.3rem;
+            cursor: pointer;
+          }
+        }
+
+        .img-containner {
+          height: 50px;
+          width: 50px;
+          border-radius: 100%;
+        }
+      }
+
+      img {
+        height: 2.5rem;
+        cursor: pointer;
+      }
+    }
+
+    img.main-pic {
+      width: 50%;
+      margin: 2rem 0;
+    }
+
+    .controls {
+      display: flex;
+
+      .one {
+        display: flex;
+        align-items: center;
+        color: white;
+
+        p {
+          margin-left: -1.5rem;
+        }
+      }
+
+      img {
+        height: 2rem;
+        margin: 0 2rem;
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@ class App extends Component {
       <Fragment>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/profile" component={Userprofile} />
+          <Route path="/profile/:username" component={Userprofile} />
           <Route path="/search" component={Search} />
           <Route path="/picture/:id" component={Fullimage} />
           <Route path="/login" component={Login} />

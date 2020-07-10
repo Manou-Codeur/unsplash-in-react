@@ -26,7 +26,7 @@ class Home extends Component {
       headers: {
         Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
       },
-      url: "https://api.unsplash.com/search/photos?query=girl",
+      url: "https://api.unsplash.com/search/photos?query=travel",
     });
     const data3 = await axios({
       headers: {

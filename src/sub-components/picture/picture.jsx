@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
 import Context from "./../../services/contextApi";
-import likeBlack from "../../assets/img/favorite.png";
+import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 import downloadIcon from "../../assets/img/download.png";
-import addIcon from "../../assets/img/add-btn.png";
+import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
 class Picture extends Component {
