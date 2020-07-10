@@ -67,6 +67,11 @@
       .imgg-containner {
         width: 33%;
         text-align: center;
+
+        img {
+          height: 2rem;
+          cursor: pointer;
+        }
       }
 
       .one {
@@ -78,11 +83,6 @@
           color: white;
           margin-left: 0.5rem;
         }
-      }
-
-      img {
-        height: 2rem;
-        cursor: pointer;
       }
     }
 
