@@ -1,6 +1,5 @@
 import React from "react";
 
-import test from "../../assets/img/test.jpg";
 import likeBlack from "../../assets/img/favorite.png";
 import likeRed from "../../assets/img/favorite-red.png";
 import downloadIcon from "../../assets/img/download.png";

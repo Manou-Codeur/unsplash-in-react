@@ -28,16 +28,18 @@ class Home extends Component {
       },
       url: "https://api.unsplash.com/search/photos?query=girl",
     });
+    const data3 = await axios({
+      headers: {
+        Authorization: "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE",
+      },
+      url: "https://api.unsplash.com/search/photos?query=nature",
+    });
     const clone = [...this.state.pictures];
     clone[0] = data.data.results;
     clone[1] = data2.data.results;
+    clone[2] = data3.data.results;
     this.setState({ pictures: clone });
     console.log(data.data.results[0]);
-
-    //hide the menu while the user scroll
-    window.onscroll = () => {
-      this.setState({ menuAsked: false });
-    };
   }
 
   askForMenu = () => {
