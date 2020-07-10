@@ -37,6 +37,8 @@ class Home extends Component {
   };
 
   render() {
+    const { pictures } = this.state;
+
     return (
       <div className="home">
         <Context.Provider
@@ -47,23 +49,28 @@ class Home extends Component {
           }}
         >
           <Headerhome />
-          <div className="picture-grid">
-            <div className="col-one col">
-              {this.state.pictures[0].map(picture => (
-                <Picture key={picture.id} data={picture} />
-              ))}
+          {pictures[1].length > 0 ? (
+            <div className="picture-grid">
+              <div className="col-one col">
+                {this.state.pictures[0].map(picture => (
+                  <Picture key={picture.id} data={picture} />
+                ))}
+              </div>
+              <div className="col-two col">
+                {this.state.pictures[1].map(picture => (
+                  <Picture key={picture.id} data={picture} />
+                ))}
+              </div>
+              <div className="col-three col">
+                {this.state.pictures[2].map(picture => (
+                  <Picture key={picture.id} data={picture} />
+                ))}
+              </div>
             </div>
-            <div className="col-two col">
-              {this.state.pictures[1].map(picture => (
-                <Picture key={picture.id} data={picture} />
-              ))}
-            </div>
-            <div className="col-three col">
-              {this.state.pictures[2].map(picture => (
-                <Picture key={picture.id} data={picture} />
-              ))}
-            </div>
-          </div>
+          ) : (
+            <h1 style={{ textAlign: "center" }}>Please wait...</h1>
+          )}
+
           <Menu menuAsked={this.state.menuAsked} />
         </Context.Provider>
       </div>
