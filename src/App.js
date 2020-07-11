@@ -16,7 +16,6 @@ class App extends Component {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/profile/:username" component={Userprofile} />
-          <Route path="/search" component={Search} />
           <Route path="/picture/:id" component={Fullimage} />
           <Route path="/login" component={Login} />
           <Route path="/singup" component={Singup} />

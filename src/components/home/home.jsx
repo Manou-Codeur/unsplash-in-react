@@ -5,6 +5,7 @@ import { callServer } from "../../services/httpService";
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
+import Search from "./../search/search";
 import Context from "./../../services/contextApi";
 
 import "./home.scss";
@@ -13,6 +14,7 @@ class Home extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
+    searchAsked: false,
   };
 
   async componentDidMount() {
@@ -35,14 +37,21 @@ class Home extends Component {
   };
 
   handleSearchIconClick = () => {
-    this.props.history.push("/search");
+    this.setState({ searchAsked: !this.state.searchAsked });
   };
 
   render() {
     const { pictures } = this.state;
 
     return (
-      <div className="home">
+      <div
+        className="home"
+        style={
+          this.state.searchAsked
+            ? { backgroundColor: "white" }
+            : { backgroundColor: "" }
+        }
+      >
         <Context.Provider
           value={{
             askForMenu: this.askForMenu,
@@ -51,7 +60,7 @@ class Home extends Component {
             handleSearchIconClick: this.handleSearchIconClick,
           }}
         >
-          <Headerhome />
+          {this.state.searchAsked ? <Search /> : <Headerhome />}
 
           {pictures[1].length > 0 ? (
             <div className="picture-grid">

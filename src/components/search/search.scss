@@ -33,16 +33,4 @@
       color: #c5c5c5;
     }
   }
-
-  .picture-grid {
-    width: 85%;
-    margin: 3rem auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    .col {
-      width: 32%;
-    }
-  }
 }
