@@ -12,3 +12,10 @@ export const callServer = async query => {
 
   return [data[0].data.results, data[1].data.results, data[2].data.results];
 };
+
+export const download = async () => {
+  const { data } = await axios({
+    url: "https://api.unsplash.com/photos/xrVDYZRGdw4/download",
+  });
+  return data.url;
+};

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { callServer } from "../../services/httpService";
+import { callServer, download } from "../../services/httpService";
 
 import "./fullImage.scss";
 import likeWhitee from "../../assets/img/favorite-white.svg";
@@ -13,6 +13,7 @@ import infoIcon from "../../assets/img/info.svg";
 class Fullimage extends Component {
   state = {
     selectedPic: {},
+    linkToPicture: "",
   };
 
   async componentDidMount() {
@@ -23,7 +24,9 @@ class Fullimage extends Component {
     const index = data.findIndex(el => el.id === params.id);
     const selectedPic = data[index];
 
-    this.setState({ selectedPic });
+    const linkToPicture = await download();
+
+    this.setState({ selectedPic, linkToPicture });
   }
 
   handleClosePic = () => {
@@ -140,7 +143,9 @@ class Fullimage extends Component {
                 <img src={addIconn} alt="ds" />
               </div>
               <div className="img-containner">
-                <img src={downloadIconn} alt="ds" />
+                <a href={this.state.linkToPicture} target="_blank">
+                  <img src={downloadIconn} alt="ds" />
+                </a>
               </div>
               <div className="img-containner">
                 <img src={infoIcon} alt="ds" onClick={this.handleInfoClick} />
