@@ -1,3 +1,11 @@
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+$costum-gray: #313131;
+
 .not-found {
   background-image: url("../../assets/img/wall.jpg");
   background-size: cover;
@@ -6,17 +14,13 @@
   .filterr {
     backdrop-filter: brightness(0.5) blur(4px);
     -webkit-backdrop-filter: brightness(0.5) blur(4px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex-column;
     padding: 3rem 0;
     height: 100%;
 
     .brand {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      color: #313131;
+      @include flex-column;
+      color: $costum-gray;
       font-weight: 900;
 
       p {
@@ -26,7 +30,7 @@
 
     h1 {
       font-size: 12rem;
-      color: #313131;
+      color: $costum-gray;
       margin: 6rem 0;
       pointer-events: none;
     }
@@ -36,7 +40,7 @@
 
       p {
         font-size: 1.4rem;
-        color: #313131;
+        color: $costum-gray;
         font-weight: 600;
         margin-bottom: 1.8rem;
       }
@@ -44,7 +48,7 @@
       button {
         font-family: "Lato";
         cursor: pointer;
-        background-color: #313131;
+        background-color: $costum-gray;
         border: 1px solid transparent;
         padding: 0.6rem 2rem;
         color: white;
