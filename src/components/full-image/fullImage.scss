@@ -75,5 +75,11 @@
         cursor: pointer;
       }
     }
+
+    @media only screen and (max-width: 900px) {
+      img.main-pic {
+        width: 70%;
+      }
+    }
   }
 }

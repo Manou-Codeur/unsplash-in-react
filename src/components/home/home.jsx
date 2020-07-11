@@ -13,7 +13,7 @@ class Home extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
-    randomSearch: "cars",
+    randomSearch: "programming",
   };
 
   async componentDidMount() {
