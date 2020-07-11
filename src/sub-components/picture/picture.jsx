@@ -40,11 +40,12 @@ class Picture extends Component {
   render() {
     const { data } = this.props;
     const userPP = data.user.profile_image.large;
+    console.log(this.context);
 
     return (
       <div
         className="picture"
-        onClick={this.context.handlePictureClick.bind(this, data)}
+        onClick={() => this.context.handlePictureClick(data)}
       >
         <img
           className="background no-blur"

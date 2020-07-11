@@ -34,6 +34,10 @@ class Home extends Component {
       this.props.history.push("/picture/" + data.id);
   };
 
+  handleSearchIconClick = () => {
+    this.props.history.push("/search");
+  };
+
   render() {
     const { pictures } = this.state;
 
@@ -44,9 +48,11 @@ class Home extends Component {
             askForMenu: this.askForMenu,
             closeMenu: this.closeMenu,
             handlePictureClick: this.handlePictureClick,
+            handleSearchIconClick: this.handleSearchIconClick,
           }}
         >
           <Headerhome />
+
           {pictures[1].length > 0 ? (
             <div className="picture-grid">
               <div className="col-one col">

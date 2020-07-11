@@ -8,7 +8,7 @@ import searchIcon from "../../assets/img/search.svg";
 import cameraIcon from "../../assets/img/camera.svg";
 import "./headerHome.scss";
 
-const Headerhome = () => {
+const Headerhome = props => {
   const myContext = useContext(Context);
 
   return (
@@ -41,7 +41,12 @@ const Headerhome = () => {
           </p>
           <button>Subscribe</button>
         </div>
-        <img className="search-icon" src={searchIcon} alt="search icon" />
+        <img
+          className="search-icon"
+          src={searchIcon}
+          alt="search icon"
+          onClick={myContext.handleSearchIconClick}
+        />
       </div>
     </div>
   );

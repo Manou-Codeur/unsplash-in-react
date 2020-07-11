@@ -1,0 +1,48 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0;
+
+  img.cameraIcon {
+    margin: 2rem 0;
+  }
+
+  .brandANDclose {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+
+    img {
+      cursor: pointer;
+    }
+  }
+
+  input {
+    border: 0;
+    border-bottom: 1.2px solid #c5c5c5ce;
+    width: 80%;
+    font-size: 3.5rem;
+    margin: 1rem 0;
+    font-weight: 900;
+    outline: none;
+    font-family: "Lato";
+    padding-bottom: 0.7rem;
+
+    &::placeholder {
+      color: #c5c5c5;
+    }
+  }
+
+  .picture-grid {
+    width: 85%;
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .col {
+      width: 32%;
+    }
+  }
+}
