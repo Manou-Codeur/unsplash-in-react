@@ -47,6 +47,12 @@ class Fullimage extends Component {
     }
   };
 
+  handleInfoClick = () => {
+    this.mainPicture.className += " hidee";
+    this.controlsLayout.className += " hidee";
+    this.infoLayout.className = "info";
+  };
+
   render() {
     const { selectedPic } = this.state;
 
@@ -84,10 +90,43 @@ class Fullimage extends Component {
             <img
               className="main-pic"
               src={selectedPic.urls.regular}
+              ref={el => (this.mainPicture = el)}
               alt="pic"
             />
 
-            <div className="controls">
+            <div className="info hidee" ref={el => (this.infoLayout = el)}>
+              <div className="left-part">
+                <div className="item">
+                  <span>Published</span>
+                  <p>March 25, 2016</p>
+                </div>
+                <div className="item">
+                  <span>Camera</span>
+                  <p>FujiFilm</p>
+                </div>
+                <div className="item">
+                  <span>Focal Length</span>
+                  <p>60.7 mm</p>
+                </div>
+              </div>
+
+              <div className="right-part">
+                <div className="item">
+                  <span>Dimensions</span>
+                  <p>4000 x 2658</p>
+                </div>
+                <div className="item">
+                  <span>Dimensions</span>
+                  <p>X-T1</p>
+                </div>
+                <div className="item">
+                  <span>Shutter Speed</span>
+                  <p>0.01 sec</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="controls" ref={el => (this.controlsLayout = el)}>
               <div className="img-containner one">
                 <img
                   src={likeWhitee}
@@ -104,7 +143,7 @@ class Fullimage extends Component {
                 <img src={downloadIconn} alt="ds" />
               </div>
               <div className="img-containner">
-                <img src={infoIcon} alt="ds" />
+                <img src={infoIcon} alt="ds" onClick={this.handleInfoClick} />
               </div>
             </div>
           </div>

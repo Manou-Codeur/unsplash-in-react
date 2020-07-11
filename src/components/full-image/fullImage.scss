@@ -11,8 +11,8 @@
     width: 100%;
     overflow-y: scroll;
 
-    backdrop-filter: blur(10px) brightness(0.6);
-    -webkit-backdrop-filter: blur(10px) brightness(0.6);
+    backdrop-filter: blur(10px) brightness(0.5) grayscale(1);
+    -webkit-backdrop-filter: blur(10px) brightness(0.5) grayscale(1);
 
     .userANDclose {
       display: flex;
@@ -56,6 +56,36 @@
       border: 1.3px solid white;
     }
 
+    .info {
+      width: 40%;
+      height: 400px;
+      margin: 2rem 0;
+      display: flex;
+
+      .left-part,
+      .right-part {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        // border: 1px solid green;
+
+        .item {
+          padding-left: 35%;
+          width: 100%;
+          margin: 2rem 0;
+          color: white;
+          // border: 1px solid red;
+
+          span {
+            font-weight: 300;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+
     .controls {
       display: flex;
 
@@ -74,6 +104,10 @@
         margin: 0 2rem;
         cursor: pointer;
       }
+    }
+
+    .hidee {
+      display: none;
     }
 
     @media only screen and (max-width: 900px) {
