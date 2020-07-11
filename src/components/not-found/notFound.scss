@@ -1,0 +1,56 @@
+.not-found {
+  background-image: url("../../assets/img/wall.jpg");
+  background-size: cover;
+  height: 100vh;
+
+  .filterr {
+    backdrop-filter: brightness(0.5) blur(4px);
+    -webkit-backdrop-filter: brightness(0.5) blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+    height: 100%;
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #313131;
+      font-weight: 900;
+
+      p {
+        pointer-events: none;
+      }
+    }
+
+    h1 {
+      font-size: 12rem;
+      color: #313131;
+      margin: 6rem 0;
+      pointer-events: none;
+    }
+
+    .bottom {
+      text-align: center;
+
+      p {
+        font-size: 1.4rem;
+        color: #313131;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
+      }
+
+      button {
+        font-family: "Lato";
+        cursor: pointer;
+        background-color: #313131;
+        border: 1px solid transparent;
+        padding: 0.6rem 2rem;
+        color: white;
+        font-weight: 300;
+        outline: none;
+      }
+    }
+  }
+}

@@ -19,7 +19,7 @@ class App extends Component {
           <Route path="/picture/:id" component={Fullimage} />
           <Route path="/login" component={Login} />
           <Route path="/singup" component={Singup} />
-          <Route path="notFound" component={Notfound} />
+          <Route path="/notFound" component={Notfound} />
           <Redirect to="/notFound" />
         </Switch>
       </Fragment>
