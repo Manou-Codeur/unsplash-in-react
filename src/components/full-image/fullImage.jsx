@@ -18,13 +18,13 @@ class Fullimage extends Component {
 
   async componentDidMount() {
     const { params } = this.props.match;
-    let data = await callServer(params.query);
+    let data = await callServer();
 
     data = [...data[0], ...data[1], ...data[2]];
     const index = data.findIndex(el => el.id === params.id);
     const selectedPic = data[index];
 
-    const linkToPicture = await download();
+    const linkToPicture = await download(params.id);
 
     this.setState({ selectedPic, linkToPicture });
   }

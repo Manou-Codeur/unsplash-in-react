@@ -13,12 +13,12 @@ class Home extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
-    randomSearch: "programming",
   };
 
   async componentDidMount() {
-    const data = await callServer(this.state.randomSearch);
+    const data = await callServer();
     this.setState({ pictures: data });
+    console.log(data[0][0]);
   }
 
   askForMenu = () => {
@@ -31,9 +31,7 @@ class Home extends Component {
 
   handlePictureClick = (data, { target }) => {
     if (!target.className.includes("heart"))
-      this.props.history.push(
-        "/picture/" + data.id + "/" + this.state.randomSearch
-      );
+      this.props.history.push("/picture/" + data.id);
   };
 
   render() {

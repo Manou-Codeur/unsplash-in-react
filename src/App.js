@@ -17,7 +17,7 @@ class App extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/profile/:username" component={Userprofile} />
           <Route path="/search" component={Search} />
-          <Route path="/picture/:id/:query" component={Fullimage} />
+          <Route path="/picture/:id" component={Fullimage} />
           <Route path="/login" component={Login} />
           <Route path="/singup" component={Singup} />
           <Route path="notFound" component={Notfound} />
