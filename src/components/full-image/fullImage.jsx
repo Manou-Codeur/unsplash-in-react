@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { callServer, download } from "../../services/httpService";
+import { formatDate, getCamera } from "../../services/pictureInfo";
 
 import "./fullImage.scss";
 import likeWhitee from "../../assets/img/favorite-white.svg";
@@ -58,13 +59,16 @@ class Fullimage extends Component {
 
   render() {
     const { selectedPic } = this.state;
+    console.log(selectedPic);
 
-    if (Object.keys(selectedPic).length > 0)
+    if (Object.keys(selectedPic).length > 0) {
+      const date = selectedPic.created_at.split("T")[0];
+
       return (
         <div
           className="full-pic"
           style={{
-            background: `url("${selectedPic.urls.regular}")`,
+            background: `url("${selectedPic.urls.regular}") center`,
             backgroundSize: "cover",
           }}
         >
@@ -101,11 +105,11 @@ class Fullimage extends Component {
               <div className="left-part">
                 <div className="item">
                   <span>Published</span>
-                  <p>March 25, 2016</p>
+                  <p>{formatDate(date)}</p>
                 </div>
                 <div className="item">
                   <span>Camera</span>
-                  <p>FujiFilm</p>
+                  <p>{getCamera()}</p>
                 </div>
                 <div className="item">
                   <span>Focal Length</span>
@@ -116,7 +120,7 @@ class Fullimage extends Component {
               <div className="right-part">
                 <div className="item">
                   <span>Dimensions</span>
-                  <p>4000 x 2658</p>
+                  <p>{selectedPic.width + " x " + selectedPic.height}</p>
                 </div>
                 <div className="item">
                   <span>Dimensions</span>
@@ -154,7 +158,7 @@ class Fullimage extends Component {
           </div>
         </div>
       );
-    else return <h1>Please wait...</h1>;
+    } else return <h1>Please wait...</h1>;
   }
 }
 
