@@ -12,12 +12,14 @@ class Picture extends Component {
     this.controlsRef.className = "controls";
     this.user.className = "picture-owner";
     this.picture.className = "background";
+    this.picture.style.transform = "scale(1.1)";
   };
 
   handleLeave = () => {
     this.controlsRef.className = "controls hide";
     this.user.className = "picture-owner hide";
     this.picture.className = "background no-blur";
+    this.picture.style.transform = "";
   };
 
   handleLike = ({ target }) => {

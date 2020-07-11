@@ -4,10 +4,12 @@
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
+  overflow: hidden;
 
   img.background {
     filter: blur(2px) brightness(0.4);
     width: 100%;
+    transition: transform 0.5s ease;
   }
 
   img.no-blur {
