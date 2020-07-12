@@ -1,0 +1,71 @@
+.header-profile {
+  background-color: #313131;
+  height: 12.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-bottom: 12rem;
+
+  .header-content {
+    height: 200px;
+    background-color: white;
+    width: 85%;
+    position: absolute;
+    top: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem 1.3rem;
+
+    .menu-icon,
+    .search-icon {
+      height: 2rem;
+      cursor: pointer;
+    }
+
+    .middle-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .user-picture {
+        height: 5rem;
+        width: 5rem;
+        border: 2px solid white;
+        border-radius: 100%;
+        background-image: url("../../assets/img/user.png");
+        background-size: cover;
+        position: absolute;
+        top: -2.5rem;
+      }
+
+      .user-name {
+        margin-top: 3rem;
+        font-weight: 700;
+      }
+
+      .user-website {
+        color: gray;
+        font-weight: 400;
+        font-size: 0.9rem;
+        margin-top: 0.4rem;
+      }
+
+      .links {
+        display: flex;
+        position: absolute;
+        justify-content: center;
+        bottom: 0;
+        width: 100%;
+
+        p {
+          padding: 0.6rem 2rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
