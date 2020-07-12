@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import Context from "./../../services/contextApi";
-
 import menuBar from "../../assets/img/menu.svg";
 import searchIcon from "../../assets/img/search.svg";
 import cameraIcon from "../../assets/img/camera.svg";
 import "./headerHome.scss";
 
-const Headerhome = props => {
-  const myContext = useContext(Context);
-
+const Headerhome = ({
+  askForMenu,
+  handleSubscribeClick,
+  handleSearchIconClick,
+}) => {
   return (
     <div className="header-home">
       <nav>
@@ -31,7 +31,7 @@ const Headerhome = props => {
           className="menu-icon"
           src={menuBar}
           alt="menu icon"
-          onClick={myContext.askForMenu}
+          onClick={askForMenu}
         />
         <div className="middle-content">
           <img src={cameraIcon} alt="camera icon" />
@@ -39,13 +39,13 @@ const Headerhome = props => {
           <p className="for-margin">
             Free high-resolution photos every 10 days
           </p>
-          <button onClick={myContext.handleSubscribeClick}>Subscribe</button>
+          <button onClick={handleSubscribeClick}>Subscribe</button>
         </div>
         <img
           className="search-icon"
           src={searchIcon}
           alt="search icon"
-          onClick={myContext.handleSearchIconClick}
+          onClick={handleSearchIconClick}
         />
       </div>
     </div>

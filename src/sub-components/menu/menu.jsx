@@ -1,6 +1,4 @@
-import React, { useContext } from "react";
-
-import Context from "./../../services/contextApi";
+import React from "react";
 
 import "./menu.scss";
 import closeIcon from "../../assets/img/close.svg";
@@ -9,9 +7,7 @@ import facebookIcon from "../../assets/img/facebook.png";
 import twitterIcon from "../../assets/img/twitter.png";
 import pinIcon from "../../assets/img/pinterest.png";
 
-const Menu = ({ menuAsked }) => {
-  const menuContext = useContext(Context);
-
+const Menu = ({ menuAsked, closeMenu }) => {
   return (
     <div
       className="menu-containner"
@@ -23,7 +19,7 @@ const Menu = ({ menuAsked }) => {
             className="close-icon"
             src={closeIcon}
             alt="close icon"
-            onClick={menuContext.closeMenu}
+            onClick={closeMenu}
           />
         </div>
 

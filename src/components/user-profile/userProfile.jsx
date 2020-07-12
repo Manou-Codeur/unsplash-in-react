@@ -9,13 +9,29 @@ import "./userProfile.scss";
 class Userprofile extends Component {
   state = {
     menuAsked: false,
+    searchAsked: false,
+  };
+
+  closeMenuu = () => {
+    this.setState({ menuAsked: false });
+  };
+
+  handleShowMenu = () => {
+    this.setState({ menuAsked: true });
+  };
+
+  handleShowSearch = () => {
+    this.setState({ searchAsked: true });
   };
 
   render() {
     return (
-      <div className="user-profile">
-        <HeaderProfile />
-        <Menu />
+      <div className="User-profile">
+        <HeaderProfile
+          showMenu={this.handleShowMenu}
+          showSearch={this.handleShowSearch}
+        />
+        <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenuu} />
       </div>
     );
   }

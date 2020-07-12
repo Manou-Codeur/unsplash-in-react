@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import Context from "./../../services/contextApi";
 import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 import downloadIcon from "../../assets/img/download.png";
@@ -35,8 +34,6 @@ class Picture extends Component {
     }
   };
 
-  static contextType = Context;
-
   render() {
     const { data } = this.props;
     const userPP = data.user.profile_image.large;
@@ -44,7 +41,7 @@ class Picture extends Component {
     return (
       <div
         className="picture"
-        onClick={this.context.handlePictureClick.bind(this, data)}
+        onClick={this.props.handlePictureClick.bind(this, data)}
       >
         <img
           className="background no-blur"

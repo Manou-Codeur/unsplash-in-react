@@ -6,7 +6,6 @@ import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
 import Search from "./../search/search";
-import Context from "./../../services/contextApi";
 
 import "./home.scss";
 
@@ -16,6 +15,7 @@ class Home extends Component {
     pictures: [[], [], []],
     searchAsked: this.props.search,
     searchVal: "",
+    lastPath: "",
   };
 
   async componentDidMount() {
@@ -52,12 +52,13 @@ class Home extends Component {
 
   handleSearchIconClick = () => {
     this.setState({ searchAsked: true });
+    this.setState({ lastPath: this.props.location.pathname });
     this.props.history.push("/search");
   };
 
   handleCloseSearch = () => {
     this.setState({ searchAsked: false });
-    this.props.history.push("/home");
+    this.props.history.push(this.state.lastPath);
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {
@@ -87,43 +88,54 @@ class Home extends Component {
             : { backgroundColor: "" }
         }
       >
-        <Context.Provider
-          value={{
-            askForMenu: this.askForMenu,
-            closeMenu: this.closeMenu,
-            handlePictureClick: this.handlePictureClick,
-            handleSearchIconClick: this.handleSearchIconClick,
-            handleSearchInput: this.handleSearchInput,
-            handleCloseSearch: this.handleCloseSearch,
-            handleSubscribeClick: this.handleSubscribeClick,
-          }}
-        >
-          {this.state.searchAsked ? <Search /> : <Headerhome />}
+        {this.state.searchAsked ? (
+          <Search
+            handleCloseSearch={this.handleCloseSearch}
+            handleSearchInput={this.handleSearchInput}
+          />
+        ) : (
+          <Headerhome
+            askForMenu={this.askForMenu}
+            handleSubscribeClick={this.handleSubscribeClick}
+            handleSearchIconClick={this.handleSearchIconClick}
+          />
+        )}
 
-          {pictures[1].length > 0 ? (
-            <div className="picture-grid">
-              <div className="col-one col">
-                {this.state.pictures[0].map(picture => (
-                  <Picture key={picture.id} data={picture} />
-                ))}
-              </div>
-              <div className="col-two col">
-                {this.state.pictures[1].map(picture => (
-                  <Picture key={picture.id} data={picture} />
-                ))}
-              </div>
-              <div className="col-three col">
-                {this.state.pictures[2].map(picture => (
-                  <Picture key={picture.id} data={picture} />
-                ))}
-              </div>
+        {pictures[1].length > 0 ? (
+          <div className="picture-grid">
+            <div className="col-one col">
+              {this.state.pictures[0].map(picture => (
+                <Picture
+                  handlePictureClick={this.handlePictureClick}
+                  key={picture.id}
+                  data={picture}
+                />
+              ))}
             </div>
-          ) : (
-            <h1 style={{ textAlign: "center" }}>Please wait...</h1>
-          )}
+            <div className="col-two col">
+              {this.state.pictures[1].map(picture => (
+                <Picture
+                  handlePictureClick={this.handlePictureClick}
+                  key={picture.id}
+                  data={picture}
+                />
+              ))}
+            </div>
+            <div className="col-three col">
+              {this.state.pictures[2].map(picture => (
+                <Picture
+                  handlePictureClick={this.handlePictureClick}
+                  key={picture.id}
+                  data={picture}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <h1 style={{ textAlign: "center" }}>Please wait...</h1>
+        )}
 
-          <Menu menuAsked={this.state.menuAsked} />
-        </Context.Provider>
+        <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenu} />
       </div>
     );
   }

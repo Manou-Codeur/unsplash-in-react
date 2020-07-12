@@ -1,14 +1,10 @@
-import React, { useContext } from "react";
-
-import Context from "./../../services/contextApi";
+import React from "react";
 
 import menuBar from "../../assets/img/menu.svg";
 import searchIcon from "../../assets/img/search.svg";
 import "./headerProfile.scss";
 
-const HeaderProfile = props => {
-  const myContext = useContext(Context);
-
+const HeaderProfile = ({ showMenu, showSearch }) => {
   return (
     <div className="header-profile">
       <div className="header-content">
@@ -16,7 +12,7 @@ const HeaderProfile = props => {
           className="menu-icon"
           src={menuBar}
           alt="menu icon"
-          //   onClick={myContext.askForMenu}
+          onClick={showMenu}
         />
 
         <div className="middle-content">
@@ -34,7 +30,7 @@ const HeaderProfile = props => {
           className="search-icon"
           src={searchIcon}
           alt="search icon"
-          //   onClick={myContext.handleSearchIconClick}
+          onClick={showSearch}
         />
       </div>
     </div>
