@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { callServer } from "../../services/httpService";
+import { flatten } from "./../../services/helperFunctions";
 
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
@@ -15,7 +16,6 @@ class Home extends Component {
     pictures: [[], [], []],
     searchAsked: this.props.search,
     searchVal: "",
-    lastPath: "",
   };
 
   async componentDidMount() {
@@ -52,13 +52,12 @@ class Home extends Component {
 
   handleSearchIconClick = () => {
     this.setState({ searchAsked: true });
-    this.setState({ lastPath: this.props.location.pathname });
     this.props.history.push("/search");
   };
 
   handleCloseSearch = () => {
     this.setState({ searchAsked: false });
-    this.props.history.push(this.state.lastPath);
+    this.props.history.push("/home");
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {
@@ -101,7 +100,7 @@ class Home extends Component {
           />
         )}
 
-        {pictures[1].length > 0 ? (
+        {flatten(pictures).length > 0 ? (
           <div className="picture-grid">
             <div className="col-one col">
               {this.state.pictures[0].map(picture => (
