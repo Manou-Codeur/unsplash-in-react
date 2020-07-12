@@ -13,21 +13,22 @@ class App extends Component {
     return (
       <Fragment>
         <Switch>
+          <Route path="/profile/:username" component={Userprofile} />
+          <Route path="/picture/:id" component={Fullimage} />
+          <Route
+            path="/search"
+            exact
+            render={props => <Home {...props} search={true} />}
+          />
+          <Route path="/login" component={Login} />
+          <Route path="/singup" component={Singup} />
+          <Route path="/notFound" component={Notfound} />
           <Route
             path="/home"
             exact
             render={props => <Home {...props} search={false} />}
           />
-          <Route
-            path="/home/search"
-            render={props => <Home {...props} search={true} />}
-          />
-          <Route path="/profile/:username" component={Userprofile} />
-          <Route path="/picture/:id" component={Fullimage} />
-          <Route path="/login" component={Login} />
-          <Route path="/singup" component={Singup} />
-          <Route path="/notFound" component={Notfound} />
-          <Redirect from="/" to="/home" />
+          <Redirect from="/" exact to="/home" />
           <Redirect to="/notFound" />
         </Switch>
       </Fragment>

@@ -19,9 +19,22 @@ class Home extends Component {
   };
 
   async componentDidMount() {
-    const data = await callServer();
-    this.setState({ pictures: data });
-    console.log(data[0][0]);
+    if (window.query) {
+      const data = await callServer(window.query);
+      this.setState({ pictures: data });
+    } else {
+      const data = await callServer();
+      this.setState({ pictures: data });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { search } = this.props;
+    if (prevProps.search !== search) {
+      if (!search) {
+        this.setState({ searchAsked: false });
+      }
+    }
   }
 
   askForMenu = () => {
@@ -39,7 +52,7 @@ class Home extends Component {
 
   handleSearchIconClick = () => {
     this.setState({ searchAsked: true });
-    this.props.history.push("/home/search");
+    this.props.history.push("/search");
   };
 
   handleCloseSearch = () => {

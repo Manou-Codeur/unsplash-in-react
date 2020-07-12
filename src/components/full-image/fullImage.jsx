@@ -22,7 +22,7 @@ class Fullimage extends Component {
     const { params } = this.props.match;
     if (window.query) {
       data = await callServer(window.query);
-      window.query = "";
+      // window.query = "";
     } else {
       data = await callServer();
     }
@@ -38,8 +38,11 @@ class Fullimage extends Component {
 
   handleClosePic = () => {
     if (window.query !== undefined) {
-      this.props.history.push("/home/search");
-    } else this.props.history.push("/home");
+      this.props.history.push("/search");
+    } else {
+      this.props.history.push("/home");
+      window.query = "";
+    }
   };
 
   handleUserClick = () => {
