@@ -14,7 +14,7 @@ class Home extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
-    searchAsked: false,
+    searchAsked: this.props.search,
     searchVal: "",
   };
 
@@ -38,7 +38,13 @@ class Home extends Component {
   };
 
   handleSearchIconClick = () => {
-    this.setState({ searchAsked: !this.state.searchAsked });
+    this.setState({ searchAsked: true });
+    this.props.history.push("/home/search");
+  };
+
+  handleCloseSearch = () => {
+    this.setState({ searchAsked: false });
+    this.props.history.push("/home");
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {
@@ -71,6 +77,7 @@ class Home extends Component {
             handlePictureClick: this.handlePictureClick,
             handleSearchIconClick: this.handleSearchIconClick,
             handleSearchInput: this.handleSearchInput,
+            handleCloseSearch: this.handleCloseSearch,
           }}
         >
           {this.state.searchAsked ? <Search /> : <Headerhome />}

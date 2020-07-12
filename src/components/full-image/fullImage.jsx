@@ -37,7 +37,9 @@ class Fullimage extends Component {
   }
 
   handleClosePic = () => {
-    this.props.history.goBack();
+    if (window.query !== undefined) {
+      this.props.history.push("/home/search");
+    } else this.props.history.push("/home");
   };
 
   handleUserClick = () => {

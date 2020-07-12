@@ -31,7 +31,7 @@ class Search extends Component {
           <img
             src={closeBlack}
             alt="close icon"
-            onClick={this.context.handleSearchIconClick}
+            onClick={this.context.handleCloseSearch}
           />
         </div>
 
