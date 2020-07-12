@@ -3,7 +3,6 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import Home from "./components/home/home";
 import Userprofile from "./components/user-profile/userProfile";
-import Search from "./components/search/search";
 import Fullimage from "./components/full-image/fullImage";
 import Login from "./components/login/login";
 import Singup from "./components/singup/singup";

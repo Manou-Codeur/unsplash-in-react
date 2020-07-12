@@ -18,8 +18,14 @@ class Fullimage extends Component {
   };
 
   async componentDidMount() {
+    var data;
     const { params } = this.props.match;
-    let data = await callServer();
+    if (window.query) {
+      data = await callServer(window.query);
+      window.query = "";
+    } else {
+      data = await callServer();
+    }
 
     data = [...data[0], ...data[1], ...data[2]];
     const index = data.findIndex(el => el.id === params.id);
