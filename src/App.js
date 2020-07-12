@@ -22,12 +22,12 @@ class App extends Component {
           />
           <Route path="/login" component={Login} />
           <Route path="/singup" component={Singup} />
-          <Route path="/notFound" component={Notfound} />
           <Route
             path="/home"
             exact
             render={props => <Home {...props} search={false} />}
           />
+          <Route path="/notFound" component={Notfound} />
           <Redirect from="/" exact to="/home" />
           <Redirect to="/notFound" />
         </Switch>

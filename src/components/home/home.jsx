@@ -71,6 +71,10 @@ class Home extends Component {
     }
   };
 
+  handleSubscribeClick = () => {
+    this.props.history.push("/singup");
+  };
+
   render() {
     const { pictures } = this.state;
 
@@ -91,6 +95,7 @@ class Home extends Component {
             handleSearchIconClick: this.handleSearchIconClick,
             handleSearchInput: this.handleSearchInput,
             handleCloseSearch: this.handleCloseSearch,
+            handleSubscribeClick: this.handleSubscribeClick,
           }}
         >
           {this.state.searchAsked ? <Search /> : <Headerhome />}

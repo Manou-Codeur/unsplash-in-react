@@ -46,7 +46,9 @@ class Fullimage extends Component {
   };
 
   handleUserClick = () => {
-    this.props.history.push("/profile/username");
+    this.props.history.push(
+      "/profile/" + this.state.selectedPic.user.first_name
+    );
   };
 
   handleLikePic = ({ target }) => {

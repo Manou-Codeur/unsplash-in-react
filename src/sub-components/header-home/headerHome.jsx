@@ -39,7 +39,7 @@ const Headerhome = props => {
           <p className="for-margin">
             Free high-resolution photos every 10 days
           </p>
-          <button>Subscribe</button>
+          <button onClick={myContext.handleSubscribeClick}>Subscribe</button>
         </div>
         <img
           className="search-icon"

@@ -2,8 +2,8 @@ import React from "react";
 
 import "./userProfile.scss";
 
-const Userprofile = () => {
-  return <h1>profile</h1>;
+const Userprofile = props => {
+  return <h1>{props.match.params.username}</h1>;
 };
 
 export default Userprofile;
