@@ -57,7 +57,7 @@ class Home extends Component {
 
   handleCloseSearch = () => {
     this.setState({ searchAsked: false });
-    this.props.history.push("/home");
+    this.props.history.goBack();
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {

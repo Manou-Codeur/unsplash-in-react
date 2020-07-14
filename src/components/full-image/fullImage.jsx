@@ -161,7 +161,11 @@ class Fullimage extends Component {
                 <img src={addIconn} alt="ds" />
               </div>
               <div className="img-containner">
-                <a href={this.state.linkToPicture} target="_blank">
+                <a
+                  href={this.state.linkToPicture}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img src={downloadIconn} alt="ds" />
                 </a>
               </div>
