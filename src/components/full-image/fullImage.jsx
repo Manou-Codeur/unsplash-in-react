@@ -40,7 +40,7 @@ class Fullimage extends Component {
     if (window.query !== undefined) {
       this.props.history.push("/search");
     } else {
-      this.props.history.push("/home");
+      this.props.history.goBack();
       window.query = "";
     }
   };

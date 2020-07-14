@@ -9,7 +9,6 @@ import "./userProfile.scss";
 class Userprofile extends Component {
   state = {
     menuAsked: false,
-    searchAsked: false,
   };
 
   closeMenuu = () => {
@@ -21,7 +20,7 @@ class Userprofile extends Component {
   };
 
   handleShowSearch = () => {
-    this.setState({ searchAsked: true });
+    this.props.history.push("/search");
   };
 
   render() {
