@@ -10,37 +10,52 @@ const HeaderProfile = ({
   getUserPhotos,
   getUserLikes,
   getUserCollection,
+  userInfo,
 }) => {
-  return (
-    <div className="header-profile">
-      <div className="header-content">
-        <img
-          className="menu-icon"
-          src={menuBar}
-          alt="menu icon"
-          onClick={showMenu}
-        />
+  if (userInfo !== undefined) {
+    const { user } = userInfo;
 
-        <div className="middle-content">
-          <div className="user-picture"></div>
-          <p className="user-name">Ayache Salim</p>
-          <p className="user-website">www.mariophtography.com</p>
-          <div className="links one">
-            <p onClick={getUserPhotos}>Photos</p>
-            <p onClick={getUserLikes}>Liked</p>
-            <p onClick={getUserCollection}>Collections</p>
+    return (
+      <div className="header-profile">
+        <div className="header-content">
+          <img
+            className="menu-icon"
+            src={menuBar}
+            alt="menu icon"
+            onClick={showMenu}
+          />
+
+          <div className="middle-content">
+            <div
+              className="user-picture"
+              style={{
+                background: `url(${user.profile_image.large})`,
+                backgroundSize: "cover",
+              }}
+            ></div>
+            <p className="user-name">
+              {user.first_name + " " + user.last_name || ""}
+            </p>
+            <p className="user-website">www.mywebsite.com</p>
+            <div className="links one">
+              <p onClick={getUserPhotos}>Photos</p>
+              <p onClick={getUserLikes}>Liked</p>
+              <p onClick={getUserCollection}>Collections</p>
+            </div>
           </div>
-        </div>
 
-        <img
-          className="search-icon"
-          src={searchIcon}
-          alt="search icon"
-          onClick={showSearch}
-        />
+          <img
+            className="search-icon"
+            src={searchIcon}
+            alt="search icon"
+            onClick={showSearch}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <h1>Please wait...</h1>;
+  }
 };
 
 export default HeaderProfile;

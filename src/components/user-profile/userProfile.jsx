@@ -23,11 +23,11 @@ class Userprofile extends Component {
       if (picture.user.username !== username) shouldICallServer = true;
     }
 
-    if (shouldICallServer) {
-      //updating the styles
-      const node = target.parentNode;
-      node.className = "links one";
+    //updating the styles
+    const node = target.parentNode;
+    node.className = "links one";
 
+    if (shouldICallServer) {
       //calling the server
       const pictures = await getUserPhotos(username);
       this.setState({ pictures });
@@ -91,6 +91,7 @@ class Userprofile extends Component {
           getUserPhotos={this.handleGetUserPhotos}
           getUserLikes={this.handleGetUserLikes}
           getUserCollection={this.handleGetUserCollection}
+          userInfo={flatten(pictures)[0]}
         />
 
         {flatten(pictures).length > 0 ? (

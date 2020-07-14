@@ -78,7 +78,6 @@ class Fullimage extends Component {
 
   render() {
     const { selectedPic } = this.state;
-    console.log(selectedPic);
 
     if (Object.keys(selectedPic).length > 0) {
       const date = selectedPic.created_at.split("T")[0];
