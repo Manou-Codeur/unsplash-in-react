@@ -15,7 +15,6 @@ class Home extends Component {
     pictures: [[], [], []],
     searchAsked: this.props.search,
     searchVal: "",
-    lastPath: "",
   };
 
   async componentDidMount() {
@@ -52,13 +51,13 @@ class Home extends Component {
 
   handleSearchIconClick = () => {
     this.setState({ searchAsked: true });
-    this.setState({ lastPath: this.props.location.pathname });
+
     this.props.history.push("/search");
   };
 
   handleCloseSearch = () => {
     this.setState({ searchAsked: false });
-    this.props.history.push(this.state.lastPath);
+    this.props.history.push("/home");
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {
