@@ -9,13 +9,3 @@ export const flatten = oldArr => {
   inner(oldArr);
   return final;
 };
-
-export const removeSpace = input => {
-  return input.split(" ").join("");
-};
-
-export const removeClass = (nodes, classname) => {
-  for (let els of nodes) {
-    if (els.className.includes(classname)) els.className = "selected";
-  }
-};

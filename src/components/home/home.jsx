@@ -45,6 +45,7 @@ class Home extends Component {
   };
 
   handlePictureClick = (data, { target }) => {
+    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
     if (!target.className.includes("heart"))
       this.props.history.push("/picture/" + data.id);
   };

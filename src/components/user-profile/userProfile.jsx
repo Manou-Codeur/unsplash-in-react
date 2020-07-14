@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { flatten, removeClass } from "../../services/helperFunctions";
-import { callServer } from "../../services/httpService";
+import { flatten } from "../../services/helperFunctions";
+import { callServer, getUserPhotos } from "../../services/httpService";
 
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Picture from "./../../sub-components/picture/picture";
@@ -14,19 +14,33 @@ class Userprofile extends Component {
     pictures: [[], [], []],
   };
 
-  handleGetUserPhotos = ({ target }) => {
+  handleGetUserPhotos = async ({ target }) => {
+    //updating the styles
     const node = target.parentNode;
     node.className = "links one";
+
+    //calling the server
+    const username = this.props.match.params.username;
+    const pictures = await getUserPhotos(username);
+    this.setState({ pictures });
+
+    //prevent the user from calling the server without need
   };
 
   handleGetUserLikes = ({ target }) => {
+    //updating the styles
     const node = target.parentNode;
     node.className = "links two";
+
+    //calling the server
   };
 
   handleGetUserCollection = ({ target }) => {
+    //updating the styles
     const node = target.parentNode;
     node.className = "links three";
+
+    //calling the server
   };
 
   async componentDidMount() {
@@ -34,7 +48,8 @@ class Userprofile extends Component {
     if (window.query) {
       data = await callServer(window.query);
     } else {
-      data = await callServer();
+      const username = this.props.match.params.username;
+      data = await getUserPhotos(username);
     }
     this.setState({ pictures: data });
   }
@@ -52,8 +67,10 @@ class Userprofile extends Component {
   };
 
   handlePictureClick = (data, { target }) => {
+    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
+    const username = this.props.match.params.username;
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + data.id);
+      this.props.history.push("/picture/" + data.id + "/" + username);
   };
 
   render() {
