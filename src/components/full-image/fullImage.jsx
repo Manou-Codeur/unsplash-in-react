@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 
-import { callServer, download } from "../../services/httpService";
+import {
+  callServer,
+  download,
+  getUserPhotos,
+} from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
 
 import "./fullImage.scss";
@@ -20,9 +24,13 @@ class Fullimage extends Component {
   async componentDidMount() {
     var data;
     const { params } = this.props.match;
+    const { pathname } = this.props.location;
+    const username = pathname.split("/")[3];
+
     if (window.query) {
       data = await callServer(window.query);
-      // window.query = "";
+    } else if (username) {
+      data = await getUserPhotos(username);
     } else {
       data = await callServer();
     }
@@ -40,15 +48,13 @@ class Fullimage extends Component {
     if (window.query !== undefined) {
       this.props.history.push("/search");
     } else {
-      this.props.history.push("/home");
+      this.props.history.goBack();
       window.query = "";
     }
   };
 
   handleUserClick = () => {
-    this.props.history.push(
-      "/profile/" + this.state.selectedPic.user.first_name
-    );
+    this.props.history.push("/profile/" + this.state.selectedPic.user.username);
   };
 
   handleLikePic = ({ target }) => {
@@ -72,7 +78,6 @@ class Fullimage extends Component {
 
   render() {
     const { selectedPic } = this.state;
-    console.log(selectedPic);
 
     if (Object.keys(selectedPic).length > 0) {
       const date = selectedPic.created_at.split("T")[0];
@@ -160,7 +165,11 @@ class Fullimage extends Component {
                 <img src={addIconn} alt="ds" />
               </div>
               <div className="img-containner">
-                <a href={this.state.linkToPicture} target="_blank">
+                <a
+                  href={this.state.linkToPicture}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img src={downloadIconn} alt="ds" />
                 </a>
               </div>
@@ -171,7 +180,8 @@ class Fullimage extends Component {
           </div>
         </div>
       );
-    } else return <h1>Please wait...</h1>;
+    }
+    return <h1>Please wait...</h1>;
   }
 }
 

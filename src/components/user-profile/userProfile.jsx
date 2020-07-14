@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { flatten } from "../../services/helperFunctions";
+import { callServer, getUserPhotos } from "../../services/httpService";
 
 import { callServer } from "./../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
@@ -13,23 +15,55 @@ import "./userProfile.scss";
 class Userprofile extends Component {
   state = {
     menuAsked: false,
-    searchAsked: false,
     pictures: [[], [], []],
   };
 
-  handleGetUserPhotos = () => {
-    console.log(
-      "here i will ask the http to give me the photos published by this user"
-    );
+  handleGetUserPhotos = async ({ target }) => {
+    //prevent the user from calling the server without need to
+    const username = this.props.match.params.username;
+    const picturesArr = flatten(this.state.pictures);
+    let shouldICallServer = false;
+    for (let picture of picturesArr) {
+      if (picture.user.username !== username) shouldICallServer = true;
+    }
+
+    //updating the styles
+    const node = target.parentNode;
+    node.className = "links one";
+
+    if (shouldICallServer) {
+      //calling the server
+      const pictures = await getUserPhotos(username);
+      this.setState({ pictures });
+    }
   };
 
-  handleGetUserLikes = () => {
-    console.log("here i will ask http to give me user likes pictures");
+  handleGetUserLikes = ({ target }) => {
+    //updating the styles
+    const node = target.parentNode;
+    node.className = "links two";
+
+    //calling the server
   };
 
-  handleGetUserCollection = () => {
-    console.log("here i will ask http to give me user collection pictures");
+  handleGetUserCollection = ({ target }) => {
+    //updating the styles
+    const node = target.parentNode;
+    node.className = "links three";
+
+    //calling the server
   };
+
+  async componentDidMount() {
+    let data;
+    if (window.query) {
+      data = await callServer(window.query);
+    } else {
+      const username = this.props.match.params.username;
+      data = await getUserPhotos(username);
+    }
+    this.setState({ pictures: data });
+  }
 
   closeMenuu = () => {
     this.setState({ menuAsked: false });
@@ -40,7 +74,14 @@ class Userprofile extends Component {
   };
 
   handleShowSearch = () => {
-    this.setState({ searchAsked: true });
+    this.props.history.push("/search");
+  };
+
+  handlePictureClick = (data, { target }) => {
+    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
+    const username = this.props.match.params.username;
+    if (!target.className.includes("heart"))
+      this.props.history.push("/picture/" + data.id + "/" + username);
   };
 
   handleCloseSearch = () => {
@@ -64,34 +105,23 @@ class Userprofile extends Component {
   };
 
   render() {
-    return (
-      <div
-        className="User-profile"
-        style={
-          this.state.searchAsked
-            ? { backgroundColor: "white" }
-            : { backgroundColor: "" }
-        }
-      >
-        {this.state.searchAsked ? (
-          <Search
-            handleCloseSearch={this.handleCloseSearch}
-            handleSearchInput={this.handleSearchInput}
-          />
-        ) : (
-          <HeaderProfile
-            showMenu={this.handleShowMenu}
-            showSearch={this.handleShowSearch}
-            getUserPhotos={this.handleGetUserPhotos}
-            getUserLikes={this.handleGetUserLikes}
-            getUserCollection={this.handleGetUserCollection}
-          />
-        )}
+    const { pictures } = this.state;
 
-        {flatten(this.state.pictures).length > 0 ? (
+    return (
+      <div className="User-profile">
+        <HeaderProfile
+          showMenu={this.handleShowMenu}
+          showSearch={this.handleShowSearch}
+          getUserPhotos={this.handleGetUserPhotos}
+          getUserLikes={this.handleGetUserLikes}
+          getUserCollection={this.handleGetUserCollection}
+          userInfo={flatten(pictures)[0]}
+        />
+
+        {flatten(pictures).length > 0 ? (
           <div className="picture-grid">
             <div className="col-one col">
-              {this.state.pictures[0].map(picture => (
+              {pictures[0].map(picture => (
                 <Picture
                   handlePictureClick={this.handlePictureClick}
                   key={picture.id}
@@ -100,7 +130,7 @@ class Userprofile extends Component {
               ))}
             </div>
             <div className="col-two col">
-              {this.state.pictures[1].map(picture => (
+              {pictures[1].map(picture => (
                 <Picture
                   handlePictureClick={this.handlePictureClick}
                   key={picture.id}
@@ -109,7 +139,7 @@ class Userprofile extends Component {
               ))}
             </div>
             <div className="col-three col">
-              {this.state.pictures[2].map(picture => (
+              {pictures[2].map(picture => (
                 <Picture
                   handlePictureClick={this.handlePictureClick}
                   key={picture.id}

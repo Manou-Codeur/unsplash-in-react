@@ -35,14 +35,11 @@ class Picture extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, handlePictureClick } = this.props;
     const userPP = data.user.profile_image.large;
 
     return (
-      <div
-        className="picture"
-        onClick={this.props.handlePictureClick.bind(this, data)}
-      >
+      <div className="picture" onClick={handlePictureClick.bind(this, data)}>
         <img
           className="background no-blur"
           src={data.urls.regular}
@@ -62,7 +59,7 @@ class Picture extends Component {
             ></div>
             <p className="by">Photo by</p>
             <p className="user-name">
-              {data.user.first_name + " " + data.user.last_name}
+              {data.user.first_name + " " + (data.user.last_name || "")}
             </p>
           </div>
 

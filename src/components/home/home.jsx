@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-
 import { callServer } from "../../services/httpService";
-import { flatten } from "./../../services/helperFunctions";
+import { flatten } from "../../services/helperFunctions";
 
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
@@ -19,13 +18,13 @@ class Home extends Component {
   };
 
   async componentDidMount() {
+    let data;
     if (window.query) {
-      const data = await callServer(window.query);
-      this.setState({ pictures: data });
+      data = await callServer(window.query);
     } else {
-      const data = await callServer();
-      this.setState({ pictures: data });
+      data = await callServer();
     }
+    this.setState({ pictures: data });
   }
 
   componentDidUpdate(prevProps) {
@@ -46,6 +45,7 @@ class Home extends Component {
   };
 
   handlePictureClick = (data, { target }) => {
+    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
     if (!target.className.includes("heart"))
       this.props.history.push("/picture/" + data.id);
   };
@@ -57,7 +57,7 @@ class Home extends Component {
 
   handleCloseSearch = () => {
     this.setState({ searchAsked: false });
-    this.props.history.push("/home");
+    this.props.history.goBack();
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {

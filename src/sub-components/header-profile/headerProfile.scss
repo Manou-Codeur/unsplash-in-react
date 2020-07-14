@@ -36,8 +36,6 @@
         width: 5rem;
         border: 2px solid white;
         border-radius: 100%;
-        background-image: url("../../assets/img/user.png");
-        background-size: cover;
         position: absolute;
         top: -2.5rem;
       }
@@ -59,11 +57,74 @@
         position: absolute;
         justify-content: center;
         bottom: 0;
-        width: 100%;
+        width: 400px;
 
         p {
-          padding: 0.6rem 2rem;
+          padding: 0.6rem 0;
           cursor: pointer;
+          position: relative;
+          width: 135px;
+        }
+      }
+
+      .one::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        border-radius: 5px;
+        width: 133px;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
+      }
+
+      .two::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 132px;
+        height: 4px;
+        border-radius: 5px;
+        width: 133px;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
+      }
+
+      .three::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 266px;
+        height: 4px;
+        border-radius: 5px;
+        width: 133px;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
+      }
+
+      @media only screen and (max-width: 505px) {
+        .links {
+          width: 240px;
+          font-size: 14px;
+
+          p {
+            width: 120px;
+          }
+        }
+
+        .one::after {
+          width: 80px;
+        }
+
+        .two::after {
+          width: 80px;
+          left: 80px;
+        }
+
+        .three::after {
+          width: 80px;
+          left: 160px;
         }
       }
     }

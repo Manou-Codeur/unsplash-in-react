@@ -1,4 +1,4 @@
-export function flatten(oldArr) {
+export const flatten = oldArr => {
   const final = [];
   function inner(param) {
     for (let els of param) {
@@ -8,4 +8,4 @@ export function flatten(oldArr) {
   }
   inner(oldArr);
   return final;
-}
+};
