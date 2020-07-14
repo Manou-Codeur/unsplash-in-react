@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { callServer } from "../../services/httpService";
+import { flatten } from "../../services/helperFunctions";
 
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Picture from "./../../sub-components/picture/picture";
@@ -100,7 +101,7 @@ class Home extends Component {
           />
         )}
 
-        {pictures[1].length > 0 ? (
+        {flatten(pictures).length > 0 ? (
           <div className="picture-grid">
             <div className="col-one col">
               {this.state.pictures[0].map(picture => (

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { callServer, download } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
+import { removeSpace } from "../../services/helperFunctions";
 
 import "./fullImage.scss";
 import likeWhitee from "../../assets/img/favorite-white.svg";
@@ -47,7 +48,7 @@ class Fullimage extends Component {
 
   handleUserClick = () => {
     this.props.history.push(
-      "/profile/" + this.state.selectedPic.user.first_name
+      "/profile/" + removeSpace(this.state.selectedPic.user.first_name)
     );
   };
 
