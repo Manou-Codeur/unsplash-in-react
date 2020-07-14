@@ -4,7 +4,13 @@ import menuBar from "../../assets/img/menu.svg";
 import searchIcon from "../../assets/img/search.svg";
 import "./headerProfile.scss";
 
-const HeaderProfile = ({ showMenu, showSearch }) => {
+const HeaderProfile = ({
+  showMenu,
+  showSearch,
+  getUserPhotos,
+  getUserLikes,
+  getUserCollection,
+}) => {
   return (
     <div className="header-profile">
       <div className="header-content">
@@ -20,9 +26,9 @@ const HeaderProfile = ({ showMenu, showSearch }) => {
           <p className="user-name">Ayache Salim</p>
           <p className="user-website">www.mariophtography.com</p>
           <div className="links">
-            <p>Photos</p>
-            <p>Liked</p>
-            <p>Collections</p>
+            <p onClick={getUserPhotos}>Photos</p>
+            <p onClick={getUserLikes}>Liked</p>
+            <p onClick={getUserCollection}>Collections</p>
           </div>
         </div>
 

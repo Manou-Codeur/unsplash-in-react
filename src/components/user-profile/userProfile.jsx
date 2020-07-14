@@ -14,6 +14,20 @@ class Userprofile extends Component {
     pictures: [[], [], []],
   };
 
+  handleGetUserPhotos = () => {
+    console.log(
+      "here i will ask the http to give me the photos published by this user"
+    );
+  };
+
+  handleGetUserLikes = () => {
+    console.log("here i will ask http to give me user likes pictures");
+  };
+
+  handleGetUserCollection = () => {
+    console.log("here i will ask http to give me user collection pictures");
+  };
+
   async componentDidMount() {
     let data;
     if (window.query) {
@@ -49,6 +63,9 @@ class Userprofile extends Component {
         <HeaderProfile
           showMenu={this.handleShowMenu}
           showSearch={this.handleShowSearch}
+          getUserPhotos={this.handleGetUserPhotos}
+          getUserLikes={this.handleGetUserLikes}
+          getUserCollection={this.handleGetUserCollection}
         />
 
         {flatten(pictures).length > 0 ? (
