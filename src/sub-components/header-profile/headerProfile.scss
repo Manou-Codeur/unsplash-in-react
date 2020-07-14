@@ -62,9 +62,48 @@
         width: 100%;
 
         p {
-          padding: 0.6rem 2rem;
+          padding: 0.6rem 0;
           cursor: pointer;
+          position: relative;
+          width: 10%;
+          // margin: 0 1rem;
         }
+      }
+
+      .one::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 35%;
+        height: 4px;
+        border-radius: 5px;
+        width: 10%;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
+      }
+
+      .two::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 45%;
+        height: 4px;
+        border-radius: 5px;
+        width: 10%;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
+      }
+
+      .three::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 55%;
+        height: 4px;
+        border-radius: 5px;
+        width: 10%;
+        background-color: black;
+        transition: left 0.5s ease-in-out;
       }
     }
   }

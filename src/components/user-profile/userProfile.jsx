@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { flatten } from "../../services/helperFunctions";
+import { flatten, removeClass } from "../../services/helperFunctions";
 import { callServer } from "../../services/httpService";
 
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
@@ -14,18 +14,19 @@ class Userprofile extends Component {
     pictures: [[], [], []],
   };
 
-  handleGetUserPhotos = () => {
-    console.log(
-      "here i will ask the http to give me the photos published by this user"
-    );
+  handleGetUserPhotos = ({ target }) => {
+    const node = target.parentNode;
+    node.className = "links one";
   };
 
-  handleGetUserLikes = () => {
-    console.log("here i will ask http to give me user likes pictures");
+  handleGetUserLikes = ({ target }) => {
+    const node = target.parentNode;
+    node.className = "links two";
   };
 
-  handleGetUserCollection = () => {
-    console.log("here i will ask http to give me user collection pictures");
+  handleGetUserCollection = ({ target }) => {
+    const node = target.parentNode;
+    node.className = "links three";
   };
 
   async componentDidMount() {

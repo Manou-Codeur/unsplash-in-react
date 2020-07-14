@@ -1,4 +1,4 @@
-export function flatten(oldArr) {
+export const flatten = oldArr => {
   const final = [];
   function inner(param) {
     for (let els of param) {
@@ -8,8 +8,14 @@ export function flatten(oldArr) {
   }
   inner(oldArr);
   return final;
-}
+};
 
-export function removeSpace(input) {
+export const removeSpace = input => {
   return input.split(" ").join("");
-}
+};
+
+export const removeClass = (nodes, classname) => {
+  for (let els of nodes) {
+    if (els.className.includes(classname)) els.className = "selected";
+  }
+};
