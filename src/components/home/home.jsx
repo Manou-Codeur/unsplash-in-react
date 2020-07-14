@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 
@@ -19,13 +18,13 @@ class Home extends Component {
   };
 
   async componentDidMount() {
+    let data;
     if (window.query) {
-      const data = await callServer(window.query);
-      this.setState({ pictures: data });
+      data = await callServer(window.query);
     } else {
-      const data = await callServer();
-      this.setState({ pictures: data });
+      data = await callServer();
     }
+    this.setState({ pictures: data });
   }
 
   componentDidUpdate(prevProps) {
