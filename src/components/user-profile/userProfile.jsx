@@ -15,16 +15,23 @@ class Userprofile extends Component {
   };
 
   handleGetUserPhotos = async ({ target }) => {
-    //updating the styles
-    const node = target.parentNode;
-    node.className = "links one";
-
-    //calling the server
+    //prevent the user from calling the server without need to
     const username = this.props.match.params.username;
-    const pictures = await getUserPhotos(username);
-    this.setState({ pictures });
+    const picturesArr = flatten(this.state.pictures);
+    let shouldICallServer = false;
+    for (let picture of picturesArr) {
+      if (picture.user.username !== username) shouldICallServer = true;
+    }
 
-    //prevent the user from calling the server without need
+    if (shouldICallServer) {
+      //updating the styles
+      const node = target.parentNode;
+      node.className = "links one";
+
+      //calling the server
+      const pictures = await getUserPhotos(username);
+      this.setState({ pictures });
+    }
   };
 
   handleGetUserLikes = ({ target }) => {
