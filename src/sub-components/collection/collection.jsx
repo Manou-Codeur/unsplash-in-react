@@ -11,7 +11,7 @@ const Collection = ({ data, handleOnclick }) => {
         <div
           className="bigOne"
           style={{
-            background: `url(${preview_photos[0].urls.full}) center`,
+            background: `url(${preview_photos[0].urls.full})`,
             backgroundSize: "cover",
           }}
         ></div>
@@ -19,7 +19,11 @@ const Collection = ({ data, handleOnclick }) => {
           <div
             className="first-one"
             style={{
-              background: `url(${preview_photos[1].urls.full}) center`,
+              background: `url(${
+                preview_photos[1]
+                  ? preview_photos[1].urls.full
+                  : preview_photos[0].urls.full
+              })`,
               backgroundSize: "cover",
             }}
           ></div>
@@ -30,7 +34,7 @@ const Collection = ({ data, handleOnclick }) => {
                 preview_photos[2]
                   ? preview_photos[2].urls.full
                   : preview_photos[0].urls.full
-              }) center`,
+              })`,
               backgroundSize: "cover",
             }}
           ></div>

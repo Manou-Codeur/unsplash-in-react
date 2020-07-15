@@ -25,14 +25,10 @@ class Userprofile extends Component {
   };
 
   async componentDidMount() {
-    let data;
-    if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      const username = this.props.match.params.username;
-      data = await getUserPhotos(username);
-    }
-    this.setState({ pictures: data, currentUser: data[0][0] });
+    const username = this.props.match.params.username;
+    const pictures = await getUserPhotos(username);
+
+    this.setState({ pictures, currentUser: pictures[0][0] });
   }
 
   handleGetUserPhotos = async ({ target }) => {
