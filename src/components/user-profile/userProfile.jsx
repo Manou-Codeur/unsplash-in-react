@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { flatten } from "../../services/helperFunctions";
-import { callServer, getUserPhotos } from "../../services/httpService";
-
-import { callServer } from "./../../services/httpService";
-import { flatten } from "../../services/helperFunctions";
+import {
+  callServer,
+  getUserPhotos,
+  getUserLikes,
+} from "../../services/httpService";
 
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
-import Search from "./../search/search";
 
 import "./userProfile.scss";
 
@@ -16,7 +16,20 @@ class Userprofile extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
+    collectionsAsked: false,
+    currentUser: "",
   };
+
+  async componentDidMount() {
+    let data;
+    if (window.query) {
+      data = await callServer(window.query);
+    } else {
+      const username = this.props.match.params.username;
+      data = await getUserPhotos(username);
+    }
+    this.setState({ pictures: data, currentUser: data[0][0] });
+  }
 
   handleGetUserPhotos = async ({ target }) => {
     //prevent the user from calling the server without need to
@@ -38,12 +51,18 @@ class Userprofile extends Component {
     }
   };
 
-  handleGetUserLikes = ({ target }) => {
-    //updating the styles
+  handleGetUserLikes = async ({ target }) => {
+    //prevent the user from calling the server without need to
     const node = target.parentNode;
+    if (node.className.includes("two")) return;
+
+    //updating the styles
     node.className = "links two";
 
     //calling the server
+    const username = this.props.match.params.username;
+    const pictures = await getUserLikes(username);
+    this.setState({ pictures });
   };
 
   handleGetUserCollection = ({ target }) => {
@@ -53,17 +72,6 @@ class Userprofile extends Component {
 
     //calling the server
   };
-
-  async componentDidMount() {
-    let data;
-    if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      const username = this.props.match.params.username;
-      data = await getUserPhotos(username);
-    }
-    this.setState({ pictures: data });
-  }
 
   closeMenuu = () => {
     this.setState({ menuAsked: false });
@@ -115,42 +123,38 @@ class Userprofile extends Component {
           getUserPhotos={this.handleGetUserPhotos}
           getUserLikes={this.handleGetUserLikes}
           getUserCollection={this.handleGetUserCollection}
-          userInfo={flatten(pictures)[0]}
+          userInfo={this.state.currentUser}
         />
 
-        {flatten(pictures).length > 0 ? (
-          <div className="picture-grid">
-            <div className="col-one col">
-              {pictures[0].map(picture => (
-                <Picture
-                  handlePictureClick={this.handlePictureClick}
-                  key={picture.id}
-                  data={picture}
-                />
-              ))}
-            </div>
-            <div className="col-two col">
-              {pictures[1].map(picture => (
-                <Picture
-                  handlePictureClick={this.handlePictureClick}
-                  key={picture.id}
-                  data={picture}
-                />
-              ))}
-            </div>
-            <div className="col-three col">
-              {pictures[2].map(picture => (
-                <Picture
-                  handlePictureClick={this.handlePictureClick}
-                  key={picture.id}
-                  data={picture}
-                />
-              ))}
-            </div>
+        <div className="picture-grid">
+          <div className="col-one col">
+            {pictures[0].map(picture => (
+              <Picture
+                handlePictureClick={this.handlePictureClick}
+                key={picture.id}
+                data={picture}
+              />
+            ))}
           </div>
-        ) : (
-          <h1 style={{ textAlign: "center" }}>Please wait...</h1>
-        )}
+          <div className="col-two col">
+            {pictures[1].map(picture => (
+              <Picture
+                handlePictureClick={this.handlePictureClick}
+                key={picture.id}
+                data={picture}
+              />
+            ))}
+          </div>
+          <div className="col-three col">
+            {pictures[2].map(picture => (
+              <Picture
+                handlePictureClick={this.handlePictureClick}
+                key={picture.id}
+                data={picture}
+              />
+            ))}
+          </div>
+        </div>
 
         <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenuu} />
       </div>

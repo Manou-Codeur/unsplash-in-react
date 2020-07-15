@@ -30,6 +30,15 @@ export const getUserPhotos = async username => {
   return [data[0].data, data[1].data, data[2].data];
 };
 
+export const getUserLikes = async username => {
+  const data = await axios.all([
+    axios.get(`https://api.unsplash.com/users/${username}/likes`),
+    axios.get(`https://api.unsplash.com/users/${username}/likes?page=2`),
+    axios.get(`https://api.unsplash.com/users/${username}/likes?page=3`),
+  ]);
+  return [data[0].data, data[1].data, data[2].data];
+};
+
 export const download = async id => {
   const { data } = await axios({
     url: `https://api.unsplash.com/photos/${id}/download`,

@@ -12,7 +12,7 @@ const HeaderProfile = ({
   getUserCollection,
   userInfo,
 }) => {
-  if (userInfo !== undefined) {
+  if (userInfo !== "") {
     const { user } = userInfo;
 
     return (
@@ -34,7 +34,7 @@ const HeaderProfile = ({
               }}
             ></div>
             <p className="user-name">
-              {user.first_name + " " + user.last_name || ""}
+              {user.first_name + " " + (user.last_name || "")}
             </p>
             <p className="user-website">www.mywebsite.com</p>
             <div className="links one">
