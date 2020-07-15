@@ -1,4 +1,13 @@
 .User-profile {
   background-color: whitesmoke;
   min-height: 100vh;
+
+  .collection-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 85%;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+  }
 }

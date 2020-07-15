@@ -3,7 +3,6 @@ import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 
 import Headerhome from "./../../sub-components/header-home/headerHome";
-import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
 import Search from "./../search/search";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";

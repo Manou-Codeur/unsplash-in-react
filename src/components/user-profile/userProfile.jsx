@@ -4,12 +4,13 @@ import {
   callServer,
   getUserPhotos,
   getUserLikes,
+  getUserCollections,
 } from "../../services/httpService";
 
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
-import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
+import Collection from "./../../sub-components/collection/collection";
 
 import "./userProfile.scss";
 
@@ -17,6 +18,7 @@ class Userprofile extends Component {
   state = {
     menuAsked: false,
     pictures: [[], [], []],
+    collections: [],
     collectionsAsked: false,
     currentUser: "",
   };
@@ -33,6 +35,9 @@ class Userprofile extends Component {
   }
 
   handleGetUserPhotos = async ({ target }) => {
+    //init some state props
+    this.setState({ collectionsAsked: false });
+
     //prevent the user from calling the server without need to
     const username = this.props.match.params.username;
     const picturesArr = flatten(this.state.pictures);
@@ -53,6 +58,9 @@ class Userprofile extends Component {
   };
 
   handleGetUserLikes = async ({ target }) => {
+    //init some state props
+    this.setState({ collectionsAsked: false });
+
     //prevent the user from calling the server without need to
     const node = target.parentNode;
     if (node.className.includes("two")) return;
@@ -66,12 +74,20 @@ class Userprofile extends Component {
     this.setState({ pictures });
   };
 
-  handleGetUserCollection = ({ target }) => {
-    //updating the styles
+  handleGetUserCollection = async ({ target }) => {
+    //prevent the user from calling the server without need to
     const node = target.parentNode;
+    if (node.className.includes("three")) return;
+
+    //updating the styles
     node.className = "links three";
+    this.setState({ collectionsAsked: true });
 
     //calling the server
+    const username = this.props.match.params.username;
+    const collections = await getUserCollections(username);
+    this.setState({ collections });
+    console.log(collections);
   };
 
   closeMenuu = () => {
@@ -113,8 +129,13 @@ class Userprofile extends Component {
       this.props.history.push("/picture/" + data.id);
   };
 
+  handleCollectioClick = () => {
+    this.setState({ collectionsAsked: false });
+    //call the server to get photos
+  };
+
   render() {
-    const { pictures } = this.state;
+    const { pictures, collectionsAsked, collections } = this.state;
 
     return (
       <div className="User-profile">
@@ -127,10 +148,28 @@ class Userprofile extends Component {
           userInfo={this.state.currentUser}
         />
 
-        <Picturegrid
-          pictures={pictures}
-          handlePictureClick={this.handlePictureClick}
-        />
+        {collectionsAsked ? (
+          <div className="collection-grid">
+            {collections.map(collection => (
+              <Collection
+                key={collection.id}
+                data={collection}
+                handleOnclick={this.handleCollectioClick}
+              />
+            ))}
+          </div>
+        ) : (
+          <Picturegrid
+            pictures={pictures}
+            handlePictureClick={this.handlePictureClick}
+          />
+        )}
+
+        {collections.length === 0 && collectionsAsked ? (
+          <h1 style={{ textAlign: "center" }}>
+            Sorry but this user doesn't have any collections
+          </h1>
+        ) : null}
 
         <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenuu} />
       </div>
