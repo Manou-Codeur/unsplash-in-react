@@ -1,0 +1,11 @@
+.picture-grid {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .col {
+    width: 32%;
+  }
+}

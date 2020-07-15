@@ -1,15 +1,4 @@
 .User-profile {
   background-color: whitesmoke;
-
-  .picture-grid {
-    width: 85%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    .col {
-      width: 32%;
-    }
-  }
+  min-height: 100vh;
 }

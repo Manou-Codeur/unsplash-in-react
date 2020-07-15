@@ -9,6 +9,7 @@ import {
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Picture from "./../../sub-components/picture/picture";
 import Menu from "./../../sub-components/menu/menu";
+import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 
 import "./userProfile.scss";
 
@@ -126,35 +127,10 @@ class Userprofile extends Component {
           userInfo={this.state.currentUser}
         />
 
-        <div className="picture-grid">
-          <div className="col-one col">
-            {pictures[0].map(picture => (
-              <Picture
-                handlePictureClick={this.handlePictureClick}
-                key={picture.id}
-                data={picture}
-              />
-            ))}
-          </div>
-          <div className="col-two col">
-            {pictures[1].map(picture => (
-              <Picture
-                handlePictureClick={this.handlePictureClick}
-                key={picture.id}
-                data={picture}
-              />
-            ))}
-          </div>
-          <div className="col-three col">
-            {pictures[2].map(picture => (
-              <Picture
-                handlePictureClick={this.handlePictureClick}
-                key={picture.id}
-                data={picture}
-              />
-            ))}
-          </div>
-        </div>
+        <Picturegrid
+          pictures={pictures}
+          handlePictureClick={this.handlePictureClick}
+        />
 
         <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenuu} />
       </div>
