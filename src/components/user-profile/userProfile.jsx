@@ -5,6 +5,7 @@ import {
   getUserPhotos,
   getUserLikes,
   getUserCollections,
+  getCollectionPhotos,
 } from "../../services/httpService";
 
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
@@ -79,15 +80,14 @@ class Userprofile extends Component {
     const node = target.parentNode;
     if (node.className.includes("three")) return;
 
-    //updating the styles
-    node.className = "links three";
-    this.setState({ collectionsAsked: true });
-
     //calling the server
     const username = this.props.match.params.username;
     const collections = await getUserCollections(username);
     this.setState({ collections });
-    console.log(collections);
+
+    //updating the styles
+    node.className = "links three";
+    this.setState({ collectionsAsked: true });
   };
 
   closeMenuu = () => {
@@ -129,9 +129,10 @@ class Userprofile extends Component {
       this.props.history.push("/picture/" + data.id);
   };
 
-  handleCollectioClick = () => {
-    this.setState({ collectionsAsked: false });
+  handleCollectioClick = async id => {
     //call the server to get photos
+    const pictures = await getCollectionPhotos(id);
+    this.setState({ pictures, collectionsAsked: false });
   };
 
   render() {

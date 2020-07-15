@@ -48,6 +48,15 @@ export const getUserCollections = async username => {
   return [...data[0].data, ...data[1].data, ...data[2].data];
 };
 
+export const getCollectionPhotos = async id => {
+  const data = await axios.all([
+    axios.get(`https://api.unsplash.com/collections/${id}/photos`),
+    axios.get(`https://api.unsplash.com/collections/${id}/photos?page=2`),
+    axios.get(`https://api.unsplash.com/collections/${id}/photos?page=3`),
+  ]);
+  return [data[0].data, data[1].data, data[2].data];
+};
+
 export const download = async id => {
   const { data } = await axios({
     url: `https://api.unsplash.com/photos/${id}/download`,

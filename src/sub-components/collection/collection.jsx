@@ -7,7 +7,7 @@ const Collection = ({ data, handleOnclick }) => {
     const { preview_photos } = data;
 
     return (
-      <div className="collection" onClick={handleOnclick}>
+      <div className="collection" onClick={handleOnclick.bind(this, data.id)}>
         <div
           className="bigOne"
           style={{

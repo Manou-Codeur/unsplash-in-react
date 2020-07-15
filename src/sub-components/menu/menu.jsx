@@ -11,7 +11,7 @@ const Menu = ({ menuAsked, closeMenu }) => {
   return (
     <div
       className="menu-containner"
-      style={!menuAsked ? { display: "none" } : null}
+      style={!menuAsked ? { left: "-200%" } : { left: "0" }}
     >
       <div className="menu">
         <div className="close-containner">
