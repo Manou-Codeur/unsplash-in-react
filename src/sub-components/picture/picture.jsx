@@ -39,11 +39,16 @@ class Picture extends Component {
     const userPP = data.user.profile_image.large;
 
     return (
-      <div className="picture" onClick={handlePictureClick.bind(this, data)}>
+      <div
+        className="picture"
+        onClick={handlePictureClick.bind(this, data)}
+        style={{ backgroundColor: data.color }}
+        title={data.description}
+      >
         <img
           className="background no-blur"
           src={data.urls.regular}
-          alt="test"
+          alt={data.description}
           ref={el => (this.picture = el)}
         />
 

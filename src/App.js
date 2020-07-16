@@ -20,7 +20,10 @@ class App extends Component {
             exact
             render={props => <Home {...props} search={true} />}
           />
-          <Route path="/login" component={Login} />
+          <Route
+            path="/login"
+            render={props => <Login {...props} pass="tetstt" />}
+          />
           <Route path="/singup" component={Singup} />
           <Route
             path="/home"

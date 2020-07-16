@@ -1,19 +1,18 @@
 import React from "react";
 
-const Input = props => {
-  const { label, type = "text", errors, handleInputChange, ...rest } = props;
+import "./input.scss";
 
+const Input = ({
+  error,
+  touched,
+  handleInputChange,
+  handleInputBlur,
+  ...rest
+}) => {
   return (
-    <div className="form-group">
-      <label htmlFor={label}>{label}</label>
-      <input
-        {...rest}
-        type={type}
-        className="form-control"
-        id={label}
-        onChange={handleInputChange}
-      />
-      {errors.title && <div className="alert alert-danger">{errors.title}</div>}
+    <div className="Input">
+      <input {...rest} onChange={handleInputChange} onBlur={handleInputBlur} />
+      {touched && error && <div className="my-alert">{error}</div>}
     </div>
   );
 };
