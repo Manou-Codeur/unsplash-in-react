@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import FacebookLogin from "react-facebook-login";
 
 import Input from "./../../sub-components/input/input";
 
@@ -42,6 +43,10 @@ const Login = ({ history }) => {
     history.push("/singup");
   };
 
+  const responseFacebook = respone => {
+    console.log(respone);
+  };
+
   return (
     <div className="login-form">
       <form onSubmit={handleSubmit}>
@@ -49,9 +54,7 @@ const Login = ({ history }) => {
           <img src={logo} alt="camera icon" />
           <p>MYSPLASH</p>
         </div>
-
         <h2 className="welcome">Welcome Back</h2>
-
         <Input
           placeholder="Email Adress"
           type="email"
@@ -62,7 +65,6 @@ const Login = ({ history }) => {
           value={values.email}
           handleInputBlur={handleBlur}
         />
-
         <Input
           placeholder="Password"
           type="password"
@@ -73,20 +75,27 @@ const Login = ({ history }) => {
           value={values.password}
           handleInputBlur={handleBlur}
         />
-
         <button className="submit-btn" type="submit">
           Login
         </button>
-
         <span className="go-singup">
-          Don't have an account yet?{" "}
+          Don't have an account yet?
           <strong onClick={redirectToSingup}>Sing up</strong>
         </span>
-
         <div className="log-facebook">
           <p className="or">or</p>
           <p className="facebook-choosen">
-            Singup with <strong className="fb">facebook</strong>
+            Login with
+            <strong className="fb">
+              <FacebookLogin
+                appId="634570187483137"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                cssClass="my-facebook-button-class"
+                textButton="facebook"
+              />
+            </strong>
           </p>
         </div>
       </form>
