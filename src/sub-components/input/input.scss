@@ -1,0 +1,66 @@
+.Input {
+  position: relative;
+
+  input {
+    border: 0;
+    width: 230px;
+    margin-bottom: 1.8rem;
+    border-bottom: 1.5px solid gray;
+    background-color: transparent;
+    color: white;
+    outline: none;
+
+    &::placeholder {
+      color: white;
+      font-weight: 300;
+      font-size: 0.8rem;
+    }
+  }
+
+  .error-msg {
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    color: red;
+    font-size: 0.9rem;
+  }
+
+  .input-name {
+    font-weight: 300;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .render-placeholder {
+    opacity: 1;
+    transition: all 0.5s ease;
+    top: -30%;
+  }
+
+  .close-red {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 1.5rem;
+  }
+
+  .check-green {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 1.5rem;
+  }
+
+  .red {
+    border-bottom: 1.5px solid red;
+    margin-bottom: 2.5rem;
+  }
+
+  .green {
+    border-bottom: 1.5px solid green;
+    margin-bottom: 1.8rem;
+  }
+}

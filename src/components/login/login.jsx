@@ -4,9 +4,10 @@ import * as Yup from "yup";
 
 import Input from "./../../sub-components/input/input";
 
+import logo from "../../assets/img/camera-white.svg";
 import "./login.scss";
 
-const Login = () => {
+const Login = ({ history }) => {
   const schema = {
     email: Yup.string()
       .email("Email is invalid!")
@@ -37,10 +38,22 @@ const Login = () => {
     },
   });
 
+  const redirectToSingup = () => {
+    history.push("/singup");
+  };
+
   return (
     <div className="login-form">
       <form onSubmit={handleSubmit}>
+        <div className="brand">
+          <img src={logo} alt="camera icon" />
+          <p>MYSPLASH</p>
+        </div>
+
+        <h2 className="welcome">Welcome Back</h2>
+
         <Input
+          placeholder="Email Adress"
           type="email"
           error={errors.email}
           touched={touched.email}
@@ -51,6 +64,7 @@ const Login = () => {
         />
 
         <Input
+          placeholder="Password"
           type="password"
           error={errors.password}
           touched={touched.password}
@@ -60,7 +74,19 @@ const Login = () => {
           handleInputBlur={handleBlur}
         />
 
-        <button type="submit">Submit</button>
+        <button className="submit-btn" type="submit">
+          Login
+        </button>
+
+        <span className="go-singup">
+          Don't have an account yet?{" "}
+          <strong onClick={redirectToSingup}>Sing up</strong>
+        </span>
+
+        <div className="log-facebook">
+          <p className="or">or</p>
+          <p className="facebook-choosen">Login with facebook</p>
+        </div>
       </form>
     </div>
   );
