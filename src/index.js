@@ -5,11 +5,14 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
+import Firebase, { FirebaseContext } from "./services/firebase/index";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <FirebaseContext.Provider value={new Firebase()}>
+        <App />
+      </FirebaseContext.Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
