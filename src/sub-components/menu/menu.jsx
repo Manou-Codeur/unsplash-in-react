@@ -8,10 +8,15 @@ import twitterIcon from "../../assets/img/twitter.png";
 import pinIcon from "../../assets/img/pinterest.png";
 
 const Menu = ({ menuAsked, closeMenu }) => {
+  const hideMenuOnClick = ({ target }) => {
+    target.style.left = "-200%";
+  };
+
   return (
     <div
       className="menu-containner"
       style={!menuAsked ? { left: "-200%" } : { left: "0" }}
+      onClick={hideMenuOnClick}
     >
       <div className="menu">
         <div className="close-containner">

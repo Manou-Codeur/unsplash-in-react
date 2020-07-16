@@ -17,15 +17,15 @@ class Home extends Component {
     searchVal: "",
   };
 
-  async componentDidMount() {
-    let data;
-    if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      data = await callServer();
-    }
-    this.setState({ pictures: data });
-  }
+  // async componentDidMount() {
+  //   let data;
+  //   if (window.query) {
+  //     data = await callServer(window.query);
+  //   } else {
+  //     data = await callServer();
+  //   }
+  //   this.setState({ pictures: data });
+  // }
 
   componentDidUpdate(prevProps) {
     const { search } = this.props;
@@ -108,6 +108,8 @@ class Home extends Component {
         ) : (
           <h1 style={{ textAlign: "center" }}>Please wait...</h1>
         )}
+
+        <button className="more-btn">Load More</button>
 
         <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenu} />
       </div>
