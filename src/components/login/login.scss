@@ -95,20 +95,18 @@
         text-align: center;
         font-weight: 300;
 
-        .fb:hover {
-          color: gray;
-          font-weight: 500;
-          cursor: pointer;
+        .my-facebook-button-class {
+          background-color: transparent;
+          border: 0;
+          color: white;
+          margin-left: 0.2rem;
+          outline: none;
+
+          &:hover {
+            color: gray;
+          }
         }
       }
-    }
-
-    .my-facebook-button-class {
-      background-color: transparent;
-      border: 0;
-      color: white;
-      margin-left: 0.2rem;
-      outline: none;
     }
   }
 }

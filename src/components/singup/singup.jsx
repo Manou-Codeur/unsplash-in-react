@@ -1,15 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import FacebookLogin from "react-facebook-login";
 
 import Input from "./../../sub-components/input/input";
 
 import logo from "../../assets/img/camera-white.svg";
 import "./singup.scss";
 
-const Singup = () => {
+const Singup = ({ history }) => {
   const schema = {
-    name: Yup.string().required("Name is required!"),
+    name: Yup.string().required("Name is required!").trim(),
     email: Yup.string()
       .email("Email is invalid!")
       .required("Email is required!"),
@@ -41,8 +42,14 @@ const Singup = () => {
     onSubmit: values => {
       console.log("Submitted!");
       console.log(values);
+      history.replace("./");
     },
   });
+
+  const responseFacebook = respone => {
+    console.log(respone);
+    history.replace("./");
+  };
 
   return (
     <div className="Singup-form">
@@ -105,7 +112,17 @@ const Singup = () => {
         <div className="log-facebook">
           <p className="or">or</p>
           <p className="facebook-choosen">
-            Singup with <strong className="fb">facebook</strong>
+            Singup with{" "}
+            <strong className="fb">
+              <FacebookLogin
+                appId="634570187483137"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                cssClass="my-facebook-button-class"
+                textButton="facebook"
+              />
+            </strong>
           </p>
         </div>
       </form>

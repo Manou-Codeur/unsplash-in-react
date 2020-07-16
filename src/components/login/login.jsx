@@ -36,6 +36,7 @@ const Login = ({ history }) => {
     onSubmit: values => {
       console.log("Submitted!");
       console.log(values);
+      history.replace("./");
     },
   });
 
@@ -45,6 +46,7 @@ const Login = ({ history }) => {
 
   const responseFacebook = respone => {
     console.log(respone);
+    history.replace("./");
   };
 
   return (
@@ -80,7 +82,7 @@ const Login = ({ history }) => {
         </button>
         <span className="go-singup">
           Don't have an account yet?
-          <strong onClick={redirectToSingup}>Sing up</strong>
+          <strong onClick={redirectToSingup}> Sing up</strong>
         </span>
         <div className="log-facebook">
           <p className="or">or</p>

@@ -12,7 +12,7 @@ const Input = ({
   placeholder,
   ...rest
 }) => {
-  const renderPlaceholder = ({ target }) => {
+  const renderInputName = ({ target }) => {
     target.parentNode.childNodes[0].className += " render-placeholder";
     target.placeholder = "";
   };
@@ -20,21 +20,25 @@ const Input = ({
   return (
     <div className="Input">
       <span className="input-name">{placeholder}</span>
+
       <input
-        {...rest}
         onChange={handleInputChange}
         onBlur={handleInputBlur}
         placeholder={placeholder}
-        onFocus={renderPlaceholder}
+        onFocus={renderInputName}
         className={touched && error ? "red" : ""}
+        {...rest}
       />
+
       {touched && error && (
         <img src={closeRed} className="close-red" alt="red close icon" />
       )}
+
+      {touched && error && <div className="error-msg">{error}</div>}
+
       {touched && !error && (
         <img src={check} className="check-green" alt="green check icon" />
       )}
-      {touched && error && <div className="error-msg">{error}</div>}
     </div>
   );
 };
