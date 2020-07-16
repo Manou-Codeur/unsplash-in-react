@@ -44,6 +44,10 @@
       margin-top: 1rem;
       padding: 0.5rem 2rem;
       outline: none;
+
+      &:hover {
+        background-color: black;
+      }
     }
 
     .go-singup {
@@ -90,11 +94,11 @@
         font-size: 0.9rem;
         text-align: center;
         font-weight: 300;
-        cursor: pointer;
 
-        &:hover {
+        .fb:hover {
           color: gray;
           font-weight: 500;
+          cursor: pointer;
         }
       }
     }

@@ -19,8 +19,8 @@ const Singup = () => {
       .min(6, "Password must contain at least 5 chars!")
       .required("Password is required!"),
     password2: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords doesn't match!")
-      .required("Password confirm is required"),
+      .equals([Yup.ref("password"), null], "Passwords doesn't match!")
+      .required("Password confirm is required!"),
   };
 
   const {
@@ -104,7 +104,9 @@ const Singup = () => {
 
         <div className="log-facebook">
           <p className="or">or</p>
-          <p className="facebook-choosen">Singup with facebook</p>
+          <p className="facebook-choosen">
+            Singup with <strong className="fb">facebook</strong>
+          </p>
         </div>
       </form>
     </div>

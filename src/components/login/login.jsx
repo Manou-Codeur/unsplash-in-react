@@ -85,7 +85,9 @@ const Login = ({ history }) => {
 
         <div className="log-facebook">
           <p className="or">or</p>
-          <p className="facebook-choosen">Login with facebook</p>
+          <p className="facebook-choosen">
+            Singup with <strong className="fb">facebook</strong>
+          </p>
         </div>
       </form>
     </div>
