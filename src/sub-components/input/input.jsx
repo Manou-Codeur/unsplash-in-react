@@ -28,8 +28,12 @@ const Input = ({
         onFocus={renderPlaceholder}
         className={touched && error ? "red" : ""}
       />
-      {touched && error && <img src={closeRed} className="close-red" />}
-      {touched && !error && <img src={check} className="check-green" />}
+      {touched && error && (
+        <img src={closeRed} className="close-red" alt="red close icon" />
+      )}
+      {touched && !error && (
+        <img src={check} className="check-green" alt="green check icon" />
+      )}
       {touched && error && <div className="error-msg">{error}</div>}
     </div>
   );
