@@ -7,7 +7,7 @@ import facebookIcon from "../../assets/img/facebook.png";
 import twitterIcon from "../../assets/img/twitter.png";
 import pinIcon from "../../assets/img/pinterest.png";
 
-const Menu = ({ menuAsked, closeMenu }) => {
+const Menu = ({ menuAsked, closeMenu, authUser, singoutORsingin }) => {
   const hideMenuOnClick = ({ target }) => {
     target.style.left = "-200%";
   };
@@ -29,10 +29,20 @@ const Menu = ({ menuAsked, closeMenu }) => {
         </div>
 
         <div className="user-profile">
-          <div className="pp"></div>
+          <div
+            className="pp"
+            style={
+              authUser && authUser.photoURL
+                ? {
+                    background: `url("${authUser.photoURL}")`,
+                    backgroundSize: "cover",
+                  }
+                : null
+            }
+          ></div>
           <div className="user-info">
-            <h4>Ayache Salim</h4>
-            <p>logout</p>
+            <h5>{authUser ? authUser.displayName : "Anonymous User"}</h5>
+            <p onClick={singoutORsingin}>{authUser ? "Logout" : "Singin"}</p>
           </div>
         </div>
 

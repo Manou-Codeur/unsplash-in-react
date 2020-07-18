@@ -1,10 +1,9 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import FacebookLogin from "react-facebook-login";
 
 import Input from "./../../sub-components/input/input";
-import { FirebaseContext } from "../../services/firebase/index";
+import { FirebaseContext } from "../../services/firebase/indexx";
 
 import logo from "../../assets/img/camera-white.svg";
 import "./login.scss";
@@ -43,11 +42,10 @@ const Login = ({ history }) => {
   });
 
   const doSubmit = async ({ email, password }) => {
-    console.log(values);
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
       history.replace("./");
-      //save in the localstorage that the user has othed
+      //save in the localstorage that the user has Oauthed
     } catch (error) {
       setError(error);
     }
@@ -57,10 +55,19 @@ const Login = ({ history }) => {
     history.push("/singup");
   };
 
-  // const responseFacebook = respone => {
-  //   console.log(respone);
-  //   history.replace("./");
-  // };
+  const onFacebook = async () => {
+    try {
+      await myContext.doSignInWithFacebook();
+      history.replace("./");
+    } catch (error) {
+      console.log(error);
+      if (error.code.split("/")[1].includes("account-exists"))
+        error.message =
+          "An account already exists with the same email address!";
+      else error.message = "There is a connection error, please try again!";
+      setError(error);
+    }
+  };
 
   return (
     <div className="login-form">
@@ -109,15 +116,8 @@ const Login = ({ history }) => {
           <p className="or">or</p>
           <p className="facebook-choosen">
             Login with
-            <strong className="fb">
-              {/* <FacebookLogin
-                appId="634570187483137"
-                autoLoad={true}
-                fields="name,email,picture"
-                // callback={responseFacebook}
-                cssClass="my-facebook-button-class"
-                textButton="facebook"
-              /> */}
+            <strong className="fb" onClick={onFacebook}>
+              facebook
             </strong>
           </p>
         </div>

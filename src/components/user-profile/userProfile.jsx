@@ -8,6 +8,8 @@ import {
   getCollectionPhotos,
 } from "../../services/httpService";
 
+import FirebaseContext from "./../../services/firebase/firebaseContext";
+
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Menu from "./../../sub-components/menu/menu";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
@@ -22,9 +24,17 @@ class Userprofile extends Component {
     collections: [],
     collectionsAsked: false,
     currentUser: "",
+    authUser: null,
   };
 
+  static contextType = FirebaseContext;
+
   async componentDidMount() {
+    //firebase
+    this.context.isUserAuthenticated(userInfo => {
+      this.setState({ authUser: userInfo });
+    });
+
     const username = this.props.match.params.username;
     const pictures = await getUserPhotos(username);
 
@@ -131,6 +141,18 @@ class Userprofile extends Component {
     this.setState({ pictures, collectionsAsked: false });
   };
 
+  singoutORsingin = async ({ target }) => {
+    if (target.textContent === "Singin") {
+      this.props.history.replace("/login");
+    } else {
+      try {
+        await this.context.doSignOut();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   render() {
     const { pictures, collectionsAsked, collections } = this.state;
 
@@ -168,7 +190,12 @@ class Userprofile extends Component {
           </h1>
         ) : null}
 
-        <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenuu} />
+        <Menu
+          menuAsked={this.state.menuAsked}
+          closeMenu={this.closeMenuu}
+          authUser={this.state.authUser}
+          singoutORsingin={this.singoutORsingin}
+        />
       </div>
     );
   }

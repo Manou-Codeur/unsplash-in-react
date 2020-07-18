@@ -36,6 +36,11 @@
       font-size: 1.8rem;
     }
 
+    .firebase-error {
+      width: 230px;
+      color: red;
+    }
+
     button.submit-btn {
       width: 230px;
       border: 0;
@@ -96,12 +101,9 @@
         text-align: center;
         font-weight: 300;
 
-        .my-facebook-button-class {
-          background-color: transparent;
-          border: 0;
-          color: white;
+        .fb {
+          cursor: pointer;
           margin-left: 0.2rem;
-          outline: none;
 
           &:hover {
             color: gray;

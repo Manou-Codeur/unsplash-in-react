@@ -19,6 +19,8 @@ class Firebase {
 
     //init firebase auth method so we could use all it's functions
     this.auth = app.auth();
+
+    this.facebookProvider = new app.auth.FacebookAuthProvider();
   }
 
   //method to create new user
@@ -31,11 +33,23 @@ class Firebase {
     await this.auth.signInWithEmailAndPassword(email, password);
   };
 
+  //method de singin a user with facebook
+  doSignInWithFacebook = async () =>
+    await this.auth.signInWithPopup(this.facebookProvider);
+
   //method to singout a user
-  doSignOut = () => this.auth.signOut();
+  doSignOut = async () => {
+    await this.auth.signOut();
+  };
+
+  //method to get user data if he is authenticated
+  isUserAuthenticated = funct => {
+    this.auth.onAuthStateChanged(funct);
+  };
 
   //method to reset a user password
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = async email =>
+    await this.auth.sendPasswordResetEmail(email);
 
   //methode to update user password
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);

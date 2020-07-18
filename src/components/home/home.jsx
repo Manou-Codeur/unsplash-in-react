@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 
+import { FirebaseContext } from "./../../services/firebase/indexx";
+
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Menu from "./../../sub-components/menu/menu";
 import Search from "./../search/search";
@@ -15,16 +17,28 @@ class Home extends Component {
     pictures: [[], [], []],
     searchAsked: this.props.search,
     searchVal: "",
+    authUser: null,
   };
 
-  // async componentDidMount() {
-  //   let data;
-  //   if (window.query) {
-  //     data = await callServer(window.query);
-  //   } else {
-  //     data = await callServer();
-  //   }
-  //   this.setState({ pictures: data });
+  static contextType = FirebaseContext;
+
+  async componentDidMount() {
+    //firebase
+    this.listener = this.context.isUserAuthenticated(userInfo => {
+      this.setState({ authUser: userInfo });
+    });
+
+    let data;
+    if (window.query) {
+      data = await callServer(window.query);
+    } else {
+      data = await callServer();
+    }
+    this.setState({ pictures: data });
+  }
+
+  // componentWillUnmount() {
+  //   this.listener();
   // }
 
   componentDidUpdate(prevProps) {
@@ -75,8 +89,20 @@ class Home extends Component {
     this.props.history.push("/singup");
   };
 
+  singoutORsingin = async ({ target }) => {
+    if (target.textContent === "Singin") {
+      this.props.history.replace("/login");
+    } else {
+      try {
+        await this.context.doSignOut();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   render() {
-    const { pictures } = this.state;
+    const { pictures, authUser } = this.state;
 
     return (
       <div
@@ -97,6 +123,7 @@ class Home extends Component {
             askForMenu={this.askForMenu}
             handleSubscribeClick={this.handleSubscribeClick}
             handleSearchIconClick={this.handleSearchIconClick}
+            authUser={authUser}
           />
         )}
 
@@ -111,7 +138,12 @@ class Home extends Component {
 
         <button className="more-btn">Load More</button>
 
-        <Menu menuAsked={this.state.menuAsked} closeMenu={this.closeMenu} />
+        <Menu
+          menuAsked={this.state.menuAsked}
+          closeMenu={this.closeMenu}
+          authUser={authUser}
+          singoutORsingin={this.singoutORsingin}
+        />
       </div>
     );
   }

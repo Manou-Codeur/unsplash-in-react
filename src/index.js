@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import Firebase, { FirebaseContext } from "./services/firebase/index";
+import Firebase, { FirebaseContext } from "./services/firebase/indexx";
 
 ReactDOM.render(
   <React.StrictMode>

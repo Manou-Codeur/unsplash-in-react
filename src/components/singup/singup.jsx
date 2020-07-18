@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import FacebookLogin from "react-facebook-login";
+// import FacebookLogin from "react-facebook-login";
 
 import Input from "./../../sub-components/input/input";
+import { FirebaseContext } from "../../services/firebase/indexx";
 
 import logo from "../../assets/img/camera-white.svg";
 import "./singup.scss";
 
 const Singup = ({ history }) => {
+  const myContext = useContext(FirebaseContext);
+  const [error, setError] = useState({});
+
   const schema = {
     name: Yup.string().required("Name is required!").trim(),
     email: Yup.string()
@@ -40,15 +44,32 @@ const Singup = ({ history }) => {
     },
     validationSchema: Yup.object(schema),
     onSubmit: values => {
-      console.log("Submitted!");
-      console.log(values);
-      history.replace("./");
+      doSubmit(values);
     },
   });
 
-  const responseFacebook = respone => {
-    console.log(respone);
-    history.replace("./");
+  const onFacebook = async () => {
+    try {
+      await myContext.doSignInWithFacebook();
+      history.replace("./");
+    } catch (error) {
+      console.log(error);
+      if (error.code.split("/")[1].includes("account-exists"))
+        error.message =
+          "An account already exists with the same email address!";
+      else error.message = "There is a connection error, please try again!";
+      setError(error);
+    }
+  };
+
+  const doSubmit = async ({ email, password }) => {
+    try {
+      await myContext.doCreateUserWithEmailAndPassword(email, password);
+      history.replace("./");
+      //save in the localstorage that the user has othed
+    } catch (error) {
+      setError(error);
+    }
   };
 
   return (
@@ -109,19 +130,14 @@ const Singup = ({ history }) => {
           Sing Up
         </button>
 
+        {error && <div className="firebase-error">{error.message}</div>}
+
         <div className="log-facebook">
           <p className="or">or</p>
           <p className="facebook-choosen">
-            Singup with{" "}
-            <strong className="fb">
-              <FacebookLogin
-                appId="634570187483137"
-                autoLoad={true}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                cssClass="my-facebook-button-class"
-                textButton="facebook"
-              />
+            Singup with
+            <strong className="fb" onClick={onFacebook}>
+              facebook
             </strong>
           </p>
         </div>
