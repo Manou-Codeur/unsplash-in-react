@@ -110,7 +110,7 @@ class Home extends Component {
     }
   };
 
-  handleLike = ({ target }) => {
+  handleLike = ({ target }, id) => {
     if (!this.state.authUser) {
       this.props.history.push("/login");
       return;
@@ -121,10 +121,18 @@ class Home extends Component {
       target.src = likeRed;
       target.className = "red heart";
       target.nextElementSibling.textContent = likes + 1;
+
+      //about db
+      this.context
+        .picture(this.state.authUser.uid, id)
+        .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
       target.className = "black heart";
       target.nextElementSibling.textContent = likes - 1;
+
+      //about db
+      this.context.picture(id).remove();
     }
   };
 
@@ -159,6 +167,7 @@ class Home extends Component {
             pictures={pictures}
             handlePictureClick={this.handlePictureClick}
             handlePictureLike={this.handleLike}
+            loggedOut={this.state.authUser}
           />
         ) : (
           <h1 style={{ textAlign: "center" }}>Please wait...</h1>

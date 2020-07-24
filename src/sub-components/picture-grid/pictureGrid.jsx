@@ -4,7 +4,12 @@ import Picture from "./../picture/picture";
 
 import "./pictureGrid.scss";
 
-const Picturegrid = ({ pictures, handlePictureClick, handlePictureLike }) => {
+const Picturegrid = ({
+  pictures,
+  handlePictureClick,
+  handlePictureLike,
+  loggedOut,
+}) => {
   return (
     <div className="picture-grid">
       <div className="col-one col">
@@ -12,6 +17,7 @@ const Picturegrid = ({ pictures, handlePictureClick, handlePictureLike }) => {
           <Picture
             handlePictureClick={handlePictureClick}
             handlePictureLike={handlePictureLike}
+            loggedOut={loggedOut}
             key={picture.id}
             data={picture}
           />
@@ -22,6 +28,7 @@ const Picturegrid = ({ pictures, handlePictureClick, handlePictureLike }) => {
           <Picture
             handlePictureClick={handlePictureClick}
             handlePictureLike={handlePictureLike}
+            loggedOut={loggedOut}
             key={picture.id}
             data={picture}
           />
@@ -32,6 +39,7 @@ const Picturegrid = ({ pictures, handlePictureClick, handlePictureLike }) => {
           <Picture
             handlePictureClick={handlePictureClick}
             handlePictureLike={handlePictureLike}
+            loggedOut={loggedOut}
             key={picture.id}
             data={picture}
           />

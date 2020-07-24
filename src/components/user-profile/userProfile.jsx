@@ -16,6 +16,8 @@ import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 import Collection from "./../../sub-components/collection/collection";
 
 import "./userProfile.scss";
+import likeBlack from "../../assets/img/favorite-white.svg";
+import likeRed from "../../assets/img/favorite-red.png";
 
 class Userprofile extends Component {
   state = {
@@ -155,8 +157,32 @@ class Userprofile extends Component {
     }
   };
 
+  handleLike = ({ target }, id) => {
+    if (!this.state.authUser) {
+      this.props.history.push("/login");
+      return;
+    }
+
+    const likes = parseInt(target.nextElementSibling.textContent);
+    if (target.className === "black heart") {
+      target.src = likeRed;
+      target.className = "red heart";
+      target.nextElementSibling.textContent = likes + 1;
+
+      //about db
+      this.context.picture(id).set({ liked: true });
+    } else {
+      target.src = likeBlack;
+      target.className = "black heart";
+      target.nextElementSibling.textContent = likes - 1;
+
+      //about db
+      this.context.picture(id).remove();
+    }
+  };
+
   render() {
-    const { pictures, collectionsAsked, collections } = this.state;
+    const { pictures, collectionsAsked, collections, loggedOut } = this.state;
 
     return (
       <div className="User-profile">
@@ -183,6 +209,8 @@ class Userprofile extends Component {
           <Picturegrid
             pictures={pictures}
             handlePictureClick={this.handlePictureClick}
+            handlePictureLike={this.handleLike}
+            loggedOut={loggedOut}
           />
         )}
 

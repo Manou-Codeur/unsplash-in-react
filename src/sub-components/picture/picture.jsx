@@ -1,12 +1,47 @@
 import React, { Component } from "react";
 
-import likeBlack from "../../assets/img/favorite-white.svg";
+import FirebaseContext from "./../../services/firebase/firebaseContext";
+
 import likeRed from "../../assets/img/favorite-red.png";
+import likeBlack from "../../assets/img/favorite-white.svg";
 import downloadIcon from "../../assets/img/download.png";
 import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
 class Picture extends Component {
+  state = {
+    liked: false,
+    likes: null,
+  };
+
+  static contextType = FirebaseContext;
+
+  componentDidMount() {
+    this.listener = this.context.isUserAuthenticated(userInfo => {
+      if (userInfo) {
+        this.context
+          .picture(userInfo.uid, this.props.data.id)
+          .on("value", snapshot => {
+            const usersObject = snapshot.val();
+            this.setState({
+              liked: usersObject && usersObject.liked,
+              likes: usersObject && usersObject.likes,
+            });
+          });
+      }
+    });
+
+    // this.context.picture(this.props.data.id).on("value", snapshot => {
+    //   const pictureObject = snapshot.val();
+    //   if (pictureObject) {
+    //     this.setState({
+    //       liked: pictureObject.liked,
+    //       likes: pictureObject.likes,
+    //     });
+    //   }
+    // });
+  }
+
   handleHover = () => {
     this.controlsRef.className = "controls";
     this.user.className = "picture-owner";
@@ -22,7 +57,8 @@ class Picture extends Component {
   };
 
   render() {
-    const { data, handlePictureClick } = this.props;
+    const { data, handlePictureClick, loggedOut } = this.props;
+    const { liked, likes } = this.state;
     const userPP = data.user.profile_image.large;
 
     return (
@@ -58,12 +94,13 @@ class Picture extends Component {
           <div className="controls hide" ref={el => (this.controlsRef = el)}>
             <div className="imgg-containner one">
               <img
-                src={likeBlack}
-                className="black heart"
+                //we will comeback to when the user logout
+                src={liked && loggedOut ? likeRed : likeBlack}
+                className={liked ? "red heart" : "black heart"}
                 alt="heart icon"
-                onClick={this.props.handlePictureLike}
+                onClick={e => this.props.handlePictureLike(e, data.id)}
               />
-              <p>{data.likes}</p>
+              <p>{likes ? likes : data.likes}</p>
             </div>
             <div className="imgg-containner">
               <img className="test" src={addIcon} alt="plus icon" />
