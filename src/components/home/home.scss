@@ -28,7 +28,9 @@
     &:hover {
       background-color: #383737;
       color: white;
-      border: 0;
+      transition: all 0.8s;
+      border-color: #383737;
+      font-weight: 500;
     }
   }
 }

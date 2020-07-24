@@ -7,19 +7,26 @@ import {
 } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
 
+import infoIcon from "../../assets/img/info.svg";
+
 import "./fullImage.scss";
 import likeWhitee from "../../assets/img/favorite-white.svg";
 import likeRedd from "../../assets/img/favorite-red.png";
 import downloadIconn from "../../assets/img/download.png";
 import addIconn from "../../assets/img/add.svg";
 import closeRounded from "../../assets/img/close-round.svg";
-import infoIcon from "../../assets/img/info.svg";
+import FirebaseContext from "./../../services/firebase/firebaseContext";
 
 class Fullimage extends Component {
   state = {
     selectedPic: {},
     linkToPicture: "",
+    liked: false,
+    likes: null,
+    authUser: null,
   };
+
+  static contextType = FirebaseContext;
 
   async componentDidMount() {
     var data;
@@ -42,6 +49,20 @@ class Fullimage extends Component {
     const linkToPicture = await download(params.id);
 
     this.setState({ selectedPic, linkToPicture });
+
+    //firebase
+    this.listener = this.context.isUserAuthenticated(userInfo => {
+      if (userInfo) {
+        this.context.picture(userInfo.uid, params.id).on("value", snapshot => {
+          const usersObject = snapshot.val();
+          this.setState({
+            authUser: userInfo,
+            liked: usersObject && usersObject.liked,
+            likes: usersObject && usersObject.likes,
+          });
+        });
+      }
+    });
   }
 
   handleClosePic = () => {
@@ -58,15 +79,26 @@ class Fullimage extends Component {
   };
 
   handleLikePic = ({ target }) => {
+    const { params } = this.props.match;
+    const { authUser } = this.state;
+
     const likes = parseInt(target.nextElementSibling.textContent);
     if (target.className === "white heart") {
       target.src = likeRedd;
       target.className = "red heart";
       target.nextElementSibling.textContent = likes + 1;
+
+      //about db
+      this.context
+        .picture(authUser.uid, params.id)
+        .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeWhitee;
       target.className = "white heart";
       target.nextElementSibling.textContent = likes - 1;
+
+      //about db
+      this.context.picture(authUser.uid, params.id).remove();
     }
   };
 
@@ -77,7 +109,7 @@ class Fullimage extends Component {
   };
 
   render() {
-    const { selectedPic } = this.state;
+    const { selectedPic, liked, likes } = this.state;
 
     if (Object.keys(selectedPic).length > 0) {
       const date = selectedPic.created_at.split("T")[0];
@@ -154,12 +186,12 @@ class Fullimage extends Component {
             <div className="controls" ref={el => (this.controlsLayout = el)}>
               <div className="img-containner one">
                 <img
-                  src={likeWhitee}
-                  className="white heart"
+                  src={liked ? likeRedd : likeWhitee}
+                  className={liked ? "red heart" : "white heart"}
                   onClick={this.handleLikePic}
-                  alt="ds"
+                  alt="heart icon"
                 />
-                <p>{selectedPic.likes}</p>
+                <p>{likes ? likes : selectedPic.likes}</p>
               </div>
               <div className="img-containner">
                 <img src={addIconn} alt="ds" />
