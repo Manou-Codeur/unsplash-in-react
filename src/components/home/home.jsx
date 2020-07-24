@@ -26,19 +26,22 @@ class Home extends Component {
     //firebase
     this.listener = this.context.isUserAuthenticated(userInfo => {
       if (userInfo && !userInfo.displayName) {
-        this.context.updateUser("manou", null);
+        this.context.user(userInfo.uid).on("value", snapshot => {
+          const usersObject = snapshot.val();
+          this.context.updateUser(usersObject.name, null);
+        });
       }
       this.setState({ authUser: userInfo });
     });
 
     //call the server
-    let data;
-    if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      data = await callServer();
-    }
-    this.setState({ pictures: data });
+    // let data;
+    // if (window.query) {
+    //   data = await callServer(window.query);
+    // } else {
+    //   data = await callServer();
+    // }
+    // this.setState({ pictures: data });
   }
 
   componentWillUnmount() {

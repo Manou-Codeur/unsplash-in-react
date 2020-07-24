@@ -62,9 +62,13 @@ const Singup = ({ history }) => {
     }
   };
 
-  const doSubmit = async ({ email, password }) => {
+  const doSubmit = async ({ email, password, name }) => {
     try {
-      await myContext.doCreateUserWithEmailAndPassword(email, password);
+      const data = await myContext.doCreateUserWithEmailAndPassword(
+        email,
+        password
+      );
+      myContext.user(data.user.uid).set({ name, email });
       history.replace("./");
       //save in the localstorage that the user has othed
     } catch (error) {

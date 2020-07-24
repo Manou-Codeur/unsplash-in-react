@@ -1,5 +1,6 @@
 import app from "firebase/app";
 import "firebase/auth";
+import "firebase/database";
 
 const config = {
   apiKey: "AIzaSyDNEQsO4hgfxQs9FlkaduurXppNKeFNaGA",
@@ -20,9 +21,13 @@ class Firebase {
     //init firebase auth method so we could use all it's functions
     this.auth = app.auth();
 
+    //init firebase auth method so we could use all it's functions
+    this.db = app.database();
+
     this.facebookProvider = new app.auth.FacebookAuthProvider();
   }
 
+  //auth methods
   //method to create new user
   doCreateUserWithEmailAndPassword = (email, password) => {
     return this.auth.createUserWithEmailAndPassword(email, password);
@@ -46,12 +51,18 @@ class Firebase {
     return this.auth.onAuthStateChanged(funct);
   };
 
+  //method to update the userprofile
   updateUser = (username, pp) => {
     this.auth.currentUser.updateProfile({
       displayName: username,
       photoURL: pp,
     });
   };
+
+  //db methods
+  users = () => this.db.ref("users");
+
+  user = uid => this.db.ref(`users/${uid}`);
 }
 
 export default Firebase;
