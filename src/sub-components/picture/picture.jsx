@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import FirebaseContext from "./../../services/firebase/firebaseContext";
-
 import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 import downloadIcon from "../../assets/img/download.png";
@@ -9,18 +7,6 @@ import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
 class Picture extends Component {
-  state = {
-    userAuth: null,
-  };
-
-  static contextType = FirebaseContext;
-
-  componentDidMount() {
-    this.context.isUserAuthenticated(userInfo => {
-      this.setState({ userAuth: userInfo });
-    });
-  }
-
   handleHover = () => {
     this.controlsRef.className = "controls";
     this.user.className = "picture-owner";

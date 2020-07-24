@@ -24,35 +24,34 @@ class Firebase {
   }
 
   //method to create new user
-  doCreateUserWithEmailAndPassword = async (email, password) => {
-    await this.auth.createUserWithEmailAndPassword(email, password);
+  doCreateUserWithEmailAndPassword = (email, password) => {
+    return this.auth.createUserWithEmailAndPassword(email, password);
   };
 
   //method to singin a user
-  doSignInWithEmailAndPassword = async (email, password) => {
-    await this.auth.signInWithEmailAndPassword(email, password);
+  doSignInWithEmailAndPassword = (email, password) => {
+    return this.auth.signInWithEmailAndPassword(email, password);
   };
 
   //method de singin a user with facebook
-  doSignInWithFacebook = async () =>
-    await this.auth.signInWithPopup(this.facebookProvider);
+  doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
   //method to singout a user
-  doSignOut = async () => {
-    await this.auth.signOut();
+  doSignOut = () => {
+    return this.auth.signOut();
   };
 
   //method to get user data if he is authenticated
   isUserAuthenticated = funct => {
-    this.auth.onAuthStateChanged(funct);
+    return this.auth.onAuthStateChanged(funct);
   };
 
-  //method to reset a user password
-  doPasswordReset = async email =>
-    await this.auth.sendPasswordResetEmail(email);
-
-  //methode to update user password
-  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+  updateUser = (username, pp) => {
+    this.auth.currentUser.updateProfile({
+      displayName: username,
+      photoURL: pp,
+    });
+  };
 }
 
 export default Firebase;

@@ -54,14 +54,10 @@ class App extends Component {
           />
           <Route
             path="/login"
-            render={props => <Login {...props} pass="tetstt" />}
+            component={Login}
           />
           <Route path="/singup" component={Singup} />
-          <Route
-            path="/home"
-            exact
-            render={props => <Home {...props} search={false} />}
-          />
+          <Route path="/home" exact component={Home} />
           <Route path="/notFound" component={Notfound} />
           <Redirect from="/" exact to="/home" />
           <Redirect to="/notFound" />

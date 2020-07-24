@@ -22,24 +22,25 @@ class Home extends Component {
 
   static contextType = FirebaseContext;
 
-  async componentDidMount() {
+  componentDidMount() {
     //firebase
     this.listener = this.context.isUserAuthenticated(userInfo => {
+      this.context.updateUser("manou", null);
       this.setState({ authUser: userInfo });
     });
 
-    let data;
-    if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      data = await callServer();
-    }
-    this.setState({ pictures: data });
+    // let data;
+    // if (window.query) {
+    //   data = await callServer(window.query);
+    // } else {
+    //   data = await callServer();
+    // }
+    // this.setState({ pictures: data });
   }
 
-  // componentWillUnmount() {
-  //   this.listener();
-  // }
+  componentWillUnmount() {
+    this.listener();
+  }
 
   componentDidUpdate(prevProps) {
     const { search } = this.props;
