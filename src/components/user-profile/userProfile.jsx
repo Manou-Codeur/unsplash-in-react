@@ -170,19 +170,21 @@ class Userprofile extends Component {
       target.nextElementSibling.textContent = likes + 1;
 
       //about db
-      this.context.picture(id).set({ liked: true });
+      this.context
+        .picture(this.state.authUser.uid, id)
+        .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
       target.className = "black heart";
       target.nextElementSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(id).remove();
+      this.context.picture(this.state.authUser.uid, id).remove();
     }
   };
 
   render() {
-    const { pictures, collectionsAsked, collections, loggedOut } = this.state;
+    const { pictures, collectionsAsked, collections, authUser } = this.state;
 
     return (
       <div className="User-profile">
@@ -210,7 +212,7 @@ class Userprofile extends Component {
             pictures={pictures}
             handlePictureClick={this.handlePictureClick}
             handlePictureLike={this.handleLike}
-            loggedOut={loggedOut}
+            loggedOut={authUser}
           />
         )}
 

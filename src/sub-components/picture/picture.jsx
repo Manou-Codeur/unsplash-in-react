@@ -30,16 +30,6 @@ class Picture extends Component {
           });
       }
     });
-
-    // this.context.picture(this.props.data.id).on("value", snapshot => {
-    //   const pictureObject = snapshot.val();
-    //   if (pictureObject) {
-    //     this.setState({
-    //       liked: pictureObject.liked,
-    //       likes: pictureObject.likes,
-    //     });
-    //   }
-    // });
   }
 
   handleHover = () => {

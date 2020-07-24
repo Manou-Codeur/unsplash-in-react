@@ -132,7 +132,7 @@ class Home extends Component {
       target.nextElementSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(id).remove();
+      this.context.picture(this.state.authUser.uid, id).remove();
     }
   };
 
