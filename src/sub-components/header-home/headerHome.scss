@@ -120,6 +120,12 @@
           color: white;
         }
       }
+
+      @media only screen and (max-width: 505px) {
+        p.for-margin {
+          font-size: 0.8rem;
+        }
+      }
     }
   }
 }

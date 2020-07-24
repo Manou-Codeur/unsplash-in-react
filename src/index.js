@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import "bootstrap/dist/css/bootstrap.css";
 import Firebase, { FirebaseContext } from "./services/firebase/indexx";
 
 ReactDOM.render(

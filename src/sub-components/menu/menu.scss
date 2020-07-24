@@ -32,6 +32,7 @@
       flex-direction: row;
       justify-content: flex-start;
       padding-left: 1.8rem;
+      margin-bottom: 1rem;
 
       .pp {
         background-image: url("../../assets//img/user.png");
@@ -80,7 +81,7 @@
         color: white;
         font-size: 0.95rem;
         letter-spacing: 0.7px;
-        padding: 0.8rem 1.8rem;
+        padding: 1rem 1.8rem;
         width: 100%;
         cursor: pointer;
 
@@ -92,7 +93,8 @@
 
     .social-media {
       margin-left: 1.4rem;
-      margin-top: 1.8rem;
+      position: absolute;
+      bottom: 2%;
 
       img {
         height: 1.4rem;
@@ -130,6 +132,8 @@
 
         .social-media {
           margin-bottom: 0.5rem;
+          position: initial;
+          padding: 2rem 0 1rem 0;
         }
       }
     }

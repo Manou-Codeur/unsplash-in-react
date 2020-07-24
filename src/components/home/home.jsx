@@ -34,14 +34,14 @@ class Home extends Component {
       this.setState({ authUser: userInfo });
     });
 
-    //call the server
-    // let data;
-    // if (window.query) {
-    //   data = await callServer(window.query);
-    // } else {
-    //   data = await callServer();
-    // }
-    // this.setState({ pictures: data });
+    // call the server
+    let data;
+    if (window.query) {
+      data = await callServer(window.query);
+    } else {
+      data = await callServer();
+    }
+    this.setState({ pictures: data });
   }
 
   componentWillUnmount() {
