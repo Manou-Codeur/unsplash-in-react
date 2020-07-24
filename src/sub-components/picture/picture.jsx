@@ -21,19 +21,6 @@ class Picture extends Component {
     this.picture.style.transform = "";
   };
 
-  handleLike = ({ target }) => {
-    const likes = parseInt(target.nextElementSibling.textContent);
-    if (target.className === "black heart") {
-      target.src = likeRed;
-      target.className = "red heart";
-      target.nextElementSibling.textContent = likes + 1;
-    } else {
-      target.src = likeBlack;
-      target.className = "black heart";
-      target.nextElementSibling.textContent = likes - 1;
-    }
-  };
-
   render() {
     const { data, handlePictureClick } = this.props;
     const userPP = data.user.profile_image.large;
@@ -74,7 +61,7 @@ class Picture extends Component {
                 src={likeBlack}
                 className="black heart"
                 alt="heart icon"
-                onClick={this.handleLike}
+                onClick={this.props.handlePictureLike}
               />
               <p>{data.likes}</p>
             </div>

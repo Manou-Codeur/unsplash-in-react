@@ -10,6 +10,8 @@ import Search from "./../search/search";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 
 import "./home.scss";
+import likeBlack from "../../assets/img/favorite-white.svg";
+import likeRed from "../../assets/img/favorite-red.png";
 
 class Home extends Component {
   state = {
@@ -108,6 +110,24 @@ class Home extends Component {
     }
   };
 
+  handleLike = ({ target }) => {
+    if (!this.state.authUser) {
+      this.props.history.push("/login");
+      return;
+    }
+
+    const likes = parseInt(target.nextElementSibling.textContent);
+    if (target.className === "black heart") {
+      target.src = likeRed;
+      target.className = "red heart";
+      target.nextElementSibling.textContent = likes + 1;
+    } else {
+      target.src = likeBlack;
+      target.className = "black heart";
+      target.nextElementSibling.textContent = likes - 1;
+    }
+  };
+
   render() {
     const { pictures, authUser } = this.state;
 
@@ -138,6 +158,7 @@ class Home extends Component {
           <Picturegrid
             pictures={pictures}
             handlePictureClick={this.handlePictureClick}
+            handlePictureLike={this.handleLike}
           />
         ) : (
           <h1 style={{ textAlign: "center" }}>Please wait...</h1>
