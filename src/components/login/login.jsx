@@ -45,7 +45,6 @@ const Login = ({ history }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
       history.replace("./");
-      //save in the localstorage that the user has Oauthed
     } catch (error) {
       setError(error);
     }

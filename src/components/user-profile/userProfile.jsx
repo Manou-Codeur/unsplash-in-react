@@ -132,7 +132,9 @@ class Userprofile extends Component {
 
   handlePictureClick = (data, { target }) => {
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + data.id);
+      this.props.history.push(
+        "/picture/" + data.id + "/" + this.props.match.params.username
+      );
   };
 
   handleCollectioClick = async id => {
