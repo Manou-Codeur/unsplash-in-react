@@ -137,7 +137,7 @@ class Fullimage extends Component {
                   <p className="name" onClick={this.handleUserClick}>
                     {selectedPic.user.first_name +
                       " " +
-                      selectedPic.user.last_name}
+                      (selectedPic.user.last_name || "")}
                   </p>
                 </div>
               </div>

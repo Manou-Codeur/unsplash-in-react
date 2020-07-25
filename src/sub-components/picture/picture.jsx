@@ -12,6 +12,7 @@ class Picture extends Component {
   state = {
     liked: false,
     likes: null,
+    authUser: null,
   };
 
   static contextType = FirebaseContext;
@@ -24,12 +25,18 @@ class Picture extends Component {
           .on("value", snapshot => {
             const usersObject = snapshot.val();
             this.setState({
+              authUser: userInfo,
               liked: usersObject && usersObject.liked,
               likes: usersObject && usersObject.likes,
             });
           });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.listener();
+    this.context.pictures(this.state.authUser.uid).off();
   }
 
   handleHover = () => {

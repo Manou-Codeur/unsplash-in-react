@@ -48,6 +48,7 @@ class Home extends Component {
 
   componentWillUnmount() {
     this.listener();
+    this.context.users().off();
   }
 
   componentDidUpdate(prevProps) {
