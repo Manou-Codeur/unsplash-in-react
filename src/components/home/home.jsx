@@ -22,9 +22,13 @@ class Home extends Component {
     authUser: null,
   };
 
+  _isMounted = false;
+
   static contextType = FirebaseContext;
 
   async componentDidMount() {
+    this._isMounted = true;
+
     //firebase
     this.listener = this.context.isUserAuthenticated(userInfo => {
       if (userInfo && !userInfo.displayName) {
@@ -43,10 +47,12 @@ class Home extends Component {
     } else {
       data = await callServer();
     }
-    this.setState({ pictures: data });
+    if (this._isMounted) this.setState({ pictures: data });
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
+
     this.listener();
     this.context.users().off();
   }

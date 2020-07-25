@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { flatten } from "../../services/helperFunctions";
 import {
-  callServer,
   getUserPhotos,
   getUserLikes,
   getUserCollections,
@@ -29,18 +28,27 @@ class Userprofile extends Component {
     authUser: null,
   };
 
+  _isMounted = false;
+
   static contextType = FirebaseContext;
 
   async componentDidMount() {
+    this._isMounted = true;
+
     //firebase
     this.context.isUserAuthenticated(userInfo => {
-      this.setState({ authUser: userInfo });
+      if (this._isMounted) this.setState({ authUser: userInfo });
     });
 
     const username = this.props.match.params.username;
     const pictures = await getUserPhotos(username);
 
-    this.setState({ pictures, currentUser: pictures[0][0] });
+    if (this._isMounted)
+      this.setState({ pictures, currentUser: pictures[0][0] });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleGetUserPhotos = async ({ target }) => {
@@ -62,7 +70,7 @@ class Userprofile extends Component {
     if (shouldICallServer) {
       //calling the server
       const pictures = await getUserPhotos(username);
-      this.setState({ pictures });
+      if (this._isMounted) this.setState({ pictures });
     }
   };
 
@@ -80,7 +88,7 @@ class Userprofile extends Component {
     //calling the server
     const username = this.props.match.params.username;
     const pictures = await getUserLikes(username);
-    this.setState({ pictures });
+    if (this._isMounted) this.setState({ pictures });
   };
 
   handleGetUserCollection = async ({ target }) => {
@@ -91,7 +99,7 @@ class Userprofile extends Component {
     //calling the server
     const username = this.props.match.params.username;
     const collections = await getUserCollections(username);
-    this.setState({ collections });
+    if (this._isMounted) this.setState({ collections });
 
     //updating the styles
     node.className = "links three";
@@ -118,20 +126,10 @@ class Userprofile extends Component {
       this.props.history.push("/picture/" + data.id + "/" + username);
   };
 
-  handleSearchInput = async ({ keyCode, target }, val) => {
-    if (keyCode === 13 && val !== "") {
-      const data = await callServer(val);
-      this.setState({ pictures: data });
-      window.query = val;
-      target.value = "";
-      target.focus();
-    }
-  };
-
   handleCollectioClick = async id => {
     //call the server to get photos
     const pictures = await getCollectionPhotos(id);
-    this.setState({ pictures, collectionsAsked: false });
+    if (this._isMounted) this.setState({ pictures, collectionsAsked: false });
   };
 
   singoutORsingin = async ({ target }) => {

@@ -26,9 +26,13 @@ class Fullimage extends Component {
     authUser: null,
   };
 
+  _isMounted = false;
+
   static contextType = FirebaseContext;
 
   async componentDidMount() {
+    this._isMounted = true;
+
     var data;
     const { params } = this.props.match;
     const { pathname } = this.props.location;
@@ -48,21 +52,27 @@ class Fullimage extends Component {
 
     const linkToPicture = await download(params.id);
 
-    this.setState({ selectedPic, linkToPicture });
+    if (this._isMounted) this.setState({ selectedPic, linkToPicture });
 
     //firebase
     this.listener = this.context.isUserAuthenticated(userInfo => {
       if (userInfo) {
         this.context.picture(userInfo.uid, params.id).on("value", snapshot => {
           const usersObject = snapshot.val();
-          this.setState({
-            authUser: userInfo,
-            liked: usersObject && usersObject.liked,
-            likes: usersObject && usersObject.likes,
-          });
+          if (this._isMounted) {
+            this.setState({
+              authUser: userInfo,
+              liked: usersObject && usersObject.liked,
+              likes: usersObject && usersObject.likes,
+            });
+          }
         });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleClosePic = () => {

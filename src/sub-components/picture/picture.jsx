@@ -15,26 +15,34 @@ class Picture extends Component {
     authUser: null,
   };
 
+  _isMounted = false;
+
   static contextType = FirebaseContext;
 
   componentDidMount() {
+    this._isMounted = true;
+
     this.listener = this.context.isUserAuthenticated(userInfo => {
       if (userInfo) {
         this.context
           .picture(userInfo.uid, this.props.data.id)
           .on("value", snapshot => {
             const usersObject = snapshot.val();
-            this.setState({
-              authUser: userInfo,
-              liked: usersObject && usersObject.liked,
-              likes: usersObject && usersObject.likes,
-            });
+            if (this._isMounted) {
+              this.setState({
+                authUser: userInfo,
+                liked: usersObject && usersObject.liked,
+                likes: usersObject && usersObject.likes,
+              });
+            }
           });
       }
     });
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
+
     this.listener();
     if (this.state.authUser)
       this.context.pictures(this.state.authUser.uid).off();
