@@ -56,10 +56,14 @@ const Login = ({ history }) => {
 
   const onFacebook = async () => {
     try {
-      await myContext.doSignInWithFacebook();
-      history.replace("./");
+      const data = await myContext.doSignInWithFacebook();
+      if (data.additionalUserInfo.isNewUser) {
+        setError({
+          message: "You haven't registered yet, go to singup page please!",
+        });
+        await myContext.deleteUser();
+      } else history.replace("./");
     } catch (error) {
-      console.log(error);
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =
           "An account already exists with the same email address!";

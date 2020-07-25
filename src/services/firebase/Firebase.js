@@ -51,6 +51,11 @@ class Firebase {
     return this.auth.onAuthStateChanged(funct);
   };
 
+  //get current user info
+  deleteUser = () => {
+    this.auth.currentUser.delete();
+  };
+
   //method to update the userprofile
   updateUser = (username, pp) => {
     this.auth.currentUser.updateProfile({
