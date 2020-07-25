@@ -136,11 +136,8 @@ class Userprofile extends Component {
     if (target.textContent === "Singin") {
       this.props.history.replace("/login");
     } else {
-      try {
-        await this.context.doSignOut();
-      } catch (error) {
-        console.log(error);
-      }
+      await this.context.doSignOut();
+      this.props.history.replace("/");
     }
   };
 
@@ -199,7 +196,6 @@ class Userprofile extends Component {
             pictures={pictures}
             handlePictureClick={this.handlePictureClick}
             handlePictureLike={this.handleLike}
-            loggedOut={authUser}
           />
         )}
 

@@ -63,7 +63,7 @@ class Picture extends Component {
   };
 
   render() {
-    const { data, handlePictureClick, loggedOut } = this.props;
+    const { data, handlePictureClick } = this.props;
     const { liked, likes } = this.state;
     const userPP = data.user.profile_image.large;
 
@@ -101,7 +101,7 @@ class Picture extends Component {
             <div className="imgg-containner one">
               <img
                 //we will comeback to when the user logout
-                src={liked && loggedOut ? likeRed : likeBlack}
+                src={liked ? likeRed : likeBlack}
                 className={liked ? "red heart" : "black heart"}
                 alt="heart icon"
                 onClick={e => this.props.handlePictureLike(e, data.id)}
