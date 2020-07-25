@@ -168,7 +168,7 @@ class Userprofile extends Component {
   };
 
   render() {
-    const { pictures, collectionsAsked, collections, authUser } = this.state;
+    const { pictures, collectionsAsked, collections } = this.state;
 
     return (
       <div className="User-profile">

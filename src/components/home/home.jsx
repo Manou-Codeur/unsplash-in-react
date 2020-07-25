@@ -35,7 +35,7 @@ class Home extends Component {
       if (userInfo && !userInfo.displayName) {
         this.context.user(userInfo.uid).on("value", snapshot => {
           const usersObject = snapshot.val();
-          this.context.updateUser(usersObject.name, null);
+          if (usersObject) this.context.updateUser(usersObject.name, null);
         });
       }
       this.setState({ authUser: userInfo });
