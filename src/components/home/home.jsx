@@ -20,6 +20,7 @@ class Home extends Component {
     searchAsked: this.props.search,
     searchVal: "",
     authUser: null,
+    error: null,
   };
 
   _isMounted = false;
@@ -44,6 +45,7 @@ class Home extends Component {
     let data;
     if (window.query) {
       data = await callServer(window.query);
+      if (data[0].length === 0) this.setState({ error: "Picture not found!" });
     } else {
       data = await callServer();
     }
@@ -96,6 +98,7 @@ class Home extends Component {
     //update the state
     if (keyCode === 13 && val !== "") {
       const data = await callServer(val);
+      if (data[0].length === 0) this.setState({ error: "Picture not found!" });
       this.setState({ pictures: data });
       window.query = val;
       target.value = "";
@@ -146,7 +149,7 @@ class Home extends Component {
   };
 
   render() {
-    const { pictures, authUser } = this.state;
+    const { pictures, authUser, error } = this.state;
 
     return (
       <div
@@ -179,7 +182,9 @@ class Home extends Component {
             loggedOut={this.state.authUser}
           />
         ) : (
-          <h1 style={{ textAlign: "center" }}>Please wait...</h1>
+          <h1 style={{ textAlign: "center" }}>
+            {error ? error : "Please wait..."}
+          </h1>
         )}
 
         <button className="more-btn">Load More</button>

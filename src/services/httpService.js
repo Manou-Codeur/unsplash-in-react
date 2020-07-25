@@ -3,6 +3,18 @@ import axios from "axios";
 axios.defaults.headers.common["Authorization"] =
   "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE";
 
+axios.interceptors.response.use(null, error => {
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
+
+  if (!expectedError) {
+    alert("There is an unexpected error, please reload and try again!");
+  }
+  return Promise.reject(error);
+});
+
 export const callServer = async (query = ["people", "nature", "food"]) => {
   if (query.length === 3) {
     const data = await axios.all([
