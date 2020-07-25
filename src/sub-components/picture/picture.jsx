@@ -36,7 +36,8 @@ class Picture extends Component {
 
   componentWillUnmount() {
     this.listener();
-    this.context.pictures(this.state.authUser.uid).off();
+    if (this.state.authUser)
+      this.context.pictures(this.state.authUser.uid).off();
   }
 
   handleHover = () => {

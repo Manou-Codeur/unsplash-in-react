@@ -66,11 +66,13 @@ class Fullimage extends Component {
   }
 
   handleClosePic = () => {
-    if (window.query !== undefined) {
+    if (window.query !== "" && window.query !== undefined) {
       this.props.history.push("/search");
+      console.log("with query");
     } else {
       this.props.history.goBack();
       window.query = "";
+      console.log("without query");
     }
   };
 
