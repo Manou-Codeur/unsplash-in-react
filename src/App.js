@@ -49,7 +49,6 @@ class App extends Component {
           />
           <Route
             path="/search"
-            exact
             render={props => <Home {...props} search={true} />}
           />
           <Route path="/login" component={Login} />

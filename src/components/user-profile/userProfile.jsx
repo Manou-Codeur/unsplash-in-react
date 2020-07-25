@@ -107,7 +107,8 @@ class Userprofile extends Component {
   };
 
   handleShowSearch = () => {
-    this.props.history.push("/search");
+    const username = this.props.match.params.username;
+    this.props.history.push("/search/" + username);
   };
 
   handlePictureClick = (data, { target }) => {
@@ -115,11 +116,6 @@ class Userprofile extends Component {
     const username = this.props.match.params.username;
     if (!target.className.includes("heart"))
       this.props.history.push("/picture/" + data.id + "/" + username);
-  };
-
-  handleCloseSearch = () => {
-    this.setState({ searchAsked: false });
-    this.props.history.push("/profile/" + this.props.match.params.username);
   };
 
   handleSearchInput = async ({ keyCode, target }, val) => {
@@ -130,13 +126,6 @@ class Userprofile extends Component {
       target.value = "";
       target.focus();
     }
-  };
-
-  handlePictureClick = (data, { target }) => {
-    if (!target.className.includes("heart"))
-      this.props.history.push(
-        "/picture/" + data.id + "/" + this.props.match.params.username
-      );
   };
 
   handleCollectioClick = async id => {

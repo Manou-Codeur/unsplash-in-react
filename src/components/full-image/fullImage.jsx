@@ -66,14 +66,7 @@ class Fullimage extends Component {
   }
 
   handleClosePic = () => {
-    if (window.query !== "" && window.query !== undefined) {
-      this.props.history.push("/search");
-      console.log("with query");
-    } else {
-      this.props.history.goBack();
-      window.query = "";
-      console.log("without query");
-    }
+    this.props.history.goBack();
   };
 
   handleUserClick = () => {
@@ -113,7 +106,7 @@ class Fullimage extends Component {
   render() {
     const { selectedPic, liked, likes } = this.state;
 
-    if (Object.keys(selectedPic).length > 0) {
+    if (selectedPic && Object.keys(selectedPic).length > 0) {
       const date = selectedPic.created_at.split("T")[0];
 
       return (
