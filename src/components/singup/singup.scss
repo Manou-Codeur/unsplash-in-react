@@ -50,6 +50,7 @@
       margin-top: 1rem;
       padding: 0.5rem 2rem;
       outline: none;
+      cursor: pointer;
 
       &:hover {
         background-color: black;
@@ -100,6 +101,7 @@
         font-size: 0.9rem;
         text-align: center;
         font-weight: 300;
+        padding: 1rem 0;
 
         .fb {
           cursor: pointer;
