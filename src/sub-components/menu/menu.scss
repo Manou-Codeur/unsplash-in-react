@@ -6,7 +6,6 @@
   height: 100vh;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  overflow-y: scroll;
   transition: left 0.8s ease;
 
   .menu {
@@ -18,7 +17,7 @@
     width: 20%;
     display: flex;
     flex-direction: column;
-    padding: 1rem 0;
+    padding-top: 1rem;
 
     .close-containner img.close-icon {
       float: right;
@@ -121,6 +120,16 @@
         width: 40%;
       }
     }
+    @media only screen and (max-height: 680px) {
+      & {
+        overflow-y: scroll;
+
+        .social-media {
+          position: initial;
+          padding-bottom: 1rem;
+        }
+      }
+    }
   }
 
   @media only screen and (max-width: 570px) {
@@ -132,10 +141,13 @@
 
         .social-media {
           margin-bottom: 0.5rem;
-          position: initial;
-          padding: 2rem 0 1rem 0;
+          padding-top: 2rem;
         }
       }
     }
   }
+
+  // @media only screen and (max-height: 683px) {
+
+  // }
 }

@@ -11,6 +11,14 @@
     width: 100%;
     overflow-y: scroll;
 
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #313131;
+    }
+
     backdrop-filter: blur(10px) brightness(0.5);
     -webkit-backdrop-filter: blur(10px) brightness(0.5);
 
