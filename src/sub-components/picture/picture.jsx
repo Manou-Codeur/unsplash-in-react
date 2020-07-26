@@ -71,7 +71,9 @@ class Picture extends Component {
       <div
         className="picture"
         onClick={handlePictureClick.bind(this, data)}
-        style={{ backgroundColor: data.color }}
+        style={{
+          backgroundColor: data.color,
+        }}
         title={data.description}
       >
         <img

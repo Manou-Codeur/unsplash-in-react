@@ -6,6 +6,18 @@
   margin: 1rem 0;
   overflow: hidden;
   min-height: 210px;
+  cursor: zoom-in;
+  animation: back-color-change 1.3s ease-in-out 0s infinite alternate;
+
+  @keyframes back-color-change {
+    0% {
+      background-color: rgba(128, 128, 128, 0.1);
+    }
+
+    100% {
+      background-color: "";
+    }
+  }
 
   img.background {
     filter: blur(2px) brightness(0.4);
