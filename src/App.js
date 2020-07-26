@@ -24,27 +24,21 @@ class App extends Component {
   }
 
   render() {
+    const { userAuth } = this.state;
+
     return (
       <Fragment>
         <Switch>
           <Route
             path="/profile/:username"
             render={props =>
-              this.state.userAuth ? (
-                <Userprofile {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              userAuth ? <Userprofile {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
             path="/picture/:id"
             render={props =>
-              this.state.userAuth ? (
-                <Fullimage {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              userAuth ? <Fullimage {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
