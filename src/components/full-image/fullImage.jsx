@@ -6,6 +6,7 @@ import {
   getUserPhotos,
 } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import infoIcon from "../../assets/img/info.svg";
 
@@ -218,7 +219,11 @@ class Fullimage extends Component {
         </div>
       );
     }
-    return <h1>Please wait...</h1>;
+    return (
+      <div className="full-pic-loading">
+        <CircularProgress color="inherit" />
+      </div>
+    );
   }
 }
 

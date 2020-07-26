@@ -86,9 +86,9 @@ class Userprofile extends Component {
     node.className = "links two";
 
     //calling the server
-    const username = this.props.match.params.username;
-    const pictures = await getUserLikes(username);
-    if (this._isMounted) this.setState({ pictures });
+    // const username = this.props.match.params.username;
+    // const pictures = await getUserLikes(username);
+    // if (this._isMounted) this.setState({ pictures });
   };
 
   handleGetUserCollection = async ({ target }) => {

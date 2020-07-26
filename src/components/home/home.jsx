@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { FirebaseContext } from "./../../services/firebase/indexx";
 
@@ -97,6 +98,7 @@ class Home extends Component {
   handleSearchInput = async ({ keyCode, target }, val) => {
     //update the state
     if (keyCode === 13 && val !== "") {
+      this.setState({ pictures: [[], [], []] });
       const data = await callServer(val);
       if (data[0].length === 0) this.setState({ error: "Picture not found!" });
       this.setState({ pictures: data });
@@ -178,9 +180,9 @@ class Home extends Component {
             handlePictureLike={this.handleLike}
           />
         ) : (
-          <h1 style={{ textAlign: "center" }}>
-            {error ? error : "Please wait..."}
-          </h1>
+          <div style={{ textAlign: "center", color: "black" }}>
+            {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
+          </div>
         )}
 
         <button className="more-btn">Load More</button>

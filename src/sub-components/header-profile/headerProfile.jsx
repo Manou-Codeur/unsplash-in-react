@@ -1,4 +1,5 @@
 import React from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import menuBar from "../../assets/img/menu.svg";
 import searchIcon from "../../assets/img/search.svg";
@@ -54,7 +55,11 @@ const HeaderProfile = ({
       </div>
     );
   } else {
-    return <h1>Please wait...</h1>;
+    return (
+      <div className="loading-header-home">
+        <CircularProgress color="inherit" />
+      </div>
+    );
   }
 };
 
