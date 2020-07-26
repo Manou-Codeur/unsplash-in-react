@@ -6,6 +6,7 @@ import {
   getUserCollections,
   getCollectionPhotos,
 } from "../../services/httpService";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import FirebaseContext from "./../../services/firebase/firebaseContext";
 
@@ -26,6 +27,8 @@ class Userprofile extends Component {
     collectionsAsked: false,
     currentUser: "",
     authUser: null,
+    error: null,
+    collectionError: null,
   };
 
   _isMounted = false;
@@ -53,7 +56,7 @@ class Userprofile extends Component {
 
   handleGetUserPhotos = async ({ target }) => {
     //init some state props
-    this.setState({ collectionsAsked: false });
+    this.setState({ collectionsAsked: false, pictures: [[], [], []] });
 
     //prevent the user from calling the server without need to
     const username = this.props.match.params.username;
@@ -76,7 +79,7 @@ class Userprofile extends Component {
 
   handleGetUserLikes = async ({ target }) => {
     //init some state props
-    this.setState({ collectionsAsked: false });
+    this.setState({ collectionsAsked: false, pictures: [[], [], []] });
 
     //prevent the user from calling the server without need to
     const node = target.parentNode;
@@ -86,9 +89,13 @@ class Userprofile extends Component {
     node.className = "links two";
 
     //calling the server
-    // const username = this.props.match.params.username;
-    // const pictures = await getUserLikes(username);
-    // if (this._isMounted) this.setState({ pictures });
+    const username = this.props.match.params.username;
+    const pictures = await getUserLikes(username);
+    if (this._isMounted) {
+      if (flatten(pictures).length === 0)
+        this.setState({ error: "User haven't liked any picture!" });
+      else this.setState({ pictures });
+    }
   };
 
   handleGetUserCollection = async ({ target }) => {
@@ -99,7 +106,11 @@ class Userprofile extends Component {
     //calling the server
     const username = this.props.match.params.username;
     const collections = await getUserCollections(username);
-    if (this._isMounted) this.setState({ collections });
+    if (this._isMounted) {
+      if (collections.length === 0)
+        this.setState({ collectionError: "User doesn't have any collection!" });
+      else this.setState({ collections });
+    }
 
     //updating the styles
     node.className = "links three";
@@ -168,7 +179,13 @@ class Userprofile extends Component {
   };
 
   render() {
-    const { pictures, collectionsAsked, collections } = this.state;
+    const {
+      pictures,
+      collectionsAsked,
+      collections,
+      error,
+      collectionError,
+    } = this.state;
 
     return (
       <div className="User-profile">
@@ -180,6 +197,28 @@ class Userprofile extends Component {
           getUserCollection={this.handleGetUserCollection}
           userInfo={this.state.currentUser}
         />
+
+        {/* handle nonCollection error */}
+        {!error && flatten(pictures).length === 0 ? (
+          <div style={{ textAlign: "center", color: "black" }}>
+            <CircularProgress color="inherit" />
+          </div>
+        ) : null}
+
+        {!collectionsAsked && error ? (
+          <h1 style={{ textAlign: "center" }}>{error}</h1>
+        ) : null}
+
+        {/* handle collection error */}
+        {collectionsAsked && !collectionError && collections.length === 0 ? (
+          <div style={{ textAlign: "center", color: "black" }}>
+            <CircularProgress color="inherit" />
+          </div>
+        ) : null}
+
+        {collectionsAsked && collectionError ? (
+          <h1 style={{ textAlign: "center" }}>{collectionError}</h1>
+        ) : null}
 
         {collectionsAsked ? (
           <div className="collection-grid">
@@ -198,12 +237,6 @@ class Userprofile extends Component {
             handlePictureLike={this.handleLike}
           />
         )}
-
-        {collections.length === 0 && collectionsAsked ? (
-          <h1 style={{ textAlign: "center" }}>
-            Sorry but this user doesn't have any collections
-          </h1>
-        ) : null}
 
         <Menu
           menuAsked={this.state.menuAsked}
