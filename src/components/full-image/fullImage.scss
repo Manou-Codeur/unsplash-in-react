@@ -27,35 +27,36 @@
       display: flex;
       justify-content: space-between;
       width: 80%;
+      font-size: 16px;
 
       .user-info {
         display: flex;
         align-items: center;
 
         .user-name {
-          margin-left: 1rem;
+          margin-left: 1em;
           color: white;
-          font-size: 16px;
+          font-size: inherit;
 
           p.by {
             font-weight: 300;
           }
 
           p.name {
-            font-size: 1.3rem;
+            font-size: 1.3em;
             cursor: pointer;
           }
         }
 
         .img-containner {
-          height: 50px;
-          width: 50px;
+          height: 3.125em;
+          width: 3.125em;
           border-radius: 100%;
         }
       }
 
       img {
-        height: 2.5rem;
+        height: 2.5em;
         cursor: pointer;
       }
     }
@@ -80,14 +81,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        // border: 1px solid green;
 
         .item {
           padding-left: 35%;
           width: 100%;
           margin: 2rem 0;
           color: white;
-          // border: 1px solid red;
 
           span {
             font-weight: 300;
@@ -99,6 +98,7 @@
 
     .controls {
       display: flex;
+      font-size: 16px;
 
       .one {
         display: flex;
@@ -111,7 +111,7 @@
       }
 
       img {
-        height: 2rem;
+        height: 2em;
         margin: 0 2rem;
         cursor: pointer;
       }
@@ -132,33 +132,9 @@
       }
     }
     @media only screen and (max-width: 403px) {
-      .controls {
-        img {
-          height: 1.5rem;
-        }
-      }
-
+      .controls,
       .userANDclose {
-        .user-info {
-          .user-name {
-            p.by {
-              font-size: 0.8rem;
-            }
-
-            p.name {
-              font-size: 1.2rem;
-            }
-          }
-
-          .img-containner {
-            width: 40px;
-            height: 40px;
-          }
-        }
-
-        img {
-          height: 2rem;
-        }
+        font-size: 12px;
       }
     }
   }
