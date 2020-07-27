@@ -33,4 +33,14 @@
       color: #c5c5c5;
     }
   }
+
+  @media only screen and (max-width: 587px) {
+    & {
+      padding: 1.5rem 0;
+
+      input {
+        font-size: 2rem;
+      }
+    }
+  }
 }

@@ -106,7 +106,8 @@
         color: rgba(0, 0, 0, 0.7);
       }
 
-      button {
+      button,
+      a.start-btn {
         background-color: #313131;
         border: 0;
         padding: 0.7rem 2.8rem;
@@ -115,6 +116,7 @@
         font-weight: 100;
         cursor: pointer;
         border-radius: 3px;
+        text-decoration: none;
 
         &:hover {
           color: white;

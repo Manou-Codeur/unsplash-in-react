@@ -48,7 +48,9 @@ const Headerhome = ({
           {!authUser ? (
             <button onClick={handleSubscribeClick}>Subscribe</button>
           ) : (
-            <button>Start</button>
+            <a className="start-btn" href="#start">
+              Start
+            </a>
           )}
         </div>
 

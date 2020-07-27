@@ -6,7 +6,7 @@ import "./pictureGrid.scss";
 
 const Picturegrid = ({ pictures, handlePictureClick, handlePictureLike }) => {
   return (
-    <div className="picture-grid">
+    <div id="start" className="picture-grid">
       <div className="col-one col">
         {pictures[0].map(picture => (
           <Picture
