@@ -52,7 +52,7 @@ const Singup = ({ history }) => {
     try {
       const data = await myContext.doSignInWithFacebook();
       if (!data.additionalUserInfo.isNewUser) {
-        setError({ message: "You have ever registered!" });
+        setError({ message: "You have already registered!" });
       } else {
         history.replace("./");
       }
