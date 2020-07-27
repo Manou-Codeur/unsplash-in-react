@@ -19,12 +19,6 @@
       width: 9.19rem;
     }
 
-    @media only screen and (max-width: 500px) {
-      .fake-div {
-        display: none;
-      }
-    }
-
     .author {
       font-weight: 400;
       color: gray;
@@ -63,6 +57,12 @@
         &:last-child {
           margin-right: 0;
         }
+      }
+    }
+
+    @media only screen and (max-width: 500px) {
+      .fake-div {
+        display: none;
       }
     }
   }
@@ -128,6 +128,12 @@
           font-size: 0.8rem;
         }
       }
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+    & {
+      margin-bottom: 10rem;
     }
   }
 }

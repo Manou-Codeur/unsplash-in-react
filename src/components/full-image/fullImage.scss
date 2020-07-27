@@ -21,6 +21,7 @@
 
     backdrop-filter: blur(10px) brightness(0.5);
     -webkit-backdrop-filter: blur(10px) brightness(0.5);
+    -moz-backdrop-filter: blur(10px) brightness(0.5);
 
     .userANDclose {
       display: flex;
@@ -34,6 +35,8 @@
         .user-name {
           margin-left: 1rem;
           color: white;
+          font-size: 16px;
+
           p.by {
             font-weight: 300;
           }
@@ -121,6 +124,41 @@
     @media only screen and (max-width: 900px) {
       img.main-pic {
         width: 70%;
+      }
+    }
+    @media only screen and (max-width: 550px) {
+      img.main-pic {
+        width: 100%;
+      }
+    }
+    @media only screen and (max-width: 403px) {
+      .controls {
+        img {
+          height: 1.5rem;
+        }
+      }
+
+      .userANDclose {
+        .user-info {
+          .user-name {
+            p.by {
+              font-size: 0.8rem;
+            }
+
+            p.name {
+              font-size: 1.2rem;
+            }
+          }
+
+          .img-containner {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        img {
+          height: 2rem;
+        }
       }
     }
   }
