@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  callServer,
-  download,
-  getUserPhotos,
-} from "../../services/httpService";
+import { download, getPicture } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -34,23 +30,8 @@ class Fullimage extends Component {
   async componentDidMount() {
     this._isMounted = true;
 
-    var data;
     const { params } = this.props.match;
-    const { pathname } = this.props.location;
-    const username = pathname.split("/")[3];
-
-    if (username) {
-      data = await getUserPhotos(username);
-    } else if (window.query) {
-      data = await callServer(window.query);
-    } else {
-      data = await callServer();
-    }
-
-    data = [...data[0], ...data[1], ...data[2]];
-    const index = data.findIndex(el => el.id === params.id);
-    const selectedPic = data[index];
-
+    const selectedPic = await getPicture(params.id);
     const linkToPicture = await download(params.id);
 
     if (this._isMounted) this.setState({ selectedPic, linkToPicture });
