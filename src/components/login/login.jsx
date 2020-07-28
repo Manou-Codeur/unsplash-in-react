@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -11,6 +11,12 @@ import "./login.scss";
 const Login = ({ history }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
+
+  useEffect(() => {
+    myContext.isUserAuthenticated(userInfo => {
+      if (userInfo) history.goBack();
+    });
+  }, []);
 
   const schema = {
     email: Yup.string()
