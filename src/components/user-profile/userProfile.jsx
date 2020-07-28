@@ -93,7 +93,7 @@ class Userprofile extends Component {
     const pictures = await getUserLikes(this.username);
     if (this._isMounted) {
       if (flatten(pictures).length === 0)
-        this.setState({ error: "User haven't liked any picture!" });
+        this.setState({ error: "User hasn't liked any picture!" });
       else this.setState({ pictures });
     }
   };
@@ -107,7 +107,7 @@ class Userprofile extends Component {
     const collections = await getUserCollections(this.username);
     if (this._isMounted) {
       if (collections.length === 0)
-        this.setState({ collectionError: "User doesn't have any collection!" });
+        this.setState({ collectionError: "User doesn't has any collection!" });
       else this.setState({ collections });
     }
 
@@ -138,9 +138,8 @@ class Userprofile extends Component {
     //call the server to get photos
     const pictures = await getCollectionPhotos(id);
     if (this._isMounted) {
-      if (flatten(pictures).length === 0)
-        this.setState({ error: "This collection is empty!" });
-      else this.setState({ pictures, collectionsAsked: false });
+      if (flatten(pictures).length > 0)
+        this.setState({ pictures, collectionsAsked: false });
     }
   };
 
