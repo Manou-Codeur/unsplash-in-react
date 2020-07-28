@@ -16,7 +16,7 @@ const Login = ({ history }) => {
     myContext.isUserAuthenticated(userInfo => {
       if (userInfo) history.goBack();
     });
-  }, []);
+  });
 
   const schema = {
     email: Yup.string()
