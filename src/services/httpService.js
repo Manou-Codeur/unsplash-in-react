@@ -20,21 +20,20 @@ axios.interceptors.response.use(null, error => {
 });
 
 export const callServer = async (query = ["people", "nature", "food"]) => {
-  if (query.length === 3) {
-    const data = await axios.all([
-      axios.get(`/search/photos?query=${query[0]}`),
-      axios.get(`/search/photos?query=${query[1]}`),
-      axios.get(`/search/photos?query=${query[2]}`),
-    ]);
-    return [data[0].data.results, data[1].data.results, data[2].data.results];
-  } else {
-    const data = await axios.all([
-      axios.get(`/search/photos?query=${query}`),
-      axios.get(`/search/photos?query=${query}&page=2`),
-      axios.get(`/search/photos?query=${query}&page=3`),
-    ]);
-    return [data[0].data.results, data[1].data.results, data[2].data.results];
-  }
+  const data = await axios.all([
+    axios.get(`/search/photos?query=${query.length === 3 ? query[0] : query}`),
+    axios.get(
+      `/search/photos?query=${
+        query.length === 3 ? query[1] : query + "&page=2"
+      }`
+    ),
+    axios.get(
+      `/search/photos?query=${
+        query.length === 3 ? query[2] : query + "&page=3"
+      }`
+    ),
+  ]);
+  return [data[0].data.results, data[1].data.results, data[2].data.results];
 };
 
 export const getPicture = async id => {
