@@ -55,41 +55,33 @@ class Userprofile extends Component {
   }
 
   handleGetUserPhotos = async ({ target }) => {
+    //prevent the user from calling the server without need to
+    const node = target.parentNode;
+    if (node.className.includes("one")) return;
+
     //init some state props
     this.setState({ collectionsAsked: false, pictures: [[], [], []] });
 
-    //prevent the user from calling the server without need to
-
-    const picturesArr = flatten(this.state.pictures);
-    let shouldICallServer = false;
-    for (let picture of picturesArr) {
-      if (picture.user.username !== this.username) shouldICallServer = true;
-    }
-
     //updating the styles
-    const node = target.parentNode;
     node.className = "links one";
 
-    if (shouldICallServer) {
-      //calling the server
-      const pictures = await getUserPhotos(this.username);
-      if (this._isMounted) this.setState({ pictures });
-    }
+    //calling the server
+    const pictures = await getUserPhotos(this.username);
+    if (this._isMounted) this.setState({ pictures });
   };
 
   handleGetUserLikes = async ({ target }) => {
-    //init some state props
-    this.setState({ collectionsAsked: false, pictures: [[], [], []] });
-
     //prevent the user from calling the server without need to
     const node = target.parentNode;
     if (node.className.includes("two")) return;
+
+    //init some state props
+    this.setState({ collectionsAsked: false, pictures: [[], [], []] });
 
     //updating the styles
     node.className = "links two";
 
     //calling the server
-
     const pictures = await getUserLikes(this.username);
     if (this._isMounted) {
       if (flatten(pictures).length === 0)
@@ -153,28 +145,30 @@ class Userprofile extends Component {
   };
 
   handleLike = ({ target }, id) => {
-    if (!this.state.authUser) {
+    const { authUser } = this.state;
+
+    if (!authUser) {
       this.props.history.push("/login");
       return;
     }
-
-    const likes = parseInt(target.nextElementSibling.textContent);
+    const nextSibling = target.nextElementSibling;
+    const likes = parseInt(nextSibling.textContent);
     if (target.className === "black heart") {
       target.src = likeRed;
       target.className = "red heart";
-      target.nextElementSibling.textContent = likes + 1;
+      nextSibling.textContent = likes + 1;
 
       //about db
       this.context
-        .picture(this.state.authUser.uid, id)
+        .picture(authUser.uid, id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
       target.className = "black heart";
-      target.nextElementSibling.textContent = likes - 1;
+      nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(this.state.authUser.uid, id).remove();
+      this.context.picture(authUser.uid, id).remove();
     }
   };
 
