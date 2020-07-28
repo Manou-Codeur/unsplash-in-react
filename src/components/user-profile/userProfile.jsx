@@ -36,6 +36,7 @@ class Userprofile extends Component {
   static contextType = FirebaseContext;
 
   async componentDidMount() {
+    this.username = this.props.match.params.username;
     this._isMounted = true;
 
     //firebase
@@ -43,8 +44,7 @@ class Userprofile extends Component {
       if (this._isMounted) this.setState({ authUser: userInfo });
     });
 
-    const username = this.props.match.params.username;
-    const pictures = await getUserPhotos(username);
+    const pictures = await getUserPhotos(this.username);
 
     if (this._isMounted)
       this.setState({ pictures, currentUser: pictures[0][0] });
@@ -59,11 +59,11 @@ class Userprofile extends Component {
     this.setState({ collectionsAsked: false, pictures: [[], [], []] });
 
     //prevent the user from calling the server without need to
-    const username = this.props.match.params.username;
+
     const picturesArr = flatten(this.state.pictures);
     let shouldICallServer = false;
     for (let picture of picturesArr) {
-      if (picture.user.username !== username) shouldICallServer = true;
+      if (picture.user.username !== this.username) shouldICallServer = true;
     }
 
     //updating the styles
@@ -72,7 +72,7 @@ class Userprofile extends Component {
 
     if (shouldICallServer) {
       //calling the server
-      const pictures = await getUserPhotos(username);
+      const pictures = await getUserPhotos(this.username);
       if (this._isMounted) this.setState({ pictures });
     }
   };
@@ -89,8 +89,8 @@ class Userprofile extends Component {
     node.className = "links two";
 
     //calling the server
-    const username = this.props.match.params.username;
-    const pictures = await getUserLikes(username);
+
+    const pictures = await getUserLikes(this.username);
     if (this._isMounted) {
       if (flatten(pictures).length === 0)
         this.setState({ error: "User haven't liked any picture!" });
@@ -104,8 +104,7 @@ class Userprofile extends Component {
     if (node.className.includes("three")) return;
 
     //calling the server
-    const username = this.props.match.params.username;
-    const collections = await getUserCollections(username);
+    const collections = await getUserCollections(this.username);
     if (this._isMounted) {
       if (collections.length === 0)
         this.setState({ collectionError: "User doesn't have any collection!" });
@@ -126,21 +125,23 @@ class Userprofile extends Component {
   };
 
   handleShowSearch = () => {
-    const username = this.props.match.params.username;
-    this.props.history.push("/search/" + username);
+    this.props.history.push("/search/" + this.username);
   };
 
   handlePictureClick = (data, { target }) => {
     //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
-    const username = this.props.match.params.username;
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + data.id + "/" + username);
+      this.props.history.push("/picture/" + data.id + "/" + this.username);
   };
 
   handleCollectioClick = async id => {
     //call the server to get photos
     const pictures = await getCollectionPhotos(id);
-    if (this._isMounted) this.setState({ pictures, collectionsAsked: false });
+    if (this._isMounted) {
+      if (flatten(pictures).length === 0)
+        this.setState({ error: "This collection is empty!" });
+      else this.setState({ pictures, collectionsAsked: false });
+    }
   };
 
   singoutORsingin = async ({ target }) => {
@@ -185,6 +186,9 @@ class Userprofile extends Component {
       collections,
       error,
       collectionError,
+      currentUser,
+      menuAsked,
+      authUser,
     } = this.state;
 
     return (
@@ -195,7 +199,7 @@ class Userprofile extends Component {
           getUserPhotos={this.handleGetUserPhotos}
           getUserLikes={this.handleGetUserLikes}
           getUserCollection={this.handleGetUserCollection}
-          userInfo={this.state.currentUser}
+          userInfo={currentUser}
         />
 
         {/* handle nonCollection error */}
@@ -239,9 +243,9 @@ class Userprofile extends Component {
         )}
 
         <Menu
-          menuAsked={this.state.menuAsked}
+          menuAsked={menuAsked}
           closeMenu={this.closeMenuu}
-          authUser={this.state.authUser}
+          authUser={authUser}
           singoutORsingin={this.singoutORsingin}
         />
       </div>

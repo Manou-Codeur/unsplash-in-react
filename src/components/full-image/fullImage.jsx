@@ -39,10 +39,10 @@ class Fullimage extends Component {
     const { pathname } = this.props.location;
     const username = pathname.split("/")[3];
 
-    if (window.query) {
-      data = await callServer(window.query);
-    } else if (username) {
+    if (username) {
       data = await getUserPhotos(username);
+    } else if (window.query) {
+      data = await callServer(window.query);
     } else {
       data = await callServer();
     }
@@ -74,6 +74,15 @@ class Fullimage extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+
+    //about firebase
+    const { authUser } = this.state;
+    const { params } = this.props.match;
+
+    this.listener();
+    if (authUser) {
+      this.context.picture(authUser.uid, params.id).off();
+    }
   }
 
   handleClosePic = () => {
@@ -81,18 +90,20 @@ class Fullimage extends Component {
   };
 
   handleUserClick = () => {
-    this.props.history.push("/profile/" + this.state.selectedPic.user.username);
+    const { selectedPic } = this.state;
+    this.props.history.push("/profile/" + selectedPic.user.username);
   };
 
   handleLikePic = ({ target }) => {
     const { params } = this.props.match;
     const { authUser } = this.state;
+    const nextSibling = target.nextElementSibling;
 
-    const likes = parseInt(target.nextElementSibling.textContent);
+    const likes = parseInt(nextSibling.textContent);
     if (target.className === "white heart") {
       target.src = likeRedd;
       target.className = "red heart";
-      target.nextElementSibling.textContent = likes + 1;
+      nextSibling.textContent = likes + 1;
 
       //about db
       this.context
@@ -101,7 +112,7 @@ class Fullimage extends Component {
     } else {
       target.src = likeWhitee;
       target.className = "white heart";
-      target.nextElementSibling.textContent = likes - 1;
+      nextSibling.textContent = likes - 1;
 
       //about db
       this.context.picture(authUser.uid, params.id).remove();
@@ -154,7 +165,7 @@ class Fullimage extends Component {
               className="main-pic"
               src={selectedPic.urls.regular}
               ref={el => (this.mainPicture = el)}
-              alt="pic"
+              alt="random"
             />
 
             <div className="info hidee" ref={el => (this.infoLayout = el)}>

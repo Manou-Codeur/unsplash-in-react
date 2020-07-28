@@ -122,44 +122,45 @@ class Home extends Component {
   };
 
   handleLike = ({ target }, id) => {
-    if (!this.state.authUser) {
+    const { authUser } = this.state;
+
+    if (!authUser) {
       this.props.history.push("/login");
       return;
     }
 
-    const likes = parseInt(target.nextElementSibling.textContent);
+    const nextSibling = target.nextElementSibling;
+    const likes = parseInt(nextSibling.textContent);
     if (target.className === "black heart") {
       target.src = likeRed;
       target.className = "red heart";
-      target.nextElementSibling.textContent = likes + 1;
+      nextSibling.textContent = likes + 1;
 
       //about db
       this.context
-        .picture(this.state.authUser.uid, id)
+        .picture(authUser.uid, id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
       target.className = "black heart";
-      target.nextElementSibling.textContent = likes - 1;
+      nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(this.state.authUser.uid, id).remove();
+      this.context.picture(authUser.uid, id).remove();
     }
   };
 
   render() {
-    const { pictures, authUser, error } = this.state;
+    const { pictures, authUser, error, searchAsked, menuAsked } = this.state;
 
     return (
       <div
         className="home"
         style={
-          this.state.searchAsked
-            ? { backgroundColor: "white" }
-            : { backgroundColor: "" }
+          searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
         }
       >
-        {this.state.searchAsked ? (
+        {searchAsked ? (
           <Search
             handleCloseSearch={this.handleCloseSearch}
             handleSearchInput={this.handleSearchInput}
@@ -188,7 +189,7 @@ class Home extends Component {
         <button className="more-btn">Load More</button>
 
         <Menu
-          menuAsked={this.state.menuAsked}
+          menuAsked={menuAsked}
           closeMenu={this.closeMenu}
           authUser={authUser}
           singoutORsingin={this.singoutORsingin}

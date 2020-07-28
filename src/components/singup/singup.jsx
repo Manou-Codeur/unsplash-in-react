@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import FacebookLogin from "react-facebook-login";
 
 import Input from "./../../sub-components/input/input";
 import { FirebaseContext } from "../../services/firebase/indexx";

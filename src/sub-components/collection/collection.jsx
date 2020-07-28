@@ -11,34 +11,38 @@ const Collection = ({ data, handleOnclick }) => {
         <div
           className="bigOne"
           style={{
-            background: `url(${preview_photos[0].urls.full})`,
+            background: `url(${
+              preview_photos ? preview_photos[0].urls.full : null
+            })`,
             backgroundSize: "cover",
           }}
         ></div>
-        <div className="littlesOne">
-          <div
-            className="first-one"
-            style={{
-              background: `url(${
-                preview_photos[1]
-                  ? preview_photos[1].urls.full
-                  : preview_photos[0].urls.full
-              })`,
-              backgroundSize: "cover",
-            }}
-          ></div>
-          <div
-            className="second-one"
-            style={{
-              background: `url(${
-                preview_photos[2]
-                  ? preview_photos[2].urls.full
-                  : preview_photos[0].urls.full
-              })`,
-              backgroundSize: "cover",
-            }}
-          ></div>
-        </div>
+        {preview_photos && (
+          <div className="littlesOne">
+            <div
+              className="first-one"
+              style={{
+                background: `url(${
+                  preview_photos[1]
+                    ? preview_photos[1].urls.full
+                    : preview_photos[0].urls.full
+                })`,
+                backgroundSize: "cover",
+              }}
+            ></div>
+            <div
+              className="second-one"
+              style={{
+                background: `url(${
+                  preview_photos[2]
+                    ? preview_photos[2].urls.full
+                    : preview_photos[0].urls.full
+                })`,
+                backgroundSize: "cover",
+              }}
+            ></div>
+          </div>
+        )}
       </div>
     );
   } else {

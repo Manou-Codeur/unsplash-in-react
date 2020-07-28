@@ -15,26 +15,22 @@ class Search extends Component {
   };
 
   render() {
+    const { searchVal } = this.state;
+    const { handleSearchInput, handleCloseSearch } = this.props;
+
     return (
-      <div
-        className="search"
-        onKeyDown={e => this.props.handleSearchInput(e, this.state.searchVal)}
-      >
+      <div className="search" onKeyDown={e => handleSearchInput(e, searchVal)}>
         <img className="cameraIcon" src={cameraIcon} alt="camera icon" />
 
         <div className="brandANDclose">
           <p>Search Mysplash</p>
-          <img
-            src={closeBlack}
-            alt="close icon"
-            onClick={this.props.handleCloseSearch}
-          />
+          <img src={closeBlack} alt="close icon" onClick={handleCloseSearch} />
         </div>
 
         <input
           type="text"
           placeholder="Type something"
-          value={this.state.searchVal}
+          value={searchVal}
           onChange={this.handleChange}
         />
       </div>
