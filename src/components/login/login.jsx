@@ -50,7 +50,7 @@ const Login = ({ history }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
-      history.replace("./");
+      history.replace("/");
     } catch (error) {
       setError(error);
     }
@@ -68,7 +68,7 @@ const Login = ({ history }) => {
           message: "You haven't registered yet, go to singup page please!",
         });
         await myContext.deleteUser();
-      } else history.replace("./");
+      } else history.replace("/");
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =

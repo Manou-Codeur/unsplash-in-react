@@ -65,35 +65,34 @@ const Singup = ({ history }) => {
   };
 
   const doSubmit = ({ email, password, name }) => {
-    try {
-      //test if the name is already used
-      myContext.users().on("value", async snap => {
-        const usersObject = snap.val();
+    //test if the name is already used
+    myContext.users().on("value", async snap => {
+      const usersObject = snap.val();
 
-        const usersList = Object.keys(usersObject).map(key => ({
-          ...usersObject[key],
-          uid: key,
-        }));
+      const usersList = Object.keys(usersObject).map(key => ({
+        ...usersObject[key],
+        uid: key,
+      }));
 
-        for (let els of usersList) {
-          if (els.name === name) {
-            setError({
-              message: "This name is already used, please try another one!",
-            });
-            return;
-          }
+      for (let els of usersList) {
+        if (els.name === name) {
+          setError({
+            message: "This name is already used, please try another one!",
+          });
+          return;
         }
-
+      }
+      try {
         const data = await myContext.doCreateUserWithEmailAndPassword(
           email,
           password
         );
         myContext.user(data.user.uid).set({ name, email });
-        history.replace("./");
-      });
-    } catch (error) {
-      setError(error);
-    }
+        history.replace("/");
+      } catch (error) {
+        setError(error);
+      }
+    });
   };
 
   return (
