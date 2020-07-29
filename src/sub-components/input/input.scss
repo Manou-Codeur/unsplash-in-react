@@ -1,3 +1,9 @@
+@mixin placeholder {
+  color: white;
+  font-weight: 300;
+  font-size: 0.8rem;
+}
+
 .Input {
   position: relative;
 
@@ -11,9 +17,11 @@
     outline: none;
 
     &::placeholder {
-      color: white;
-      font-weight: 300;
-      font-size: 0.8rem;
+      @include placeholder;
+    }
+
+    &::-moz-placeholder {
+      @include placeholder;
     }
   }
 
@@ -56,7 +64,7 @@
 
   .red {
     border-bottom: 1.5px solid red;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.7rem;
   }
 
   .green {

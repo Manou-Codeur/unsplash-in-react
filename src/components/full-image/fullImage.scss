@@ -23,6 +23,15 @@
     -webkit-backdrop-filter: blur(10px) brightness(0.5);
     -moz-backdrop-filter: blur(10px) brightness(0.5);
 
+    @supports not (backdrop-filter: blur(10px)) {
+      & {
+        background-image: linear-gradient(
+          rgba(0, 0, 0, 0.7),
+          rgba(0, 0, 0, 0.7)
+        );
+      }
+    }
+
     .userANDclose {
       display: flex;
       justify-content: space-between;

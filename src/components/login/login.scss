@@ -16,6 +16,10 @@
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
 
+    @supports not (backdrop-filter: blur(25px)) {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
     .brand {
       display: flex;
       flex-direction: column;
