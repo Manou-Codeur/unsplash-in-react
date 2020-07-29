@@ -13,7 +13,7 @@ const Singup = ({ history }) => {
   const [error, setError] = useState({});
 
   const schema = {
-    name: Yup.string().required("Name is required!").trim(),
+    name: Yup.string().max(10).required("Name is required!").trim(),
     email: Yup.string()
       .email("Email is invalid!")
       .required("Email is required!"),
@@ -90,6 +90,7 @@ const Singup = ({ history }) => {
         myContext.user(data.user.uid).set({ name, email });
         history.replace("/");
       } catch (error) {
+        console.log(error);
         setError(error);
       }
     });
