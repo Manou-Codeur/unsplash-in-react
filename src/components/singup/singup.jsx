@@ -13,7 +13,7 @@ const Singup = ({ history }) => {
   const [error, setError] = useState({});
 
   const schema = {
-    name: Yup.string().max(10).required("Name is required!").trim(),
+    name: Yup.string().max(13).required("Name is required!").trim(),
     email: Yup.string()
       .email("Email is invalid!")
       .required("Email is required!"),
@@ -69,17 +69,20 @@ const Singup = ({ history }) => {
     myContext.users().on("value", async snap => {
       const usersObject = snap.val();
 
-      const usersList = Object.keys(usersObject).map(key => ({
-        ...usersObject[key],
-        uid: key,
-      }));
+      if (usersObject) {
+        const usersList = Object.keys(usersObject).map(key => ({
+          ...usersObject[key],
+          uid: key,
+        }));
 
-      for (let els of usersList) {
-        if (els.name === name) {
-          setError({
-            message: "This name is already used, please try another one!",
-          });
-          return;
+        for (let els of usersList) {
+          if (els.name === name) {
+            setError({
+              message:
+                "This name is already been used, please try another one!",
+            });
+            return;
+          }
         }
       }
       try {
@@ -87,10 +90,9 @@ const Singup = ({ history }) => {
           email,
           password
         );
-        myContext.user(data.user.uid).set({ name, email });
+        myContext.user(data.user.uid).set({ name, email, isNew: true });
         history.replace("/");
       } catch (error) {
-        console.log(error);
         setError(error);
       }
     });
