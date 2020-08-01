@@ -43,14 +43,14 @@ class Home extends Component {
     });
 
     // call the server
-    // let data;
-    // if (window.query) {
-    //   data = await callServer(window.query);
-    //   if (data[0].length === 0) this.setState({ error: "Picture not found!" });
-    // } else {
-    //   data = await callServer();
-    // }
-    // if (this._isMounted) this.setState({ pictures: data });
+    let data;
+    if (window.query) {
+      data = await callServer(window.query);
+      if (data[0].length === 0) this.setState({ error: "Picture not found!" });
+    } else {
+      data = await callServer();
+    }
+    if (this._isMounted) this.setState({ pictures: data });
   }
 
   componentWillUnmount() {
