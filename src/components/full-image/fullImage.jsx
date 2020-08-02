@@ -116,7 +116,7 @@ class Fullimage extends Component {
         <div
           className="full-pic"
           style={{
-            background: `url("${selectedPic.urls.regular}") center`,
+            background: `url("${selectedPic.urls.full}") center`,
             backgroundSize: "cover",
           }}
         >
