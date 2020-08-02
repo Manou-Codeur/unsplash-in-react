@@ -13,7 +13,7 @@ const HeaderProfile = ({
   getUserCollection,
   userInfo,
 }) => {
-  if (userInfo !== "") {
+  if (userInfo) {
     const { user } = userInfo;
 
     return (

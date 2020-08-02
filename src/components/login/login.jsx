@@ -7,14 +7,12 @@ import { FirebaseContext } from "../../services/firebase/indexx";
 
 import logo from "../../assets/img/camera-white.svg";
 import "./login.scss";
+import { Redirect } from "react-router-dom";
 
-const Login = ({ history, userAuth }) => {
+const Login = ({ history, userAuth, location }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
-
-  useEffect(() => {
-    if (userAuth) history.replace("/");
-  });
+  const [goSingUp, setGoSingUp] = useState(false);
 
   const schema = {
     email: Yup.string()
@@ -48,14 +46,14 @@ const Login = ({ history, userAuth }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
-      history.replace("/");
+      history.replace(location.state.from);
     } catch (error) {
       setError(error);
     }
   };
 
   const redirectToSingup = () => {
-    history.push("/singup");
+    setGoSingUp(true);
   };
 
   const onFacebook = async () => {
@@ -66,7 +64,7 @@ const Login = ({ history, userAuth }) => {
           message: "You haven't registered yet, go to singup page please!",
         });
         await myContext.deleteUser();
-      } else history.replace("/");
+      } else history.replace(location.state.from);
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =
@@ -75,6 +73,21 @@ const Login = ({ history, userAuth }) => {
       setError(error);
     }
   };
+
+  //redirect to where the user come from if he's already authed
+  if (userAuth && location.state) return <Redirect to={location.state.from} />;
+  else if (userAuth && !location.state) return <Redirect to="/" />;
+
+  //redirect user if he asked the singup
+  if (goSingUp && location.state)
+    return (
+      <Redirect
+        to={{ pathname: "/singup", state: { from: location.state.from } }}
+      />
+    );
+  else if (goSingUp && !location.state) {
+    return <Redirect to="/singup" />;
+  }
 
   return (
     <div className="login-form">

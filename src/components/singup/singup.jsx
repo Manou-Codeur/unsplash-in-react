@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -8,13 +9,9 @@ import { FirebaseContext } from "../../services/firebase/indexx";
 import logo from "../../assets/img/camera-white.svg";
 import "./singup.scss";
 
-const Singup = ({ history, userAuth }) => {
+const Singup = ({ history, userAuth, location }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
-
-  useEffect(() => {
-    if (userAuth) history.replace("/");
-  });
 
   const schema = {
     name: Yup.string().max(13).required("Name is required!").trim(),
@@ -57,7 +54,9 @@ const Singup = ({ history, userAuth }) => {
       if (!data.additionalUserInfo.isNewUser) {
         setError({ message: "You have already registered!" });
       } else {
-        history.replace("./");
+        location.state
+          ? history.replace(location.state.from)
+          : history.replace("/");
       }
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
@@ -95,12 +94,17 @@ const Singup = ({ history, userAuth }) => {
           password
         );
         myContext.user(data.user.uid).set({ name, email, isNew: true });
-        history.replace("/");
+        location.state
+          ? history.replace(location.state.from)
+          : history.replace("/");
       } catch (error) {
         setError(error);
       }
     });
   };
+
+  //redirect to where the user come from if he's already authed
+  if (userAuth) return <Redirect to="/" />;
 
   return (
     <div className="Singup-form">

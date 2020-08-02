@@ -26,7 +26,6 @@ class Userprofile extends Component {
     collections: [],
     collectionsAsked: false,
     currentUser: "",
-    authUser: null,
     error: null,
     collectionError: null,
   };
@@ -38,11 +37,6 @@ class Userprofile extends Component {
   async componentDidMount() {
     this.username = this.props.match.params.username;
     this._isMounted = true;
-
-    //firebase
-    this.context.isUserAuthenticated(userInfo => {
-      if (this._isMounted) this.setState({ authUser: userInfo });
-    });
 
     const pictures = await getUserPhotos(this.username);
 
@@ -145,9 +139,9 @@ class Userprofile extends Component {
   };
 
   handleLike = ({ target }, id) => {
-    const { authUser } = this.state;
+    const { userAuth } = this.props;
 
-    if (!authUser) {
+    if (!userAuth) {
       this.props.history.push("/login");
       return;
     }
@@ -160,7 +154,7 @@ class Userprofile extends Component {
 
       //about db
       this.context
-        .picture(authUser.uid, id)
+        .picture(userAuth.uid, id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
@@ -168,7 +162,7 @@ class Userprofile extends Component {
       nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(authUser.uid, id).remove();
+      this.context.picture(userAuth.uid, id).remove();
     }
   };
 
@@ -181,8 +175,8 @@ class Userprofile extends Component {
       collectionError,
       currentUser,
       menuAsked,
-      authUser,
     } = this.state;
+    const { userAuth } = this.props;
 
     return (
       <div className="User-profile">
@@ -238,7 +232,7 @@ class Userprofile extends Component {
         <Menu
           menuAsked={menuAsked}
           closeMenu={this.closeMenuu}
-          authUser={authUser}
+          userAuth={userAuth}
           singoutORsingin={this.singoutORsingin}
         />
       </div>

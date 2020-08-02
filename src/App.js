@@ -35,7 +35,12 @@ class App extends Component {
               userAuth ? (
                 <Userprofile {...props} userAuth={userAuth} />
               ) : (
-                <Redirect to="/login" />
+                <Redirect
+                  to={{
+                    pathname: "/login",
+                    state: { from: props.location.pathname },
+                  }}
+                />
               )
             }
           />
@@ -45,7 +50,12 @@ class App extends Component {
               userAuth ? (
                 <Fullimage {...props} userAuth={userAuth} />
               ) : (
-                <Redirect to="/login" />
+                <Redirect
+                  to={{
+                    pathname: "/login",
+                    state: { from: props.location.pathname },
+                  }}
+                />
               )
             }
           />
