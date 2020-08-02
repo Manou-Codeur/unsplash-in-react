@@ -78,7 +78,7 @@ const Login = ({ history, userAuth, location }) => {
   if (userAuth && location.state) return <Redirect to={location.state.from} />;
   else if (userAuth && !location.state) return <Redirect to="/" />;
 
-  //redirect user if he asked the singup
+  //redirect user if he asked to singup
   if (goSingUp && location.state)
     return (
       <Redirect
