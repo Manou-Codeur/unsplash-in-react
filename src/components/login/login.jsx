@@ -8,14 +8,12 @@ import { FirebaseContext } from "../../services/firebase/indexx";
 import logo from "../../assets/img/camera-white.svg";
 import "./login.scss";
 
-const Login = ({ history }) => {
+const Login = ({ history, userAuth }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
 
   useEffect(() => {
-    myContext.isUserAuthenticated(userInfo => {
-      if (userInfo) history.goBack();
-    });
+    if (userAuth) history.replace("/");
   });
 
   const schema = {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -8,9 +8,13 @@ import { FirebaseContext } from "../../services/firebase/indexx";
 import logo from "../../assets/img/camera-white.svg";
 import "./singup.scss";
 
-const Singup = ({ history }) => {
+const Singup = ({ history, userAuth }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
+
+  useEffect(() => {
+    if (userAuth) history.replace("/");
+  });
 
   const schema = {
     name: Yup.string().max(13).required("Name is required!").trim(),

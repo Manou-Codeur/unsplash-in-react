@@ -32,21 +32,35 @@ class App extends Component {
           <Route
             path="/profile/:username"
             render={props =>
-              userAuth ? <Userprofile {...props} /> : <Redirect to="/login" />
+              userAuth ? (
+                <Userprofile {...props} userAuth={userAuth} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
             path="/picture/:id"
             render={props =>
-              userAuth ? <Fullimage {...props} /> : <Redirect to="/login" />
+              userAuth ? (
+                <Fullimage {...props} userAuth={userAuth} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
             path="/search"
             render={props => <Home {...props} search={true} />}
           />
-          <Route path="/login" component={Login} />
-          <Route path="/singup" component={Singup} />
+          <Route
+            path="/login"
+            render={props => <Login {...props} userAuth={userAuth} />}
+          />
+          <Route
+            path="/singup"
+            render={props => <Singup {...props} userAuth={userAuth} />}
+          />
           <Route path="/home" exact component={Home} />
           <Route path="/notFound" component={Notfound} />
           <Redirect from="/" exact to="/home" />

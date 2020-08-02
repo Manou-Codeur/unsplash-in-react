@@ -20,7 +20,6 @@ class Fullimage extends Component {
     linkToPicture: "",
     liked: false,
     likes: null,
-    authUser: null,
   };
 
   _isMounted = false;
@@ -31,38 +30,35 @@ class Fullimage extends Component {
     this._isMounted = true;
 
     const { params } = this.props.match;
+    const { userAuth } = this.props;
     const selectedPic = await getPicture(params.id);
     const linkToPicture = await download(params.id);
 
     if (this._isMounted) this.setState({ selectedPic, linkToPicture });
 
     //firebase
-    this.listener = this.context.isUserAuthenticated(userInfo => {
-      if (userInfo) {
-        this.context.picture(userInfo.uid, params.id).on("value", snapshot => {
-          const usersObject = snapshot.val();
-          if (this._isMounted) {
-            this.setState({
-              authUser: userInfo,
-              liked: usersObject && usersObject.liked,
-              likes: usersObject && usersObject.likes,
-            });
-          }
-        });
-      }
-    });
+    if (userAuth) {
+      this.context.picture(userAuth.uid, params.id).on("value", snapshot => {
+        const usersObject = snapshot.val();
+        if (this._isMounted) {
+          this.setState({
+            liked: usersObject && usersObject.liked,
+            likes: usersObject && usersObject.likes,
+          });
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
     this._isMounted = false;
 
     //about firebase
-    const { authUser } = this.state;
+    const { userAuth } = this.props;
     const { params } = this.props.match;
 
-    this.listener();
-    if (authUser) {
-      this.context.picture(authUser.uid, params.id).off();
+    if (userAuth) {
+      this.context.picture(userAuth.uid, params.id).off();
     }
   }
 
@@ -77,7 +73,7 @@ class Fullimage extends Component {
 
   handleLikePic = ({ target }) => {
     const { params } = this.props.match;
-    const { authUser } = this.state;
+    const { userAuth } = this.props;
     const nextSibling = target.nextElementSibling;
 
     const likes = parseInt(nextSibling.textContent);
@@ -88,7 +84,7 @@ class Fullimage extends Component {
 
       //about db
       this.context
-        .picture(authUser.uid, params.id)
+        .picture(userAuth.uid, params.id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeWhitee;
@@ -96,7 +92,7 @@ class Fullimage extends Component {
       nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(authUser.uid, params.id).remove();
+      this.context.picture(userAuth.uid, params.id).remove();
     }
   };
 
@@ -116,7 +112,7 @@ class Fullimage extends Component {
         <div
           className="full-pic"
           style={{
-            background: `url("${selectedPic.urls.full}") center`,
+            background: `url("${selectedPic.urls.thumb}") center`,
             backgroundSize: "cover",
           }}
         >
