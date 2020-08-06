@@ -50,11 +50,6 @@ class Fullimage extends Component {
     }
   }
 
-  //performance
-  shouldComponentUpdate(nextPros, nextState) {
-    return this.state.linkToPicture !== nextState.linkToPicture;
-  }
-
   componentWillUnmount() {
     this._isMounted = false;
 

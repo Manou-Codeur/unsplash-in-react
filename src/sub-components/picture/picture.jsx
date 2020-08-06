@@ -9,6 +9,11 @@ import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
 class Picture extends Component {
+  constructor(props) {
+    super(props);
+    this.handlePictureClick = props.handlePictureClick.bind(this, props.data);
+  }
+
   state = {
     liked: false,
     likes: null,
@@ -62,15 +67,20 @@ class Picture extends Component {
     this.picture.style.transform = "";
   };
 
+  handlePictureLike = e => {
+    const { handlePictureLike, data } = this.props;
+    return handlePictureLike(e, data.id);
+  };
+
   render() {
-    const { data, handlePictureClick } = this.props;
+    const { data } = this.props;
     const { liked, likes } = this.state;
     const userPP = data.user.profile_image.large;
 
     return (
       <div
         className="picture"
-        onClick={handlePictureClick.bind(this, data)}
+        onClick={this.handlePictureClick}
         style={{
           backgroundColor: data.color,
         }}
@@ -106,7 +116,7 @@ class Picture extends Component {
                 src={liked ? likeRed : likeBlack}
                 className={liked ? "red heart" : "black heart"}
                 alt="heart icon"
-                onClick={e => this.props.handlePictureLike(e, data.id)}
+                onClick={this.handlePictureLike}
               />
               <p>{likes ? likes : data.likes}</p>
             </div>
