@@ -229,12 +229,14 @@ class Userprofile extends Component {
           />
         )}
 
-        <Menu
-          menuAsked={menuAsked}
-          closeMenu={this.closeMenuu}
-          userAuth={userAuth}
-          singoutORsingin={this.singoutORsingin}
-        />
+        {menuAsked && (
+          <Menu
+            menuAsked={menuAsked}
+            closeMenu={this.closeMenuu}
+            authUser={userAuth}
+            singoutORsingin={this.singoutORsingin}
+          />
+        )}
       </div>
     );
   }

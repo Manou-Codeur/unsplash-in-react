@@ -7,6 +7,12 @@ import closeBlack from "../../assets/img/close-black.svg";
 class Search extends Component {
   state = {
     searchVal: "",
+    update: false,
+  };
+
+  //i've written it this way to avoid creating new funct each time a render method runs
+  handleSearchInput = e => {
+    return this.props.handleSearchInput(e, this.state.searchVal);
   };
 
   handleChange = ({ target }) => {
@@ -16,10 +22,10 @@ class Search extends Component {
 
   render() {
     const { searchVal } = this.state;
-    const { handleSearchInput, handleCloseSearch } = this.props;
+    const { handleCloseSearch } = this.props;
 
     return (
-      <div className="search" onKeyDown={e => handleSearchInput(e, searchVal)}>
+      <div className="search" onKeyDown={this.handleSearchInput}>
         <img className="cameraIcon" src={cameraIcon} alt="camera icon" />
 
         <div className="brandANDclose">

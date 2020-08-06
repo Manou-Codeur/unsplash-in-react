@@ -10,6 +10,7 @@ import pinIcon from "../../assets/img/pinterest.png";
 const Menu = ({ menuAsked, closeMenu, authUser, singoutORsingin }) => {
   const hideMenuOnClick = ({ target }) => {
     target.style.left = "-200%";
+    closeMenu();
   };
 
   return (
