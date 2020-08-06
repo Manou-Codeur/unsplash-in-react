@@ -188,14 +188,12 @@ class Home extends Component {
 
         <button className="more-btn">Load More</button>
 
-        {menuAsked && (
-          <Menu
-            menuAsked={menuAsked}
-            closeMenu={this.closeMenu}
-            authUser={authUser}
-            singoutORsingin={this.singoutORsingin}
-          />
-        )}
+        <Menu
+          menuAsked={menuAsked}
+          closeMenu={this.closeMenu}
+          authUser={authUser}
+          singoutORsingin={this.singoutORsingin}
+        />
       </div>
     );
   }
