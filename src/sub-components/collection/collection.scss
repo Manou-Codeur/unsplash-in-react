@@ -8,6 +8,11 @@
   background-color: white;
   cursor: pointer;
 
+  &:hover {
+    filter: grayscale(1.5);
+    transition: all 0.7s;
+  }
+
   .bigOne {
     width: 65%;
     height: 100%;

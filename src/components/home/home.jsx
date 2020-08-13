@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -14,118 +14,132 @@ import "./home.scss";
 import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 
-class Home extends Component {
-  state = {
-    menuAsked: false,
-    pictures: [[], [], []],
-    searchAsked: this.props.search,
-    searchVal: "",
-    authUser: null,
-    error: null,
-  };
+const Home = ({ search, history, location }) => {
+  // console.log("rendered");
 
-  _isMounted = false;
+  //managing satate
+  const [menuAsked, setMenuAsked] = useState(false);
+  const [pictures, setPictures] = useState([[], [], []]);
+  const [searchAsked, setSearchAsked] = useState(search);
+  const [authUser, setAuthUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
 
-  static contextType = FirebaseContext;
+  //context API
+  const firebaseContext = useContext(FirebaseContext);
 
-  async componentDidMount() {
-    this._isMounted = true;
-
-    //firebase
-    this.listener = this.context.isUserAuthenticated(userInfo => {
+  //firebase funct
+  const firebaseListener = useCallback(() => {
+    firebaseContext.isUserAuthenticated(userInfo => {
       if (userInfo && !userInfo.displayName) {
-        this.context.user(userInfo.uid).on("value", snapshot => {
+        firebaseContext.user(userInfo.uid).on("value", snapshot => {
           const usersObject = snapshot.val();
-          if (usersObject) this.context.updateUser(usersObject.name, null);
+          if (usersObject) firebaseContext.updateUser(usersObject.name, null);
         });
       }
-      this.setState({ authUser: userInfo });
+      setAuthUser(userInfo);
     });
+  }, [firebaseContext]);
 
-    // call the server
+  //funct to call the server and get pictures
+  const getPictures = useCallback(async () => {
     let data;
     if (window.query) {
       data = await callServer(window.query);
-      if (data[0].length === 0) this.setState({ error: "Picture not found!" });
+      if (data[0].length === 0) setError("Picture not found!");
     } else {
       data = await callServer();
     }
-    if (this._isMounted) this.setState({ pictures: data });
-  }
+    setPictures(data);
+  }, []);
 
-  componentWillUnmount() {
-    this._isMounted = false;
+  useEffect(() => {
+    console.log("upadted and mounted");
+  });
 
-    this.listener();
-    this.context.users().off();
-  }
+  //component did mount
+  useEffect(() => {
+    setIsMounted(true);
 
-  componentDidUpdate(prevProps) {
-    const { search } = this.props;
-    if (prevProps.search !== search) {
-      if (!search) {
-        this.setState({ searchAsked: false });
-      }
-    }
-  }
+    firebaseListener();
+    getPictures();
+    console.log("mounted");
+  }, [firebaseListener, getPictures]);
 
-  askForMenu = () => {
-    this.setState({ menuAsked: !this.state.menuAsked });
+  //component will unmount
+  useEffect(() => {
+    return () => {
+      const test = isMounted;
+      setIsMounted(false);
+
+      firebaseListener();
+      firebaseContext.users().off();
+    };
+  }, [firebaseListener, firebaseContext, isMounted]);
+
+  //component did update
+  useEffect(() => {
+    if (!search) setSearchAsked(false);
+  }, [search]);
+
+  //here we will use memo for shouldComponentUpdate
+
+  const askForMenu = () => {
+    setMenuAsked(true);
   };
 
-  closeMenu = () => {
-    this.setState({ menuAsked: false });
+  const closeMenu = () => {
+    setMenuAsked(false);
   };
 
-  handlePictureClick = (data, { target }) => {
+  const handlePictureClick = (data, { target }) => {
     //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
     if (!target.className.includes("heart"))
-      this.props.history.push("/picture/" + data.id);
+      history.push("/picture/" + data.id);
   };
 
-  handleSearchIconClick = () => {
-    this.setState({ searchAsked: true });
-    this.props.history.push("/search");
+  const handleSearchIconClick = () => {
+    setSearchAsked(true);
+    history.push("/search");
   };
 
-  handleCloseSearch = () => {
-    this.setState({ searchAsked: false });
-    const usernamee = this.props.location.pathname.split("/")[2];
-    if (usernamee) this.props.history.push("/profile/" + usernamee);
-    else this.props.history.push("/");
+  const handleCloseSearch = () => {
+    setSearchAsked(false);
+    const usernamee = location.pathname.split("/")[2];
+    if (usernamee) history.push("/profile/" + usernamee);
+    else history.push("/");
   };
 
-  handleSearchInput = async ({ keyCode, target }, val) => {
+  const handleSearchInput = async ({ keyCode, target }, val) => {
     //update the state
     if (keyCode === 13 && val !== "") {
-      this.setState({ pictures: [[], [], []] });
+      setPictures([[], [], []]);
+      setError(null);
       const data = await callServer(val);
-      if (data[0].length === 0) this.setState({ error: "Picture not found!" });
-      this.setState({ pictures: data });
+      if (data[0].length === 0) setError("Picture not found!");
+      setPictures(data);
       window.query = val;
       target.value = "";
       target.focus();
     }
   };
 
-  handleSubscribeClick = () => {
-    this.props.history.push("/singup");
+  const handleSubscribeClick = () => {
+    history.push("/singup");
   };
 
-  singoutORsingin = async ({ target }) => {
+  const singoutORsingin = async ({ target }) => {
     if (target.textContent === "Singin") {
-      this.props.history.replace("/login");
+      history.replace("/login");
     } else {
-      await this.context.doSignOut();
-      this.props.history.replace("/");
+      await firebaseContext.doSignOut();
+      history.replace("/");
     }
   };
 
-  handleLike = ({ target }, id) => {
-    const { authUser } = this.state;
-
+  const handleLike = ({ target }, id) => {
     if (!authUser) {
-      this.props.history.push("/login");
+      history.push("/login");
       return;
     }
 
@@ -137,7 +151,7 @@ class Home extends Component {
       nextSibling.textContent = likes + 1;
 
       //about db
-      this.context
+      firebaseContext
         .picture(authUser.uid, id)
         .set({ liked: true, likes: likes + 1 });
     } else {
@@ -146,57 +160,53 @@ class Home extends Component {
       nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(authUser.uid, id).remove();
+      firebaseContext.picture(authUser.uid, id).remove();
     }
   };
 
-  render() {
-    const { pictures, authUser, error, searchAsked, menuAsked } = this.state;
-
-    return (
-      <div
-        className="home"
-        style={
-          searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
-        }
-      >
-        {searchAsked ? (
-          <Search
-            handleCloseSearch={this.handleCloseSearch}
-            handleSearchInput={this.handleSearchInput}
-          />
-        ) : (
-          <Headerhome
-            askForMenu={this.askForMenu}
-            handleSubscribeClick={this.handleSubscribeClick}
-            handleSearchIconClick={this.handleSearchIconClick}
-            authUser={authUser}
-          />
-        )}
-
-        {flatten(pictures).length > 0 ? (
-          <Picturegrid
-            pictures={pictures}
-            handlePictureClick={this.handlePictureClick}
-            handlePictureLike={this.handleLike}
-          />
-        ) : (
-          <div style={{ textAlign: "center", color: "black" }}>
-            {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
-          </div>
-        )}
-
-        <button className="more-btn">Load More</button>
-
-        <Menu
-          menuAsked={menuAsked}
-          closeMenu={this.closeMenu}
-          authUser={authUser}
-          singoutORsingin={this.singoutORsingin}
+  return (
+    <div
+      className="home"
+      style={
+        searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
+      }
+    >
+      {searchAsked ? (
+        <Search
+          handleCloseSearch={handleCloseSearch}
+          handleSearchInput={handleSearchInput}
         />
-      </div>
-    );
-  }
-}
+      ) : (
+        <Headerhome
+          askForMenu={askForMenu}
+          handleSubscribeClick={handleSubscribeClick}
+          handleSearchIconClick={handleSearchIconClick}
+          authUser={authUser}
+        />
+      )}
+
+      {flatten(pictures).length > 0 ? (
+        <Picturegrid
+          pictures={pictures}
+          handlePictureClick={handlePictureClick}
+          handlePictureLike={handleLike}
+        />
+      ) : (
+        <div style={{ textAlign: "center", color: "black" }}>
+          {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
+        </div>
+      )}
+
+      <button className="more-btn">Load More</button>
+
+      <Menu
+        menuAsked={menuAsked}
+        closeMenu={closeMenu}
+        authUser={authUser}
+        singoutORsingin={singoutORsingin}
+      />
+    </div>
+  );
+};
 
 export default Home;

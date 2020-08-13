@@ -12,6 +12,8 @@ const Headerhome = ({
   handleSearchIconClick,
   authUser,
 }) => {
+  // console.log("header-home rendered");
+
   return (
     <div className="header-home">
       <nav>
