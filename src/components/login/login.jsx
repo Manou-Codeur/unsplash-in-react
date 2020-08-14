@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -46,7 +46,9 @@ const Login = ({ history, userAuth, location }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
-      history.replace(location.state.from);
+      if (location.state) {
+        history.replace(location.state.from);
+      }
     } catch (error) {
       setError(error);
     }
@@ -64,7 +66,9 @@ const Login = ({ history, userAuth, location }) => {
           message: "You haven't registered yet, go to singup page please!",
         });
         await myContext.deleteUser();
-      } else history.replace(location.state.from);
+      } else {
+        if (location.state) history.replace(location.state.from);
+      }
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =

@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -15,7 +21,7 @@ import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 
 const Home = ({ search, history, location }) => {
-  // console.log("rendered");
+  console.log("rendered");
 
   //managing satate
   const [menuAsked, setMenuAsked] = useState(false);
@@ -23,7 +29,6 @@ const Home = ({ search, history, location }) => {
   const [searchAsked, setSearchAsked] = useState(search);
   const [authUser, setAuthUser] = useState(null);
   const [error, setError] = useState(null);
-  const [isMounted, setIsMounted] = useState(false);
 
   //context API
   const firebaseContext = useContext(FirebaseContext);
@@ -41,7 +46,7 @@ const Home = ({ search, history, location }) => {
     });
   }, [firebaseContext]);
 
-  //funct to call the server and get pictures
+  // //funct to call the server and get pictures
   const getPictures = useCallback(async () => {
     let data;
     if (window.query) {
@@ -53,36 +58,22 @@ const Home = ({ search, history, location }) => {
     setPictures(data);
   }, []);
 
-  useEffect(() => {
-    console.log("upadted and mounted");
-  });
-
   //component did mount
   useEffect(() => {
-    setIsMounted(true);
-
     firebaseListener();
     getPictures();
-    console.log("mounted");
-  }, [firebaseListener, getPictures]);
 
-  //component will unmount
-  useEffect(() => {
     return () => {
-      const test = isMounted;
-      setIsMounted(false);
-
-      firebaseListener();
       firebaseContext.users().off();
     };
-  }, [firebaseListener, firebaseContext, isMounted]);
+  }, [firebaseListener, getPictures, firebaseContext]);
 
   //component did update
   useEffect(() => {
-    if (!search) setSearchAsked(false);
+    if (!search) {
+      setSearchAsked(search);
+    }
   }, [search]);
-
-  //here we will use memo for shouldComponentUpdate
 
   const askForMenu = () => {
     setMenuAsked(true);

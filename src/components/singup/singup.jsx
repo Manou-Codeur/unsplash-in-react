@@ -54,9 +54,7 @@ const Singup = ({ history, userAuth, location }) => {
       if (!data.additionalUserInfo.isNewUser) {
         setError({ message: "You have already registered!" });
       } else {
-        location.state
-          ? history.replace(location.state.from)
-          : history.replace("/");
+        history.replace(location.state.from);
       }
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
@@ -94,9 +92,7 @@ const Singup = ({ history, userAuth, location }) => {
           password
         );
         myContext.user(data.user.uid).set({ name, email, isNew: true });
-        location.state
-          ? history.replace(location.state.from)
-          : history.replace("/");
+        history.replace(location.state.from);
       } catch (error) {
         setError(error);
       }

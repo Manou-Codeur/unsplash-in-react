@@ -71,7 +71,11 @@ class App extends Component {
             path="/singup"
             render={props => <Singup {...props} userAuth={userAuth} />}
           />
-          <Route path="/home" exact component={Home} />
+          <Route
+            path="/home"
+            exact
+            render={props => <Home {...props} userAuth={userAuth} />}
+          />
           <Route path="/notFound" component={Notfound} />
           <Redirect from="/" exact to="/home" />
           <Redirect to="/notFound" />
