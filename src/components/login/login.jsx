@@ -46,7 +46,7 @@ const Login = ({ history, userAuth, location }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
-      history.replace(location.state.from);
+      if (location.state) history.replace(location.state.from);
     } catch (error) {
       setError(error);
     }
