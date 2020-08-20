@@ -27,20 +27,7 @@ const Home = ({ search, history, location }) => {
   //context API
   const firebaseContext = useContext(FirebaseContext);
 
-  //firebase funct
-  const firebaseListener = useCallback(() => {
-    firebaseContext.isUserAuthenticated(userInfo => {
-      if (userInfo && !userInfo.displayName) {
-        firebaseContext.user(userInfo.uid).on("value", snapshot => {
-          const usersObject = snapshot.val();
-          if (usersObject) firebaseContext.updateUser(usersObject.name, null);
-        });
-      }
-      setAuthUser(userInfo);
-    });
-  }, [firebaseContext]);
-
-  // //funct to call the server and get pictures
+  //funct to call the server and get pictures
   const getPictures = useCallback(async () => {
     let data;
     if (window.query) {
@@ -56,11 +43,16 @@ const Home = ({ search, history, location }) => {
   useEffect(() => {
     let _isMounted = true;
 
-    //test
-
-    firebaseListener();
-
-    //test
+    //auth user and firebase
+    firebaseContext.isUserAuthenticated(userInfo => {
+      if (userInfo && !userInfo.displayName) {
+        firebaseContext.user(userInfo.uid).on("value", snapshot => {
+          const usersObject = snapshot.val();
+          if (usersObject) firebaseContext.updateUser(usersObject.name, null);
+        });
+      }
+      if (_isMounted) setAuthUser(userInfo);
+    });
 
     getPictures().then(pictures => {
       if (_isMounted) setPictures(pictures);
@@ -70,7 +62,7 @@ const Home = ({ search, history, location }) => {
       _isMounted = false;
       firebaseContext.users().off();
     };
-  }, [firebaseListener, getPictures, firebaseContext]);
+  }, [getPictures, firebaseContext]);
 
   // component did update
   useEffect(() => {

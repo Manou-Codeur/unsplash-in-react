@@ -14,9 +14,9 @@ axios.interceptors.response.use(null, error => {
     error.response.status < 500;
 
   if (!expectedError) {
-    console.log("There is an unexpected error, please reload and try again!");
+    alert("There is an unexpected error, please reload and try again!");
   } else if (error.response && error.response.status === 403)
-    console.log("Sorry there is a lot of requests, please retry later!");
+    alert("Sorry there is a lot of requests, please retry later!");
 
   return Promise.reject(error);
 });
