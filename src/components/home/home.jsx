@@ -1,11 +1,5 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
-import { callServer } from "../../services/httpService";
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { callServer, source } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -55,20 +49,30 @@ const Home = ({ search, history, location }) => {
     } else {
       data = await callServer();
     }
-    setPictures(data);
+    return data;
   }, []);
 
   //component did mount
   useEffect(() => {
+    let _isMounted = true;
+
+    //test
+
     firebaseListener();
-    getPictures();
+
+    //test
+
+    getPictures().then(pictures => {
+      if (_isMounted) setPictures(pictures);
+    });
 
     return () => {
+      _isMounted = false;
       firebaseContext.users().off();
     };
   }, [firebaseListener, getPictures, firebaseContext]);
 
-  //component did update
+  // component did update
   useEffect(() => {
     if (!search) {
       setSearchAsked(search);

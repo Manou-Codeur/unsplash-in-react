@@ -4,6 +4,8 @@ axios.defaults.headers.common["Authorization"] =
   "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE";
 
 axios.defaults.baseURL = "https://api.unsplash.com";
+export const source = axios.CancelToken.source();
+axios.defaults.cancelToken = source.token;
 
 axios.interceptors.response.use(null, error => {
   const expectedError =
@@ -12,9 +14,9 @@ axios.interceptors.response.use(null, error => {
     error.response.status < 500;
 
   if (!expectedError) {
-    alert("There is an unexpected error, please reload and try again!");
+    console.log("There is an unexpected error, please reload and try again!");
   } else if (error.response && error.response.status === 403)
-    alert("Sorry there is a lot of requests, please retry later!");
+    console.log("Sorry there is a lot of requests, please retry later!");
 
   return Promise.reject(error);
 });
