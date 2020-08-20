@@ -51,12 +51,13 @@ const Singup = ({ history, userAuth, location }) => {
   const onFacebook = async () => {
     try {
       const data = await myContext.doSignInWithFacebook();
+      console.log(data);
       if (!data.additionalUserInfo.isNewUser) {
         setError({ message: "You have already registered!" });
-      } else {
-        history.replace(location.state.from);
+        console.log("You have already registered!");
       }
     } catch (error) {
+      console.log(error);
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =
           "An account already exists with the same email address!";
@@ -92,7 +93,9 @@ const Singup = ({ history, userAuth, location }) => {
           password
         );
         myContext.user(data.user.uid).set({ name, email, isNew: true });
-        history.replace(location.state.from);
+        location.state
+          ? history.replace(location.state.from)
+          : history.replace("/");
       } catch (error) {
         setError(error);
       }

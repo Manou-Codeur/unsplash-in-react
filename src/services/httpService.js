@@ -4,8 +4,6 @@ axios.defaults.headers.common["Authorization"] =
   "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE";
 
 axios.defaults.baseURL = "https://api.unsplash.com";
-export const source = axios.CancelToken.source();
-axios.defaults.cancelToken = source.token;
 
 axios.interceptors.response.use(null, error => {
   const expectedError =

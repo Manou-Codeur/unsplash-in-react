@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { callServer, source } from "../../services/httpService";
+import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
