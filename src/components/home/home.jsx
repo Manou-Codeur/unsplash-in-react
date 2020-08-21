@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useReducer } from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -14,13 +14,34 @@ import "./home.scss";
 import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 
+const reducerFunct = (currState, action) => {
+  switch (action.type) {
+    case "MENU-ASKED":
+      return { ...currState, menuAsked: action.val };
+    case "PICTURES":
+      return { ...currState, pictures: action.data };
+    case "SEARCH-ASKED":
+      return { ...currState, searchAsked: action.val };
+    case "AUTH-USER":
+      return { ...currState, authUser: action.userInfo };
+    case "ERROR":
+      return { ...currState, error: action.message };
+
+    default:
+      throw new Error("shouldn't get here");
+  }
+};
+
 const Home = ({ search, history, location }) => {
-  //managing satate
-  const [menuAsked, setMenuAsked] = useState(false);
-  const [pictures, setPictures] = useState([[], [], []]);
-  const [searchAsked, setSearchAsked] = useState(search);
-  const [authUser, setAuthUser] = useState(null);
-  const [error, setError] = useState(null);
+  const initState = {
+    menuAsked: false,
+    pictures: [[], [], []],
+    searchAsked: search,
+    authUser: null,
+    error: null,
+  };
+
+  const [updatedState, dispatch] = useReducer(reducerFunct, initState);
 
   //context API
   const firebaseContext = useContext(FirebaseContext);
@@ -30,7 +51,8 @@ const Home = ({ search, history, location }) => {
     let data;
     if (window.query) {
       data = await callServer(window.query);
-      if (data[0].length === 0) setError("Picture not found!");
+      if (data[0].length === 0)
+        dispatch({ type: "ERROR", message: "Picture not found!" });
     } else {
       data = await callServer();
     }
@@ -49,11 +71,11 @@ const Home = ({ search, history, location }) => {
           if (usersObject) firebaseContext.updateUser(usersObject.name, null);
         });
       }
-      if (_isMounted) setAuthUser(userInfo);
+      if (_isMounted) dispatch({ type: "AUTH-USER", userInfo: userInfo });
     });
 
     getPictures().then(pictures => {
-      if (_isMounted) setPictures(pictures);
+      if (_isMounted) dispatch({ type: "PICTURES", data: pictures });
     });
 
     return () => {
@@ -65,16 +87,16 @@ const Home = ({ search, history, location }) => {
   // component did update
   useEffect(() => {
     if (!search) {
-      setSearchAsked(search);
+      dispatch({ type: "SEARCH-ASKED", val: search });
     }
   }, [search]);
 
   const askForMenu = () => {
-    setMenuAsked(true);
+    dispatch({ type: "MENU-ASKED", val: true });
   };
 
   const closeMenu = () => {
-    setMenuAsked(false);
+    dispatch({ type: "MENU-ASKED", val: false });
   };
 
   const handlePictureClick = (data, { target }) => {
@@ -84,12 +106,13 @@ const Home = ({ search, history, location }) => {
   };
 
   const handleSearchIconClick = () => {
-    setSearchAsked(true);
+    dispatch({ type: "SEARCH-ASKED", val: true });
     history.push("/search");
   };
 
   const handleCloseSearch = () => {
-    setSearchAsked(false);
+    dispatch({ type: "SEARCH-ASKED", val: false });
+
     const usernamee = location.pathname.split("/")[2];
     if (usernamee) history.push("/profile/" + usernamee);
     else history.push("/");
@@ -98,11 +121,12 @@ const Home = ({ search, history, location }) => {
   const handleSearchInput = async ({ keyCode, target }, val) => {
     //update the state
     if (keyCode === 13 && val !== "") {
-      setPictures([[], [], []]);
-      setError(null);
+      dispatch({ type: "PICTURES", data: [[], [], []] });
+      dispatch({ type: "ERROR", message: null });
       const data = await callServer(val);
-      if (data[0].length === 0) setError("Picture not found!");
-      setPictures(data);
+      if (data[0].length === 0)
+        dispatch({ type: "ERROR", message: "Picture not found!" });
+      dispatch({ type: "PICTURES", data: data });
       window.query = val;
       target.value = "";
       target.focus();
@@ -123,7 +147,7 @@ const Home = ({ search, history, location }) => {
   };
 
   const handleLike = ({ target }, id) => {
-    if (!authUser) {
+    if (!updatedState.authUser) {
       history.push("/login");
       return;
     }
@@ -137,7 +161,7 @@ const Home = ({ search, history, location }) => {
 
       //about db
       firebaseContext
-        .picture(authUser.uid, id)
+        .picture(updatedState.authUser.uid, id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
@@ -145,7 +169,7 @@ const Home = ({ search, history, location }) => {
       nextSibling.textContent = likes - 1;
 
       //about db
-      firebaseContext.picture(authUser.uid, id).remove();
+      firebaseContext.picture(updatedState.authUser.uid, id).remove();
     }
   };
 
@@ -153,10 +177,12 @@ const Home = ({ search, history, location }) => {
     <div
       className="home"
       style={
-        searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
+        updatedState.searchAsked
+          ? { backgroundColor: "white" }
+          : { backgroundColor: "" }
       }
     >
-      {searchAsked ? (
+      {updatedState.searchAsked ? (
         <Search
           handleCloseSearch={handleCloseSearch}
           handleSearchInput={handleSearchInput}
@@ -166,28 +192,32 @@ const Home = ({ search, history, location }) => {
           askForMenu={askForMenu}
           handleSubscribeClick={handleSubscribeClick}
           handleSearchIconClick={handleSearchIconClick}
-          authUser={authUser}
+          authUser={updatedState.authUser}
         />
       )}
 
-      {flatten(pictures).length > 0 ? (
+      {flatten(updatedState.pictures).length > 0 ? (
         <Picturegrid
-          pictures={pictures}
+          pictures={updatedState.pictures}
           handlePictureClick={handlePictureClick}
           handlePictureLike={handleLike}
         />
       ) : (
         <div style={{ textAlign: "center", color: "black" }}>
-          {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
+          {updatedState.error ? (
+            <h1>{updatedState.error}</h1>
+          ) : (
+            <CircularProgress color="inherit" />
+          )}
         </div>
       )}
 
       <button className="more-btn">Load More</button>
 
       <Menu
-        menuAsked={menuAsked}
+        menuAsked={updatedState.menuAsked}
         closeMenu={closeMenu}
-        authUser={authUser}
+        authUser={updatedState.authUser}
         singoutORsingin={singoutORsingin}
       />
     </div>
