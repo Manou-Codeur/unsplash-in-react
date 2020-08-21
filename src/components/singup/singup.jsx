@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { Redirect } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -9,7 +8,7 @@ import { FirebaseContext } from "../../services/firebase/indexx";
 import logo from "../../assets/img/camera-white.svg";
 import "./singup.scss";
 
-const Singup = ({ history, userAuth, location }) => {
+const Singup = ({ history, location }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
 
@@ -53,6 +52,7 @@ const Singup = ({ history, userAuth, location }) => {
       const data = await myContext.doSignInWithFacebook();
       if (!data.additionalUserInfo.isNewUser) {
         setError({ message: "You have already registered!" });
+        myContext.doSignOut();
       } else {
         location.state
           ? history.replace(location.state.from)
@@ -102,9 +102,6 @@ const Singup = ({ history, userAuth, location }) => {
       }
     });
   };
-
-  //redirect to where the user come from if he's already authed
-  if (userAuth) return <Redirect to="/" />;
 
   return (
     <div className="Singup-form">
