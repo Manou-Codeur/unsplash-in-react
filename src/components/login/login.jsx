@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -13,6 +13,13 @@ const Login = ({ history, userAuth, location }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
   const [goSingUp, setGoSingUp] = useState(false);
+  const [fb, setFB] = useState(false);
+
+  useEffect(() => {
+    //redirect to where the user comes from if he's already authed
+    if (userAuth && location.state && !fb) history.replace(location.state.from);
+    else if (userAuth && !location.state && !fb) history.replace("/");
+  });
 
   const schema = {
     email: Yup.string()
@@ -46,7 +53,10 @@ const Login = ({ history, userAuth, location }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
-      if (location.state) history.replace(location.state.from);
+      setFB(true);
+      location.state
+        ? history.replace(location.state.from)
+        : history.replace("/");
     } catch (error) {
       setError(error);
     }
@@ -57,6 +67,7 @@ const Login = ({ history, userAuth, location }) => {
   };
 
   const onFacebook = async () => {
+    setFB(true);
     try {
       const data = await myContext.doSignInWithFacebook();
       if (data.additionalUserInfo.isNewUser) {
@@ -64,7 +75,11 @@ const Login = ({ history, userAuth, location }) => {
           message: "You haven't registered yet, go to singup page please!",
         });
         await myContext.deleteUser();
-      } else history.replace(location.state.from);
+      } else {
+        location.state
+          ? history.replace(location.state.from)
+          : history.replace("/");
+      }
     } catch (error) {
       if (error.code.split("/")[1].includes("account-exists"))
         error.message =
@@ -74,11 +89,7 @@ const Login = ({ history, userAuth, location }) => {
     }
   };
 
-  //redirect to where the user come from if he's already authed
-  if (userAuth && location.state) return <Redirect to={location.state.from} />;
-  else if (userAuth && !location.state) return <Redirect to="/" />;
-
-  //redirect user if he asked to singup
+  //redirect user if the user want to singup
   if (goSingUp && location.state)
     return (
       <Redirect
