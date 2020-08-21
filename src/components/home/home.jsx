@@ -39,7 +39,7 @@ class Home extends Component {
           if (usersObject) this.context.updateUser(usersObject.name, null);
         });
       }
-      this.setState({ authUser: userInfo });
+      if (this._isMounted) this.setState({ authUser: userInfo });
     });
 
     // call the server
