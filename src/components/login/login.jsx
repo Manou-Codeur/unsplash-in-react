@@ -53,10 +53,10 @@ const Login = ({ history, userAuth, location }) => {
   const doSubmit = async ({ email, password }) => {
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
+      setFB(true);
       location.state
         ? history.replace(location.state.from)
         : history.replace("/");
-      setFB(true);
     } catch (error) {
       setError(error);
     }
