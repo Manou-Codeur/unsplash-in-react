@@ -91,24 +91,27 @@ const Home = ({ search, history, location }) => {
     }
   }, [search]);
 
-  const askForMenu = () => {
+  const askForMenu = useCallback(() => {
     dispatch({ type: "MENU-ASKED", val: true });
-  };
+  }, []);
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     dispatch({ type: "MENU-ASKED", val: false });
-  };
+  }, []);
 
-  const handlePictureClick = (data, { target }) => {
-    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
-    if (!target.className.includes("heart"))
-      history.push("/picture/" + data.id);
-  };
+  const handlePictureClick = useCallback(
+    (data, { target }) => {
+      //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
+      if (!target.className.includes("heart"))
+        history.push("/picture/" + data.id);
+    },
+    [history]
+  );
 
-  const handleSearchIconClick = () => {
+  const handleSearchIconClick = useCallback(() => {
     dispatch({ type: "SEARCH-ASKED", val: true });
     history.push("/search");
-  };
+  }, [history]);
 
   const handleCloseSearch = () => {
     dispatch({ type: "SEARCH-ASKED", val: false });
@@ -133,45 +136,51 @@ const Home = ({ search, history, location }) => {
     }
   };
 
-  const handleSubscribeClick = () => {
+  const handleSubscribeClick = useCallback(() => {
     history.push("/singup");
-  };
+  }, [history]);
 
-  const singoutORsingin = async ({ target }) => {
-    if (target.textContent === "Singin") {
-      history.replace("/login");
-    } else {
-      await firebaseContext.doSignOut();
-      history.replace("/");
-    }
-  };
+  const singoutORsingin = useCallback(
+    async ({ target }) => {
+      if (target.textContent === "Singin") {
+        history.replace("/login");
+      } else {
+        await firebaseContext.doSignOut();
+        history.replace("/");
+      }
+    },
+    [firebaseContext, history]
+  );
 
-  const handleLike = ({ target }, id) => {
-    if (!updatedState.authUser) {
-      history.push("/login");
-      return;
-    }
+  const handleLike = useCallback(
+    ({ target }, id) => {
+      if (!updatedState.authUser) {
+        history.push("/login");
+        return;
+      }
 
-    const nextSibling = target.nextElementSibling;
-    const likes = parseInt(nextSibling.textContent);
-    if (target.className === "black heart") {
-      target.src = likeRed;
-      target.className = "red heart";
-      nextSibling.textContent = likes + 1;
+      const nextSibling = target.nextElementSibling;
+      const likes = parseInt(nextSibling.textContent);
+      if (target.className === "black heart") {
+        target.src = likeRed;
+        target.className = "red heart";
+        nextSibling.textContent = likes + 1;
 
-      //about db
-      firebaseContext
-        .picture(updatedState.authUser.uid, id)
-        .set({ liked: true, likes: likes + 1 });
-    } else {
-      target.src = likeBlack;
-      target.className = "black heart";
-      nextSibling.textContent = likes - 1;
+        //about db
+        firebaseContext
+          .picture(updatedState.authUser.uid, id)
+          .set({ liked: true, likes: likes + 1 });
+      } else {
+        target.src = likeBlack;
+        target.className = "black heart";
+        nextSibling.textContent = likes - 1;
 
-      //about db
-      firebaseContext.picture(updatedState.authUser.uid, id).remove();
-    }
-  };
+        //about db
+        firebaseContext.picture(updatedState.authUser.uid, id).remove();
+      }
+    },
+    [firebaseContext, history, updatedState.authUser]
+  );
 
   return (
     <div
@@ -217,7 +226,7 @@ const Home = ({ search, history, location }) => {
       <Menu
         menuAsked={updatedState.menuAsked}
         closeMenu={closeMenu}
-        authUser={updatedState.authUser}
+        authUser={updatedState.menuAsked ? updatedState.authUser : null}
         singoutORsingin={singoutORsingin}
       />
     </div>

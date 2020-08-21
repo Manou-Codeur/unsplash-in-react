@@ -10,6 +10,7 @@ import "./login.scss";
 import { Redirect } from "react-router-dom";
 
 const Login = ({ history, userAuth, location }) => {
+  console.log("render--Login");
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
   const [goSingUp, setGoSingUp] = useState(false);

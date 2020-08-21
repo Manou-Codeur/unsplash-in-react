@@ -1,47 +1,40 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
 import "./search.scss";
 import cameraIcon from "../../assets/img/camera.svg";
 import closeBlack from "../../assets/img/close-black.svg";
 
-class Search extends Component {
-  state = {
-    searchVal: "",
-    update: false,
-  };
+const Search = ({ handleSearchInput, handleCloseSearch }) => {
+  console.log("search--render");
+  const [searchVal, setSearchVal] = useState("");
 
   //i've written it this way to avoid creating new funct each time a render method runs
-  handleSearchInput = e => {
-    return this.props.handleSearchInput(e, this.state.searchVal);
+  const handleSearchInputt = e => {
+    return handleSearchInput(e, searchVal);
   };
 
-  handleChange = ({ target }) => {
+  const handleChange = ({ target }) => {
     const searchVal = target.value;
-    this.setState({ searchVal });
+    setSearchVal(searchVal);
   };
 
-  render() {
-    const { searchVal } = this.state;
-    const { handleCloseSearch } = this.props;
+  return (
+    <div className="search" onKeyDown={handleSearchInputt}>
+      <img className="cameraIcon" src={cameraIcon} alt="camera icon" />
 
-    return (
-      <div className="search" onKeyDown={this.handleSearchInput}>
-        <img className="cameraIcon" src={cameraIcon} alt="camera icon" />
-
-        <div className="brandANDclose">
-          <p>Search Mysplash</p>
-          <img src={closeBlack} alt="close icon" onClick={handleCloseSearch} />
-        </div>
-
-        <input
-          type="text"
-          placeholder="Type something"
-          value={searchVal}
-          onChange={this.handleChange}
-        />
+      <div className="brandANDclose">
+        <p>Search Mysplash</p>
+        <img src={closeBlack} alt="close icon" onClick={handleCloseSearch} />
       </div>
-    );
-  }
-}
+
+      <input
+        type="text"
+        placeholder="Type something"
+        value={searchVal}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
 
 export default Search;
