@@ -16,7 +16,7 @@ const Login = ({ history, userAuth, location }) => {
   const [fb, setFB] = useState(false);
 
   useEffect(() => {
-    //redirect to where the user come from if he's already authed
+    //redirect to where the user comes from if he's already authed
     if (userAuth && location.state && !fb) history.replace(location.state.from);
     else if (userAuth && !location.state && !fb) history.replace("/");
   });
@@ -89,7 +89,7 @@ const Login = ({ history, userAuth, location }) => {
     }
   };
 
-  //redirect user if he asked to singup
+  //redirect user if the user want to singup
   if (goSingUp && location.state)
     return (
       <Redirect
