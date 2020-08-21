@@ -54,9 +54,9 @@ const Home = ({ search, history, location }) => {
       if (_isMounted) setAuthUser(userInfo);
     });
 
-    // getPictures().then(pictures => {
-    //   if (_isMounted) setPictures(pictures);
-    // });
+    getPictures().then(pictures => {
+      if (_isMounted) setPictures(pictures);
+    });
 
     return () => {
       _isMounted = false;
