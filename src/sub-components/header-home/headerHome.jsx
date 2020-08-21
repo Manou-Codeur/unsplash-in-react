@@ -8,8 +8,6 @@ import "./headerHome.scss";
 
 const Headerhome = React.memo(
   ({ askForMenu, handleSubscribeClick, handleSearchIconClick, authUser }) => {
-    console.log("headeHome--rendered");
-
     return (
       <div className="header-home">
         <nav>
