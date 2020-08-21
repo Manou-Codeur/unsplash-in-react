@@ -73,7 +73,7 @@ class App extends Component {
 
           <Route path="/singup" render={props => <Singup {...props} />} />
 
-          <Route path="/home" exact render={props => <Home {...props} />} />
+          <Route path="/home" exact component={Home} />
 
           <Route path="/notFound" component={Notfound} />
 

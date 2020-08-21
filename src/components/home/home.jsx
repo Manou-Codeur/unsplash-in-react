@@ -15,8 +15,6 @@ import likeBlack from "../../assets/img/favorite-white.svg";
 import likeRed from "../../assets/img/favorite-red.png";
 
 const Home = ({ search, history, location }) => {
-  console.log("rendered");
-
   //managing satate
   const [menuAsked, setMenuAsked] = useState(false);
   const [pictures, setPictures] = useState([[], [], []]);
