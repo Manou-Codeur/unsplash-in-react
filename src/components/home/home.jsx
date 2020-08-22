@@ -182,16 +182,16 @@ const Home = ({ search, history, location }) => {
     [firebaseContext, history, updatedState.authUser]
   );
 
+  const { searchAsked, authUser, pictures, error, menuAsked } = updatedState;
+
   return (
     <div
       className="home"
       style={
-        updatedState.searchAsked
-          ? { backgroundColor: "white" }
-          : { backgroundColor: "" }
+        searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
       }
     >
-      {updatedState.searchAsked ? (
+      {searchAsked ? (
         <Search
           handleCloseSearch={handleCloseSearch}
           handleSearchInput={handleSearchInput}
@@ -201,32 +201,28 @@ const Home = ({ search, history, location }) => {
           askForMenu={askForMenu}
           handleSubscribeClick={handleSubscribeClick}
           handleSearchIconClick={handleSearchIconClick}
-          authUser={updatedState.authUser}
+          authUser={authUser}
         />
       )}
 
-      {flatten(updatedState.pictures).length > 0 ? (
+      {flatten(pictures).length > 0 ? (
         <Picturegrid
-          pictures={updatedState.pictures}
+          pictures={pictures}
           handlePictureClick={handlePictureClick}
           handlePictureLike={handleLike}
         />
       ) : (
         <div style={{ textAlign: "center", color: "black" }}>
-          {updatedState.error ? (
-            <h1>{updatedState.error}</h1>
-          ) : (
-            <CircularProgress color="inherit" />
-          )}
+          {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
         </div>
       )}
 
       <button className="more-btn">Load More</button>
 
       <Menu
-        menuAsked={updatedState.menuAsked}
+        menuAsked={menuAsked}
         closeMenu={closeMenu}
-        authUser={updatedState.menuAsked ? updatedState.authUser : null}
+        authUser={menuAsked ? authUser : null}
         singoutORsingin={singoutORsingin}
       />
     </div>
