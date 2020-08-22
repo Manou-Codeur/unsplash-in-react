@@ -13,7 +13,6 @@ const Input = React.memo(
     placeholder,
     ...rest
   }) => {
-    console.log("input--render");
     const renderInputName = ({ target }) => {
       target.parentNode.childNodes[0].className += " render-placeholder";
       target.placeholder = "";

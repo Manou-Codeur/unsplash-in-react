@@ -74,9 +74,9 @@ const Home = ({ search, history, location }) => {
       if (_isMounted) dispatch({ type: "AUTH-USER", userInfo: userInfo });
     });
 
-    // getPictures().then(pictures => {
-    //   if (_isMounted) dispatch({ type: "PICTURES", data: pictures });
-    // });
+    getPictures().then(pictures => {
+      if (_isMounted) dispatch({ type: "PICTURES", data: pictures });
+    });
 
     return () => {
       _isMounted = false;
