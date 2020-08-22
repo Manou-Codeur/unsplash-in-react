@@ -2,7 +2,7 @@ import React from "react";
 
 import "./collection.scss";
 
-const Collection = ({ data, handleOnclick }) => {
+const Collection = React.memo(({ data, handleOnclick }) => {
   const { preview_photos } = data;
 
   return (
@@ -48,6 +48,6 @@ const Collection = ({ data, handleOnclick }) => {
       )}
     </div>
   );
-};
+});
 
 export default Collection;

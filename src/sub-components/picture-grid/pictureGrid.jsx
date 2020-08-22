@@ -6,6 +6,7 @@ import "./pictureGrid.scss";
 
 const Picturegrid = React.memo(
   ({ pictures, handlePictureClick, handlePictureLike }) => {
+    console.log("pictureGrid--render");
     return (
       <div id="start" className="picture-grid">
         <div className="col-one col">

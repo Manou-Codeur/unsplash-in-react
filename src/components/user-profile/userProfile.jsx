@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useCallback } from "react";
 import { flatten } from "../../services/helperFunctions";
 import {
   getUserPhotos,
@@ -73,80 +73,92 @@ const Userprofile = ({ match, history, userAuth }) => {
     };
   }, [username]);
 
-  const handleGetUserPhotos = async ({ target }) => {
-    //prevent the user from calling the server without need to
-    const node = target.parentNode;
-    if (node.className.includes("one")) return;
+  const handleGetUserPhotos = useCallback(
+    async ({ target }) => {
+      //prevent the user from calling the server without need to
+      const node = target.parentNode;
+      if (node.className.includes("one")) return;
 
-    //init some state props
-    dispatch({ type: "COLLECTIONS-ASKED", val: false });
-    dispatch({ type: "PICTURES", data: [[], [], []] });
+      //init some state props
+      dispatch({ type: "COLLECTIONS-ASKED", val: false });
+      dispatch({ type: "PICTURES", data: [[], [], []] });
 
-    //updating the styles
-    node.className = "links one";
+      //updating the styles
+      node.className = "links one";
 
-    //calling the server
-    const pictures = await getUserPhotos(username);
-    dispatch({ type: "PICTURES", data: pictures });
-  };
+      //calling the server
+      const pictures = await getUserPhotos(username);
+      dispatch({ type: "PICTURES", data: pictures });
+    },
+    [username]
+  );
 
-  const handleGetUserLikes = async ({ target }) => {
-    //prevent the user from calling the server without need to
-    const node = target.parentNode;
-    if (node.className.includes("two")) return;
+  const handleGetUserLikes = useCallback(
+    async ({ target }) => {
+      //prevent the user from calling the server without need to
+      const node = target.parentNode;
+      if (node.className.includes("two")) return;
 
-    //init some state props
-    dispatch({ type: "COLLECTIONS-ASKED", val: false });
-    dispatch({ type: "PICTURES", data: [[], [], []] });
+      //init some state props
+      dispatch({ type: "COLLECTIONS-ASKED", val: false });
+      dispatch({ type: "PICTURES", data: [[], [], []] });
 
-    //updating the styles
-    node.className = "links two";
+      //updating the styles
+      node.className = "links two";
 
-    //calling the server
-    const pictures = await getUserLikes(username);
-    if (flatten(pictures).length === 0)
-      dispatch({ type: "ERROR", message: "User hasn't liked any picture!" });
-    else dispatch({ type: "PICTURES", data: pictures });
-  };
+      //calling the server
+      const pictures = await getUserLikes(username);
+      if (flatten(pictures).length === 0)
+        dispatch({ type: "ERROR", message: "User hasn't liked any picture!" });
+      else dispatch({ type: "PICTURES", data: pictures });
+    },
+    [username]
+  );
 
-  const handleGetUserCollection = async ({ target }) => {
-    //prevent the user from calling the server without need to
-    const node = target.parentNode;
-    if (node.className.includes("three")) return;
+  const handleGetUserCollection = useCallback(
+    async ({ target }) => {
+      //prevent the user from calling the server without need to
+      const node = target.parentNode;
+      if (node.className.includes("three")) return;
 
-    //calling the server
-    const collections = await getUserCollections(username);
-    if (collections.length === 0)
-      dispatch({
-        type: "COLLECTIONS-ERROR",
-        message: "User doesn't has any collection!",
-      });
-    else dispatch({ type: "COLLECTIONS", data: collections });
+      //calling the server
+      const collections = await getUserCollections(username);
+      if (collections.length === 0)
+        dispatch({
+          type: "COLLECTIONS-ERROR",
+          message: "User doesn't has any collection!",
+        });
+      else dispatch({ type: "COLLECTIONS", data: collections });
 
-    //updating the styles
-    node.className = "links three";
-    dispatch({ type: "COLLECTIONS-ASKED", val: true });
-  };
+      //updating the styles
+      node.className = "links three";
+      dispatch({ type: "COLLECTIONS-ASKED", val: true });
+    },
+    [username]
+  );
 
-  const closeMenuu = () => {
+  const closeMenuu = useCallback(() => {
     dispatch({ type: "MENU-ASKED", val: false });
-  };
+  }, []);
 
-  const handleShowMenu = () => {
+  const handleShowMenu = useCallback(() => {
     dispatch({ type: "MENU-ASKED", val: true });
-  };
+  }, []);
 
-  const handleShowSearch = () => {
+  const handleShowSearch = useCallback(() => {
     history.push("/search/" + username);
-  };
+  }, [history, username]);
 
-  const handlePictureClick = (data, { target }) => {
-    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
-    if (!target.className.includes("heart"))
-      history.push("/picture/" + data.id);
-  };
+  const handlePictureClick = useCallback(
+    (data, { target }) => {
+      //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
+      if (!target.className.includes("heart"))
+        history.push("/picture/" + data.id);
+    },
+    [history]
+  );
 
-  const handleCollectioClick = async id => {
+  const handleCollectioClick = useCallback(async id => {
     //call the server to get photos
     const pictures = await getCollectionPhotos(id);
 
@@ -154,42 +166,44 @@ const Userprofile = ({ match, history, userAuth }) => {
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
       dispatch({ type: "PICTURES", data: pictures });
     }
-  };
+  }, []);
 
-  const singoutORsingin = async ({ target }) => {
-    if (target.textContent === "Singin") {
-      history.replace("/login");
-    } else {
-      await firebaseContext.doSignOut();
-      history.replace("/");
-    }
-  };
+  const singoutORsingin = useCallback(
+    async ({ target }) => {
+      if (target.textContent === "Singin") {
+        history.replace("/login");
+      } else {
+        await firebaseContext.doSignOut();
+        history.replace("/");
+      }
+    },
+    [history, firebaseContext]
+  );
 
-  const handleLike = ({ target }, id) => {
-    if (!userAuth) {
-      history.push("/login");
-      return;
-    }
-    const nextSibling = target.nextElementSibling;
-    const likes = parseInt(nextSibling.textContent);
-    if (target.className === "black heart") {
-      target.src = likeRed;
-      target.className = "red heart";
-      nextSibling.textContent = likes + 1;
+  const handleLike = useCallback(
+    ({ target }, id) => {
+      const nextSibling = target.nextElementSibling;
+      const likes = parseInt(nextSibling.textContent);
+      if (target.className === "black heart") {
+        target.src = likeRed;
+        target.className = "red heart";
+        nextSibling.textContent = likes + 1;
 
-      //about db
-      firebaseContext
-        .picture(userAuth.uid, id)
-        .set({ liked: true, likes: likes + 1 });
-    } else {
-      target.src = likeBlack;
-      target.className = "black heart";
-      nextSibling.textContent = likes - 1;
+        //about db
+        firebaseContext
+          .picture(userAuth.uid, id)
+          .set({ liked: true, likes: likes + 1 });
+      } else {
+        target.src = likeBlack;
+        target.className = "black heart";
+        nextSibling.textContent = likes - 1;
 
-      //about db
-      firebaseContext.picture(userAuth.uid, id).remove();
-    }
-  };
+        //about db
+        firebaseContext.picture(userAuth.uid, id).remove();
+      }
+    },
+    [firebaseContext, userAuth]
+  );
 
   const {
     pictures,
@@ -203,14 +217,16 @@ const Userprofile = ({ match, history, userAuth }) => {
 
   return (
     <div className="User-profile">
-      <HeaderProfile
-        showMenu={handleShowMenu}
-        showSearch={handleShowSearch}
-        getUserPhotos={handleGetUserPhotos}
-        getUserLikes={handleGetUserLikes}
-        getUserCollection={handleGetUserCollection}
-        userInfo={currentUser}
-      />
+      {currentUser ? (
+        <HeaderProfile
+          showMenu={handleShowMenu}
+          showSearch={handleShowSearch}
+          getUserPhotos={handleGetUserPhotos}
+          getUserLikes={handleGetUserLikes}
+          getUserCollection={handleGetUserCollection}
+          userInfo={currentUser}
+        />
+      ) : null}
 
       {/* handle nonCollection error */}
       {!error && flatten(pictures).length === 0 ? (
@@ -244,13 +260,15 @@ const Userprofile = ({ match, history, userAuth }) => {
             />
           ))}
         </div>
-      ) : (
+      ) : null}
+
+      {!collectionsAsked && flatten(pictures).length > 0 ? (
         <Picturegrid
           pictures={pictures}
           handlePictureClick={handlePictureClick}
           handlePictureLike={handleLike}
         />
-      )}
+      ) : null}
 
       <Menu
         menuAsked={menuAsked}
