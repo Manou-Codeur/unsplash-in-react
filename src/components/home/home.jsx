@@ -127,8 +127,10 @@ const Home = ({ search, history, location }) => {
       dispatch({ type: "PICTURES", data: [[], [], []] });
       dispatch({ type: "ERROR", message: null });
       const data = await callServer(val);
-      if (data[0].length === 0)
+      if (data[0].length === 0) {
         dispatch({ type: "ERROR", message: "Picture not found!" });
+        return;
+      }
       dispatch({ type: "PICTURES", data: data });
       window.query = val;
       target.value = "";

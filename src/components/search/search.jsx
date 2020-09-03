@@ -5,7 +5,6 @@ import cameraIcon from "../../assets/img/camera.svg";
 import closeBlack from "../../assets/img/close-black.svg";
 
 const Search = ({ handleSearchInput, handleCloseSearch }) => {
-  console.log("search--render");
   const [searchVal, setSearchVal] = useState("");
 
   //i've written it this way to avoid creating new funct each time a render method runs

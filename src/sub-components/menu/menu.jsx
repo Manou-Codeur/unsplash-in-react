@@ -9,7 +9,6 @@ import pinIcon from "../../assets/img/pinterest.png";
 
 const Menu = React.memo(
   ({ menuAsked, closeMenu, authUser, singoutORsingin }) => {
-    console.log("menu--render");
     const hideMenuOnClick = ({ target }) => {
       target.style.left = "-200%";
       closeMenu();
