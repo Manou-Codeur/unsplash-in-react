@@ -13,7 +13,6 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "firebase": "^7.16.0",
     "formik": "^2.1.5",
-    "jwt-decode": "^2.2.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -1,0 +1,4 @@
+1. remove the state update in the <App /> and init the localStorage with the right value(auth or not)
+2. pass it into all the <Components /> which they have need for
+3. update userAuth in the <Profile />
+ 
