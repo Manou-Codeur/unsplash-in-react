@@ -14,7 +14,6 @@ const HeaderProfile = React.memo(
     getUserCollection,
     userInfo,
   }) => {
-    console.log("headerProfile--render");
     if (userInfo) {
       const { user } = userInfo;
 
