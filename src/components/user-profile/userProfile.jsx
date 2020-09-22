@@ -126,7 +126,7 @@ const Userprofile = ({ match, history, userAuth }) => {
       if (collections.length === 0)
         dispatch({
           type: "COLLECTIONS-ERROR",
-          message: "User doesn't has any collection!",
+          message: "User doesn't have any collection!",
         });
       else dispatch({ type: "COLLECTIONS", data: collections });
 
