@@ -1,7 +1,8 @@
 import axios from "axios";
 
-axios.defaults.headers.common["Authorization"] =
-  "Client-ID Gzkvaom39nvyfxCe-NtOoH1TlVqRstOPplI2bWZVfTE";
+axios.defaults.headers.common[
+  "Authorization"
+] = `Client-ID ${process.env.REACT_APP_UNSPLASH_KEY}`;
 
 axios.defaults.baseURL = "https://api.unsplash.com";
 

@@ -15,7 +15,7 @@ const config = {
 
 class Firebase {
   constructor() {
-    //init firebase configg
+    //init firebase config
     app.initializeApp(config);
 
     //init firebase auth method so we could use all it's functions
