@@ -61,12 +61,14 @@ const Userprofile = ({ match, history, userAuth }) => {
   useEffect(() => {
     let _isMounted = true;
 
-    getUserPhotos(username).then(pictures => {
-      if (_isMounted) {
-        dispatch({ type: "PICTURES", data: pictures });
-        dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
-      }
-    });
+    getUserPhotos(username)
+      .then(pictures => {
+        if (_isMounted) {
+          dispatch({ type: "PICTURES", data: pictures });
+          dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
+        }
+      })
+      .catch(err => dispatch({ type: "ERROR", message: "Network Error!" }));
 
     return () => {
       _isMounted = false;
@@ -87,8 +89,12 @@ const Userprofile = ({ match, history, userAuth }) => {
       node.className = "links one";
 
       //calling the server
-      const pictures = await getUserPhotos(username);
-      dispatch({ type: "PICTURES", data: pictures });
+      try {
+        const pictures = await getUserPhotos(username);
+        dispatch({ type: "PICTURES", data: pictures });
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
     },
     [username]
   );
@@ -107,10 +113,17 @@ const Userprofile = ({ match, history, userAuth }) => {
       node.className = "links two";
 
       //calling the server
-      const pictures = await getUserLikes(username);
-      if (flatten(pictures).length === 0)
-        dispatch({ type: "ERROR", message: "User hasn't liked any picture!" });
-      else dispatch({ type: "PICTURES", data: pictures });
+      try {
+        const pictures = await getUserLikes(username);
+        if (flatten(pictures).length === 0)
+          dispatch({
+            type: "ERROR",
+            message: "User hasn't liked any picture!",
+          });
+        else dispatch({ type: "PICTURES", data: pictures });
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
     },
     [username]
   );
@@ -122,13 +135,17 @@ const Userprofile = ({ match, history, userAuth }) => {
       if (node.className.includes("three")) return;
 
       //calling the server
-      const collections = await getUserCollections(username);
-      if (collections.length === 0)
-        dispatch({
-          type: "COLLECTIONS-ERROR",
-          message: "User doesn't have any collection!",
-        });
-      else dispatch({ type: "COLLECTIONS", data: collections });
+      try {
+        const collections = await getUserCollections(username);
+        if (collections.length === 0)
+          dispatch({
+            type: "COLLECTIONS-ERROR",
+            message: "User doesn't have any collection!",
+          });
+        else dispatch({ type: "COLLECTIONS", data: collections });
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
 
       //updating the styles
       node.className = "links three";
@@ -160,8 +177,12 @@ const Userprofile = ({ match, history, userAuth }) => {
 
   const handleCollectioClick = useCallback(async id => {
     //call the server to get photos
-    const pictures = await getCollectionPhotos(id);
-
+    try {
+      var pictures = await getCollectionPhotos(id);
+    } catch (error) {
+      console.log("there is a fuckign net error");
+      dispatch({ type: "ERROR", message: "Network Error!" });
+    }
     if (flatten(pictures).length > 0) {
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
       dispatch({ type: "PICTURES", data: pictures });

@@ -50,11 +50,19 @@ const Home = ({ search, history, location }) => {
   const getPictures = useCallback(async () => {
     let data;
     if (window.query) {
-      data = await callServer(window.query);
-      if (data[0].length === 0)
-        dispatch({ type: "ERROR", message: "Picture not found!" });
+      try {
+        data = await callServer(window.query);
+        if (data[0].length === 0)
+          dispatch({ type: "ERROR", message: "Picture not found!" });
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
     } else {
-      data = await callServer();
+      try {
+        data = await callServer();
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
     }
     return data;
   }, []);
@@ -126,7 +134,12 @@ const Home = ({ search, history, location }) => {
     if (keyCode === 13 && val !== "") {
       dispatch({ type: "PICTURES", data: [[], [], []] });
       dispatch({ type: "ERROR", message: null });
-      const data = await callServer(val);
+
+      try {
+        var data = await callServer(val);
+      } catch (error) {
+        dispatch({ type: "ERROR", message: "Network Error!" });
+      }
       if (data[0].length === 0) {
         dispatch({ type: "ERROR", message: "Picture not found!" });
         return;
@@ -207,7 +220,7 @@ const Home = ({ search, history, location }) => {
         />
       )}
 
-      {flatten(pictures).length > 0 ? (
+      {!error && flatten(pictures).length > 0 ? (
         <Picturegrid
           pictures={pictures}
           handlePictureClick={handlePictureClick}

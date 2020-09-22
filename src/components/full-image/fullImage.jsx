@@ -19,6 +19,7 @@ const Fullimage = ({ match, userAuth, history }) => {
   const [linkToPicture, setLinkToPicture] = useState("");
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
+  const [error, setError] = useState(null);
 
   const firebaseContext = useContext(FirebaseContext);
 
@@ -29,12 +30,16 @@ const Fullimage = ({ match, userAuth, history }) => {
   useEffect(() => {
     let isMounted = true;
 
-    getPicture(match.params.id).then(picture => {
-      if (isMounted) setSelectedPic(picture);
-    });
-    download(match.params.id).then(link => {
-      if (isMounted) setLinkToPicture(link);
-    });
+    getPicture(match.params.id)
+      .then(picture => {
+        if (isMounted) setSelectedPic(picture);
+      })
+      .catch(err => setError("Network Error!"));
+    download(match.params.id)
+      .then(link => {
+        if (isMounted) setLinkToPicture(link);
+      })
+      .catch(err => setError("Network Error!"));
 
     return () => {
       isMounted = false;
@@ -200,7 +205,9 @@ const Fullimage = ({ match, userAuth, history }) => {
       </div>
     );
   } else {
-    return (
+    return error ? (
+      <h2>{error}</h2>
+    ) : (
       <div className="full-pic-loading">
         <CircularProgress color="inherit" />
       </div>
