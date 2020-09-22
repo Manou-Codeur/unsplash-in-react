@@ -63,7 +63,7 @@ const Fullimage = ({ match, userAuth, history }) => {
         firebaseContext.picture(userAuth.uid, match.params.id).off();
       }
     };
-  }, [userAuth, firebaseContext]);
+  }, [userAuth, firebaseContext, match.params.id]);
 
   const handleClosePic = () => {
     history.goBack();
