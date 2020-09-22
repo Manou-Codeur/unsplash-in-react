@@ -44,6 +44,7 @@ class App extends Component {
               )
             }
           />
+
           <Route
             path="/picture/:id"
             render={props =>
@@ -59,21 +60,25 @@ class App extends Component {
               )
             }
           />
+
           <Route
             path="/search"
             render={props => <Home {...props} search={true} />}
           />
+
           <Route
             path="/login"
             render={props => <Login {...props} userAuth={userAuth} />}
           />
-          <Route
-            path="/singup"
-            render={props => <Singup {...props} userAuth={userAuth} />}
-          />
+
+          <Route path="/singup" render={props => <Singup {...props} />} />
+
           <Route path="/home" exact component={Home} />
+
           <Route path="/notFound" component={Notfound} />
+
           <Redirect from="/" exact to="/home" />
+
           <Redirect to="/notFound" />
         </Switch>
       </Fragment>

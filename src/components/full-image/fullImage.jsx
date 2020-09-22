@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 import { download, getPicture } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
@@ -14,66 +14,66 @@ import addIconn from "../../assets/img/add.svg";
 import closeRounded from "../../assets/img/close-round.svg";
 import FirebaseContext from "./../../services/firebase/firebaseContext";
 
-class Fullimage extends Component {
-  state = {
-    selectedPic: {},
-    linkToPicture: "",
-    liked: false,
-    likes: null,
-  };
+const Fullimage = ({ match, userAuth, history }) => {
+  const [selectedPic, setSelectedPic] = useState({});
+  const [linkToPicture, setLinkToPicture] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(null);
 
-  _isMounted = false;
+  const firebaseContext = useContext(FirebaseContext);
 
-  static contextType = FirebaseContext;
+  const mainPicture = useRef();
+  const infoLayout = useRef();
+  const controlsLayout = useRef();
 
-  async componentDidMount() {
-    this._isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-    const { params } = this.props.match;
-    const { userAuth } = this.props;
-    const selectedPic = await getPicture(params.id);
-    const linkToPicture = await download(params.id);
+    getPicture(match.params.id).then(picture => {
+      if (isMounted) setSelectedPic(picture);
+    });
+    download(match.params.id).then(link => {
+      if (isMounted) setLinkToPicture(link);
+    });
 
-    if (this._isMounted) this.setState({ selectedPic, linkToPicture });
+    return () => {
+      isMounted = false;
+    };
+  }, [match.params.id]);
+
+  useEffect(() => {
+    let isMounted = true;
 
     //firebase
     if (userAuth) {
-      this.context.picture(userAuth.uid, params.id).on("value", snapshot => {
-        const usersObject = snapshot.val();
-        if (this._isMounted) {
-          this.setState({
-            liked: usersObject && usersObject.liked,
-            likes: usersObject && usersObject.likes,
-          });
-        }
-      });
+      firebaseContext
+        .picture(userAuth.uid, match.params.id)
+        .on("value", snapshot => {
+          const usersObject = snapshot.val();
+          if (isMounted && usersObject) {
+            setLiked(usersObject.liked);
+            setLikes(usersObject.likes);
+          }
+        });
     }
-  }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+    return () => {
+      isMounted = false;
+      if (userAuth) {
+        firebaseContext.picture(userAuth.uid, match.params.id).off();
+      }
+    };
+  }, [userAuth, firebaseContext]);
 
-    //about firebase
-    const { userAuth } = this.props;
-    const { params } = this.props.match;
-
-    if (userAuth) {
-      this.context.picture(userAuth.uid, params.id).off();
-    }
-  }
-
-  handleClosePic = () => {
-    this.props.history.goBack();
+  const handleClosePic = () => {
+    history.goBack();
   };
 
-  handleUserClick = () => {
-    const { selectedPic } = this.state;
-    this.props.history.push("/profile/" + selectedPic.user.username);
+  const handleUserClick = () => {
+    history.push("/profile/" + selectedPic.user.username);
   };
 
-  handleLikePic = ({ target }) => {
-    const { params } = this.props.match;
-    const { userAuth } = this.props;
+  const handleLikePic = ({ target }) => {
     const nextSibling = target.nextElementSibling;
 
     const likes = parseInt(nextSibling.textContent);
@@ -83,8 +83,8 @@ class Fullimage extends Component {
       nextSibling.textContent = likes + 1;
 
       //about db
-      this.context
-        .picture(userAuth.uid, params.id)
+      firebaseContext
+        .picture(userAuth.uid, match.params.id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeWhitee;
@@ -92,127 +92,120 @@ class Fullimage extends Component {
       nextSibling.textContent = likes - 1;
 
       //about db
-      this.context.picture(userAuth.uid, params.id).remove();
+      firebaseContext.picture(userAuth.uid, match.params.id).remove();
     }
   };
 
-  handleInfoClick = () => {
-    this.mainPicture.className += " hidee";
-    this.controlsLayout.className += " hidee";
-    this.infoLayout.className = "info";
+  const handleInfoClick = () => {
+    mainPicture.current.className += " hidee";
+    controlsLayout.current.className += " hidee";
+    infoLayout.current.className = "info";
   };
 
-  render() {
-    const { selectedPic, liked, likes } = this.state;
+  if (selectedPic && Object.keys(selectedPic).length > 0) {
+    const date = selectedPic.created_at.split("T")[0];
 
-    if (selectedPic && Object.keys(selectedPic).length > 0) {
-      const date = selectedPic.created_at.split("T")[0];
-
-      return (
-        <div
-          className="full-pic"
-          style={{
-            background: `url("${selectedPic.urls.thumb}") center`,
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="filter">
-            <div className="userANDclose">
-              <div className="user-info">
-                <div
-                  className="img-containner"
-                  style={{
-                    background: `url(${selectedPic.user.profile_image.large})`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-                <div className="user-name">
-                  <p className="by">Photo by</p>
-                  <p className="name" onClick={this.handleUserClick}>
-                    {selectedPic.user.first_name +
-                      " " +
-                      (selectedPic.user.last_name || "")}
-                  </p>
-                </div>
+    return (
+      <div
+        className="full-pic"
+        style={{
+          background: `url("${selectedPic.urls.thumb}") center`,
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="filter">
+          <div className="userANDclose">
+            <div className="user-info">
+              <div
+                className="img-containner"
+                style={{
+                  background: `url(${selectedPic.user.profile_image.large})`,
+                  backgroundSize: "cover",
+                }}
+              ></div>
+              <div className="user-name">
+                <p className="by">Photo by</p>
+                <p className="name" onClick={handleUserClick}>
+                  {selectedPic.user.first_name +
+                    " " +
+                    (selectedPic.user.last_name || "")}
+                </p>
               </div>
-              <img src={closeRounded} alt="sds" onClick={this.handleClosePic} />
             </div>
+            <img src={closeRounded} alt="sds" onClick={handleClosePic} />
+          </div>
 
-            <img
-              className="main-pic"
-              src={selectedPic.urls.regular}
-              ref={el => (this.mainPicture = el)}
-              alt="random"
-            />
+          <img
+            className="main-pic"
+            src={selectedPic.urls.regular}
+            ref={mainPicture}
+            alt="random"
+          />
 
-            <div className="info hidee" ref={el => (this.infoLayout = el)}>
-              <div className="left-part">
-                <div className="item">
-                  <span>Published</span>
-                  <p>{formatDate(date)}</p>
-                </div>
-                <div className="item">
-                  <span>Camera</span>
-                  <p>{getCamera()}</p>
-                </div>
-                <div className="item">
-                  <span>Focal Length</span>
-                  <p>60.7 mm</p>
-                </div>
+          <div className="info hidee" ref={infoLayout}>
+            <div className="left-part">
+              <div className="item">
+                <span>Published</span>
+                <p>{formatDate(date)}</p>
               </div>
-
-              <div className="right-part">
-                <div className="item">
-                  <span>Dimensions</span>
-                  <p>{selectedPic.width + " x " + selectedPic.height}</p>
-                </div>
-                <div className="item">
-                  <span>Dimensions</span>
-                  <p>X-T1</p>
-                </div>
-                <div className="item">
-                  <span>Shutter Speed</span>
-                  <p>0.01 sec</p>
-                </div>
+              <div className="item">
+                <span>Camera</span>
+                <p>{getCamera()}</p>
+              </div>
+              <div className="item">
+                <span>Focal Length</span>
+                <p>60.7 mm</p>
               </div>
             </div>
 
-            <div className="controls" ref={el => (this.controlsLayout = el)}>
-              <div className="img-containner one">
-                <img
-                  src={liked ? likeRedd : likeWhitee}
-                  className={liked ? "red heart" : "white heart"}
-                  onClick={this.handleLikePic}
-                  alt="heart icon"
-                />
-                <p>{likes ? likes : selectedPic.likes}</p>
+            <div className="right-part">
+              <div className="item">
+                <span>Dimensions</span>
+                <p>{selectedPic.width + " x " + selectedPic.height}</p>
               </div>
-              <div className="img-containner">
-                <img src={addIconn} alt="ds" />
+              <div className="item">
+                <span>Dimensions</span>
+                <p>X-T1</p>
               </div>
-              <div className="img-containner">
-                <a
-                  href={this.state.linkToPicture}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img src={downloadIconn} alt="ds" />
-                </a>
-              </div>
-              <div className="img-containner">
-                <img src={infoIcon} alt="ds" onClick={this.handleInfoClick} />
+              <div className="item">
+                <span>Shutter Speed</span>
+                <p>0.01 sec</p>
               </div>
             </div>
           </div>
+
+          <div className="controls" ref={controlsLayout}>
+            <div className="img-containner one">
+              <img
+                src={liked ? likeRedd : likeWhitee}
+                className={liked ? "red heart" : "white heart"}
+                onClick={handleLikePic}
+                alt="heart icon"
+              />
+              <p>{likes ? likes : selectedPic.likes}</p>
+            </div>
+            <div className="img-containner">
+              <img src={addIconn} alt="ds" />
+            </div>
+            <div className="img-containner">
+              <a href={linkToPicture} target="_blank" rel="noopener noreferrer">
+                <img src={downloadIconn} alt="ds" />
+              </a>
+            </div>
+            <div className="img-containner">
+              <img src={infoIcon} alt="ds" onClick={handleInfoClick} />
+            </div>
+          </div>
         </div>
-      );
-    }
+      </div>
+    );
+  } else {
     return (
       <div className="full-pic-loading">
         <CircularProgress color="inherit" />
       </div>
     );
   }
-}
+};
 
 export default Fullimage;

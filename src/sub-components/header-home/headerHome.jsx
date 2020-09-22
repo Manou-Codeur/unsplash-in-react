@@ -6,63 +6,60 @@ import searchIcon from "../../assets/img/search.svg";
 import cameraIcon from "../../assets/img/camera.svg";
 import "./headerHome.scss";
 
-const Headerhome = ({
-  askForMenu,
-  handleSubscribeClick,
-  handleSearchIconClick,
-  authUser,
-}) => {
-  return (
-    <div className="header-home">
-      <nav>
-        <div className="fake-div"></div>
-        <p className="author">Made by Salim</p>
-        {!authUser ? (
-          <div className="links">
-            <Link className="link" to="./login">
-              Login
-            </Link>
-            <Link className="link" to="./singup">
-              Singup
-            </Link>
-          </div>
-        ) : (
-          <div className="links"></div>
-        )}
-      </nav>
-
-      <div className="header-content">
-        <img
-          className="menu-icon"
-          src={menuBar}
-          alt="menu icon"
-          onClick={askForMenu}
-        />
-
-        <div className="middle-content">
-          <img src={cameraIcon} alt="camera icon" />
-          <p className="logo-name">MYSPLASH</p>
-          <p className="for-margin">
-            Free high-resolution photos every 10 days
-          </p>
+const Headerhome = React.memo(
+  ({ askForMenu, handleSubscribeClick, handleSearchIconClick, authUser }) => {
+    return (
+      <div className="header-home">
+        <nav>
+          <div className="fake-div"></div>
+          <p className="author">Made by Salim</p>
           {!authUser ? (
-            <button onClick={handleSubscribeClick}>Subscribe</button>
+            <div className="links">
+              <Link className="link" to="./login">
+                Login
+              </Link>
+              <Link className="link" to="./singup">
+                Singup
+              </Link>
+            </div>
           ) : (
-            <a className="start-btn" href="#start">
-              Start
-            </a>
+            <div className="links"></div>
           )}
-        </div>
+        </nav>
 
-        <img
-          className="search-icon"
-          src={searchIcon}
-          alt="search icon"
-          onClick={handleSearchIconClick}
-        />
+        <div className="header-content">
+          <img
+            className="menu-icon"
+            src={menuBar}
+            alt="menu icon"
+            onClick={askForMenu}
+          />
+
+          <div className="middle-content">
+            <img src={cameraIcon} alt="camera icon" />
+            <p className="logo-name">MYSPLASH</p>
+            <p className="for-margin">
+              Free high-resolution photos every 10 days
+            </p>
+            {!authUser ? (
+              <button onClick={handleSubscribeClick}>Subscribe</button>
+            ) : (
+              <a className="start-btn" href="#start">
+                Start
+              </a>
+            )}
+          </div>
+
+          <img
+            className="search-icon"
+            src={searchIcon}
+            alt="search icon"
+            onClick={handleSearchIconClick}
+          />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default Headerhome;

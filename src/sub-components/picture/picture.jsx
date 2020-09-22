@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 
 import FirebaseContext from "./../../services/firebase/firebaseContext";
 
@@ -8,129 +8,114 @@ import downloadIcon from "../../assets/img/download.png";
 import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
-class Picture extends Component {
-  constructor(props) {
-    super(props);
-    this.handlePictureClick = props.handlePictureClick.bind(this, props.data);
-  }
+const Picture = ({ handlePictureLike, handlePictureClick, data }) => {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
 
-  state = {
-    liked: false,
-    likes: null,
-    authUser: null,
-  };
+  const firebaseContext = useContext(FirebaseContext);
 
-  _isMounted = false;
+  const picture = useRef();
+  const user = useRef();
+  const controlsRef = useRef();
 
-  static contextType = FirebaseContext;
+  useEffect(() => {
+    let _isMounted = true;
 
-  componentDidMount() {
-    this._isMounted = true;
-
-    this.listener = this.context.isUserAuthenticated(userInfo => {
+    firebaseContext.isUserAuthenticated(userInfo => {
       if (userInfo) {
-        this.context
-          .picture(userInfo.uid, this.props.data.id)
-          .on("value", snapshot => {
-            const usersObject = snapshot.val();
-            if (this._isMounted) {
-              this.setState({
-                authUser: userInfo,
-                liked: usersObject && usersObject.liked,
-                likes: usersObject && usersObject.likes,
-              });
-            }
-          });
+        firebaseContext.picture(userInfo.uid, data.id).on("value", snapshot => {
+          const usersObject = snapshot.val();
+          if (_isMounted && usersObject) {
+            setAuthUser(userInfo);
+            setLiked(usersObject.liked);
+            setLikes(usersObject.likes);
+          }
+        });
       }
     });
-  }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+    return () => {
+      _isMounted = false;
 
-    this.listener();
-    if (this.state.authUser)
-      this.context.pictures(this.state.authUser.uid).off();
-  }
+      if (authUser) firebaseContext.pictures(authUser.uid).off();
+    };
+  }, [authUser, firebaseContext]);
 
-  handleHover = () => {
-    this.controlsRef.className = "controls";
-    this.user.className = "picture-owner";
-    this.picture.className = "background";
-    this.picture.style.transform = "scale(1.1)";
+  const handleHover = () => {
+    controlsRef.current.className = "controls";
+    user.current.className = "picture-owner";
+    picture.current.className = "background";
+    picture.current.style.transform = "scale(1.1)";
   };
 
-  handleLeave = () => {
-    this.controlsRef.className = "controls hide";
-    this.user.className = "picture-owner hide";
-    this.picture.className = "background no-blur";
-    this.picture.style.transform = "";
+  const handleLeave = () => {
+    controlsRef.current.className = "controls hide";
+    user.current.className = "picture-owner hide";
+    picture.current.className = "background no-blur";
+    picture.current.style.transform = "";
   };
 
-  handlePictureLike = e => {
-    const { handlePictureLike, data } = this.props;
+  const handlePictureLikee = e => {
     return handlePictureLike(e, data.id);
   };
 
-  render() {
-    const { data } = this.props;
-    const { liked, likes } = this.state;
-    const userPP = data.user.profile_image.large;
+  const handlePictureClickk = e => {
+    return handlePictureClick(data, e);
+  };
 
-    return (
+  const userPP = data.user.profile_image.large;
+  return (
+    <div
+      className="picture"
+      onClick={handlePictureClickk}
+      style={{
+        backgroundColor: data.color,
+      }}
+      title={data.description}
+    >
+      <img
+        className="background no-blur"
+        src={data.urls.regular}
+        alt={data.description}
+        ref={picture}
+      />
+
       <div
-        className="picture"
-        onClick={this.handlePictureClick}
-        style={{
-          backgroundColor: data.color,
-        }}
-        title={data.description}
+        className="content-containner"
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
       >
-        <img
-          className="background no-blur"
-          src={data.urls.regular}
-          alt={data.description}
-          ref={el => (this.picture = el)}
-        />
+        <div className="picture-owner hide" ref={user}>
+          <div
+            className="img-containner"
+            style={{ background: `url(${userPP})`, backgroundSize: "cover" }}
+          ></div>
+          <p className="by">Photo by</p>
+          <p className="user-name">
+            {data.user.first_name + " " + (data.user.last_name || "")}
+          </p>
+        </div>
 
-        <div
-          className="content-containner"
-          onMouseEnter={this.handleHover}
-          onMouseLeave={this.handleLeave}
-        >
-          <div className="picture-owner hide" ref={el => (this.user = el)}>
-            <div
-              className="img-containner"
-              style={{ background: `url(${userPP})`, backgroundSize: "cover" }}
-            ></div>
-            <p className="by">Photo by</p>
-            <p className="user-name">
-              {data.user.first_name + " " + (data.user.last_name || "")}
-            </p>
+        <div className="controls hide" ref={controlsRef}>
+          <div className="imgg-containner one">
+            <img
+              src={liked ? likeRed : likeBlack}
+              className={liked ? "red heart" : "black heart"}
+              alt="heart icon"
+              onClick={handlePictureLikee}
+            />
+            <p>{likes ? likes : data.likes}</p>
           </div>
-
-          <div className="controls hide" ref={el => (this.controlsRef = el)}>
-            <div className="imgg-containner one">
-              <img
-                //we will comeback to when the user logout
-                src={liked ? likeRed : likeBlack}
-                className={liked ? "red heart" : "black heart"}
-                alt="heart icon"
-                onClick={this.handlePictureLike}
-              />
-              <p>{likes ? likes : data.likes}</p>
-            </div>
-            <div className="imgg-containner">
-              <img className="test" src={addIcon} alt="plus icon" />
-            </div>
-            <div className="imgg-containner">
-              <img src={downloadIcon} alt="download icon" />
-            </div>
+          <div className="imgg-containner">
+            <img className="test" src={addIcon} alt="plus icon" />
+          </div>
+          <div className="imgg-containner">
+            <img src={downloadIcon} alt="download icon" />
           </div>
         </div>
       </div>
-    );
-  }
-}
-
+    </div>
+  );
+};
 export default Picture;

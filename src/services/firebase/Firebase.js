@@ -38,7 +38,7 @@ class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password);
   };
 
-  //method de singin a user with facebook
+  //method to singin a user with facebook
   doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
   //method to singout a user
