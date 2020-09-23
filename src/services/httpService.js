@@ -1,24 +1,46 @@
 import axios from "axios";
+import React, { createContext, useState } from "react";
 
-axios.defaults.headers.common[
-  "Authorization"
-] = `Client-ID ${process.env.REACT_APP_UNSPLASH_KEY}`;
-
-axios.defaults.baseURL = "https://api.unsplash.com";
-
-axios.interceptors.response.use(null, error => {
-  const expectedError =
-    error.response &&
-    error.response.status >= 400 &&
-    error.response.status < 500;
-
-  if (!expectedError) {
-    alert("There is an unexpected error, please reload and try again!");
-  } else if (error.response && error.response.status === 403)
-    alert("Sorry there is a lot of requests, please retry later!");
-
-  return Promise.reject(error);
+export const errorContext = createContext({
+  error: null,
+  updateError: () => {},
 });
+
+export default props => {
+  const [error, setError] = useState(null);
+
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Client-ID ${process.env.REACT_APP_UNSPLASH_KEY}`;
+
+  axios.defaults.baseURL = "https://api.unsplash.com";
+
+  axios.interceptors.response.use(null, error => {
+    const expectedError =
+      error.response &&
+      error.response.status >= 400 &&
+      error.response.status < 500;
+
+    if (!expectedError) {
+      setError("There is an unexpected error, please reload and try again!");
+    } else if (error.response && error.response.status === 403) {
+      setError("Sorry there is a lot of requests, please retry later!");
+    }
+
+    return Promise.reject(error);
+  });
+
+  return (
+    <errorContext.Provider
+      value={{
+        error,
+        updateError: message => setError(message),
+      }}
+    >
+      {props.children}
+    </errorContext.Provider>
+  );
+};
 
 export const callServer = async (query = ["people", "nature", "food"]) => {
   const data = await axios.all([

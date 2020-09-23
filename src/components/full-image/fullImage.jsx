@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 
-import { download, getPicture } from "../../services/httpService";
+import { download, getPicture, errorContext } from "../../services/httpService";
 import { formatDate, getCamera } from "../../services/pictureInfo";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import infoIcon from "../../assets/img/info.svg";
-
 import "./fullImage.scss";
+import infoIcon from "../../assets/img/info.svg";
 import likeWhitee from "../../assets/img/favorite-white.svg";
 import likeRedd from "../../assets/img/favorite-red.png";
 import downloadIconn from "../../assets/img/download.png";
@@ -15,12 +14,18 @@ import closeRounded from "../../assets/img/close-round.svg";
 import FirebaseContext from "./../../services/firebase/firebaseContext";
 
 const Fullimage = ({ match, userAuth, history }) => {
-  const [selectedPic, setSelectedPic] = useState({});
+  const [selectedPic, setSelectedPic] = useState(null);
   const [linkToPicture, setLinkToPicture] = useState("");
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
+  const [error, setError] = useState(null);
 
   const firebaseContext = useContext(FirebaseContext);
+  const myErrorContext = useContext(errorContext);
+
+  useEffect(() => {
+    if (myErrorContext.error) setError(myErrorContext.error);
+  }, [myErrorContext]);
 
   const mainPicture = useRef();
   const infoLayout = useRef();
@@ -102,7 +107,7 @@ const Fullimage = ({ match, userAuth, history }) => {
     infoLayout.current.className = "info";
   };
 
-  if (selectedPic && Object.keys(selectedPic).length > 0) {
+  if (selectedPic) {
     const date = selectedPic.created_at.split("T")[0];
 
     return (
@@ -200,7 +205,9 @@ const Fullimage = ({ match, userAuth, history }) => {
       </div>
     );
   } else {
-    return (
+    return error ? (
+      <h2>{error}</h2>
+    ) : (
       <div className="full-pic-loading">
         <CircularProgress color="inherit" />
       </div>

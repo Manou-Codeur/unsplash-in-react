@@ -4,6 +4,7 @@ import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { FirebaseContext } from "./../../services/firebase/indexx";
+import { errorContext } from "../../services/httpService";
 
 import Headerhome from "./../../sub-components/header-home/headerHome";
 import Menu from "./../../sub-components/menu/menu";
@@ -45,6 +46,12 @@ const Home = ({ search, history, location }) => {
 
   //context API
   const firebaseContext = useContext(FirebaseContext);
+  const myErrorContext = useContext(errorContext);
+
+  useEffect(() => {
+    if (myErrorContext.error)
+      dispatch({ type: "ERROR", message: myErrorContext.error });
+  }, [myErrorContext]);
 
   //funct to call the server and get pictures
   const getPictures = useCallback(async () => {
@@ -219,7 +226,7 @@ const Home = ({ search, history, location }) => {
         </div>
       )}
 
-      <button className="more-btn">Load More</button>
+      {!error && <button className="more-btn">Load More</button>}
 
       <Menu
         menuAsked={menuAsked}
