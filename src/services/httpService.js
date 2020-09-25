@@ -6,6 +6,7 @@ export const errorContext = createContext({
   updateError: () => {},
 });
 
+//anonymous component to pass down the error object to all the components that call the server
 export default props => {
   const [error, setError] = useState(null);
 
