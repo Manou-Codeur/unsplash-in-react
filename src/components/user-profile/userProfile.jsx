@@ -5,6 +5,7 @@ import {
   getUserLikes,
   getUserCollections,
   getCollectionPhotos,
+  errorContext,
 } from "../../services/httpService";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -54,9 +55,17 @@ const Userprofile = ({ match, history, userAuth }) => {
   const [updatedState, dispatch] = useReducer(reducerFunction, initState);
 
   const firebaseContext = useContext(FirebaseContext);
+  const myErrorContext = useContext(errorContext);
 
-  //I defined it here coz it will be used many times
+  //I defined username here coz it will be used many times
   const username = match.params.username;
+
+  useEffect(() => {
+    if (myErrorContext.error) {
+      dispatch({ type: "ERROR", message: myErrorContext.error });
+      dispatch({ type: "PICTURES", data: [[], [], []] });
+    }
+  }, [myErrorContext]);
 
   useEffect(() => {
     let _isMounted = true;
