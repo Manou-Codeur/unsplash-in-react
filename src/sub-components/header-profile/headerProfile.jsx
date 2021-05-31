@@ -7,14 +7,20 @@ import "./headerProfile.scss";
 
 const HeaderProfile = React.memo(
   ({
-    showMenu,
-    showSearch,
+    dispatchFunct,
     getUserPhotos,
     getUserLikes,
     getUserCollection,
     userInfo,
   }) => {
-    console.log("headerProfile--render");
+    const showMenu = () => {
+      dispatchFunct({ type: "MENU-ASKED", val: true });
+    };
+
+    const showSearch = () => {
+      dispatchFunct({ type: "SEARCH-ASKED", val: true });
+    };
+
     if (userInfo) {
       const { user } = userInfo;
 

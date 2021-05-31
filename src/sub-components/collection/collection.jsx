@@ -1,12 +1,25 @@
 import React from "react";
 
+import { getCollectionPhotos } from "../../services/httpService";
+import { flatten } from "./../../services/helperFunctions";
+
 import "./collection.scss";
 
-const Collection = React.memo(({ data, handleOnclick }) => {
+const Collection = React.memo(({ data, dispatchFunct }) => {
   const { preview_photos } = data;
 
+  const handleOnClick = async () => {
+    //call the server to get photos
+    const pictures = await getCollectionPhotos(data.id);
+
+    if (flatten(pictures).length > 0) {
+      dispatchFunct({ type: "COLLECTIONS-ASKED", val: false });
+      dispatchFunct({ type: "PICTURES", data: pictures });
+    }
+  };
+
   return (
-    <div className="collection" onClick={handleOnclick.bind(this, data.id)}>
+    <div className="collection" onClick={handleOnClick}>
       {preview_photos ? (
         <React.Fragment>
           <div

@@ -1,28 +1,28 @@
 import React, { useReducer, useEffect, useContext, useCallback } from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import { flatten } from "../../services/helperFunctions";
 import {
   getUserPhotos,
   getUserLikes,
   getUserCollections,
-  getCollectionPhotos,
 } from "../../services/httpService";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
+import Search from "./../search/search";
 import FirebaseContext from "./../../services/firebase/firebaseContext";
-
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Menu from "./../../sub-components/menu/menu";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 import Collection from "./../../sub-components/collection/collection";
 
 import "./userProfile.scss";
-import likeBlack from "../../assets/img/favorite-white.svg";
-import likeRed from "../../assets/img/favorite-red.png";
 
 const reducerFunction = (currState, action) => {
   switch (action.type) {
     case "MENU-ASKED":
       return { ...currState, menuAsked: action.val };
+    case "SEARCH-ASKED":
+      return { ...currState, searchAsked: action.val };
     case "PICTURES":
       return { ...currState, pictures: action.data };
     case "ERROR":
@@ -43,17 +43,18 @@ const reducerFunction = (currState, action) => {
 const Userprofile = ({ match, history, userAuth }) => {
   const initState = {
     menuAsked: false,
+    searchAsked: false,
     pictures: [[], [], []],
     collections: [],
     collectionsAsked: false,
-    currentUser: "",
+    currentUser: null,
     error: null,
     collectionError: null,
   };
 
   const [updatedState, dispatch] = useReducer(reducerFunction, initState);
 
-  const firebaseContext = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
 
   //I defined it here coz it will be used many times
   const username = match.params.username;
@@ -137,76 +138,9 @@ const Userprofile = ({ match, history, userAuth }) => {
     [username]
   );
 
-  const closeMenuu = useCallback(() => {
-    dispatch({ type: "MENU-ASKED", val: false });
-  }, []);
-
-  const handleShowMenu = useCallback(() => {
-    dispatch({ type: "MENU-ASKED", val: true });
-  }, []);
-
-  const handleShowSearch = useCallback(() => {
-    history.push("/search/" + username);
-  }, [history, username]);
-
-  const handlePictureClick = useCallback(
-    (data, { target }) => {
-      //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
-      if (!target.className.includes("heart"))
-        history.push("/picture/" + data.id);
-    },
-    [history]
-  );
-
-  const handleCollectioClick = useCallback(async id => {
-    //call the server to get photos
-    const pictures = await getCollectionPhotos(id);
-
-    if (flatten(pictures).length > 0) {
-      dispatch({ type: "COLLECTIONS-ASKED", val: false });
-      dispatch({ type: "PICTURES", data: pictures });
-    }
-  }, []);
-
-  const singoutORsingin = useCallback(
-    async ({ target }) => {
-      if (target.textContent === "Singin") {
-        history.replace("/login");
-      } else {
-        await firebaseContext.doSignOut();
-        history.replace("/");
-      }
-    },
-    [history, firebaseContext]
-  );
-
-  const handleLike = useCallback(
-    ({ target }, id) => {
-      const nextSibling = target.nextElementSibling;
-      const likes = parseInt(nextSibling.textContent);
-      if (target.className === "black heart") {
-        target.src = likeRed;
-        target.className = "red heart";
-        nextSibling.textContent = likes + 1;
-
-        //about db
-        firebaseContext
-          .picture(userAuth.uid, id)
-          .set({ liked: true, likes: likes + 1 });
-      } else {
-        target.src = likeBlack;
-        target.className = "black heart";
-        nextSibling.textContent = likes - 1;
-
-        //about db
-        firebaseContext.picture(userAuth.uid, id).remove();
-      }
-    },
-    [firebaseContext, userAuth]
-  );
-
   const {
     pictures,
+    searchAsked,
     collectionsAsked,
     collections,
     error,
@@ -216,17 +150,23 @@ const Userprofile = ({ match, history, userAuth }) => {
   } = updatedState;
 
   return (
-    <div className="User-profile">
-      {currentUser ? (
+    <div
+      className="User-profile"
+      style={
+        searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
+      }
+    >
+      {searchAsked ? (
+        <Search dispatchFunct={dispatch} />
+      ) : (
         <HeaderProfile
-          showMenu={handleShowMenu}
-          showSearch={handleShowSearch}
+          dispatchFunct={dispatch}
           getUserPhotos={handleGetUserPhotos}
           getUserLikes={handleGetUserLikes}
           getUserCollection={handleGetUserCollection}
           userInfo={currentUser}
         />
-      ) : null}
+      )}
 
       {/* handle nonCollection error */}
       {!error && flatten(pictures).length === 0 ? (
@@ -256,25 +196,22 @@ const Userprofile = ({ match, history, userAuth }) => {
             <Collection
               key={collection.id}
               data={collection}
-              handleOnclick={handleCollectioClick}
+              dispatchFunct={dispatch}
             />
           ))}
         </div>
       ) : null}
 
       {!collectionsAsked && flatten(pictures).length > 0 ? (
-        <Picturegrid
-          pictures={pictures}
-          handlePictureClick={handlePictureClick}
-          handlePictureLike={handleLike}
-        />
+        <Picturegrid pictures={pictures} history={history} />
       ) : null}
 
       <Menu
         menuAsked={menuAsked}
-        closeMenu={closeMenuu}
         authUser={userAuth}
-        singoutORsingin={singoutORsingin}
+        dispatchFunct={dispatch}
+        history={history}
+        firebase={firebase}
       />
     </div>
   );
