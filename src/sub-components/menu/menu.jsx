@@ -8,10 +8,23 @@ import twitterIcon from "../../assets/img/twitter.png";
 import pinIcon from "../../assets/img/pinterest.png";
 
 const Menu = React.memo(
-  ({ menuAsked, closeMenu, authUser, singoutORsingin }) => {
+  ({ menuAsked, authUser, dispatchFunct, history, firebase }) => {
     const hideMenuOnClick = ({ target }) => {
       target.style.left = "-200%";
       closeMenu();
+    };
+
+    const closeMenu = () => {
+      dispatchFunct({ type: "MENU-ASKED", val: false });
+    };
+
+    const singoutORsingin = async ({ target }) => {
+      if (target.textContent === "Singin") {
+        history.replace("/login");
+      } else {
+        await firebase.doSignOut();
+        history.replace("/");
+      }
     };
 
     return (

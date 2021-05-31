@@ -57,11 +57,6 @@ const App = props => {
         />
 
         <Route
-          path="/search"
-          render={props => <Home {...props} search={true} />}
-        />
-
-        <Route
           path="/login"
           render={props => <Login {...props} userAuth={userAuth} />}
         />

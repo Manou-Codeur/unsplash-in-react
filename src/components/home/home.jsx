@@ -11,8 +11,6 @@ import Search from "./../search/search";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 
 import "./home.scss";
-import likeBlack from "../../assets/img/favorite-white.svg";
-import likeRed from "../../assets/img/favorite-red.png";
 
 const reducerFunct = (currState, action) => {
   switch (action.type) {
@@ -32,11 +30,11 @@ const reducerFunct = (currState, action) => {
   }
 };
 
-const Home = ({ search, history, location }) => {
+const Home = ({ history, location }) => {
   const initState = {
     menuAsked: false,
     pictures: [[], [], []],
-    searchAsked: search,
+    searchAsked: false,
     authUser: null,
     error: null,
   };
@@ -44,7 +42,7 @@ const Home = ({ search, history, location }) => {
   const [updatedState, dispatch] = useReducer(reducerFunct, initState);
 
   //context API
-  const firebaseContext = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
 
   //funct to call the server and get pictures
   const getPictures = useCallback(async () => {
@@ -64,11 +62,11 @@ const Home = ({ search, history, location }) => {
     let _isMounted = true;
 
     //auth user and firebase
-    firebaseContext.isUserAuthenticated(userInfo => {
+    firebase.isUserAuthenticated(userInfo => {
       if (userInfo && !userInfo.displayName) {
-        firebaseContext.user(userInfo.uid).on("value", snapshot => {
+        firebase.user(userInfo.uid).on("value", snapshot => {
           const usersObject = snapshot.val();
-          if (usersObject) firebaseContext.updateUser(usersObject.name, null);
+          if (usersObject) firebase.updateUser(usersObject.name, null);
         });
       }
       if (_isMounted) dispatch({ type: "AUTH-USER", userInfo: userInfo });
@@ -80,109 +78,9 @@ const Home = ({ search, history, location }) => {
 
     return () => {
       _isMounted = false;
-      firebaseContext.users().off();
+      firebase.users().off();
     };
-  }, [getPictures, firebaseContext]);
-
-  // component did update
-  useEffect(() => {
-    if (!search) {
-      dispatch({ type: "SEARCH-ASKED", val: search });
-    }
-  }, [search]);
-
-  const askForMenu = useCallback(() => {
-    dispatch({ type: "MENU-ASKED", val: true });
-  }, []);
-
-  const closeMenu = useCallback(() => {
-    dispatch({ type: "MENU-ASKED", val: false });
-  }, []);
-
-  const handlePictureClick = useCallback(
-    (data, { target }) => {
-      //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
-      if (!target.className.includes("heart"))
-        history.push("/picture/" + data.id);
-    },
-    [history]
-  );
-
-  const handleSearchIconClick = useCallback(() => {
-    dispatch({ type: "SEARCH-ASKED", val: true });
-    history.push("/search");
-  }, [history]);
-
-  const handleCloseSearch = () => {
-    dispatch({ type: "SEARCH-ASKED", val: false });
-
-    const usernamee = location.pathname.split("/")[2];
-    if (usernamee) history.push("/profile/" + usernamee);
-    else history.push("/");
-  };
-
-  const handleSearchInput = async ({ keyCode, target }, val) => {
-    //update the state
-    if (keyCode === 13 && val !== "") {
-      dispatch({ type: "PICTURES", data: [[], [], []] });
-      dispatch({ type: "ERROR", message: null });
-      const data = await callServer(val);
-      if (data[0].length === 0) {
-        dispatch({ type: "ERROR", message: "Picture not found!" });
-        return;
-      }
-      dispatch({ type: "PICTURES", data: data });
-      window.query = val;
-      target.value = "";
-      target.focus();
-    }
-  };
-
-  const handleSubscribeClick = useCallback(() => {
-    history.push("/singup");
-  }, [history]);
-
-  const singoutORsingin = useCallback(
-    async ({ target }) => {
-      if (target.textContent === "Singin") {
-        history.replace("/login");
-      } else {
-        await firebaseContext.doSignOut();
-        history.replace("/");
-      }
-    },
-    [firebaseContext, history]
-  );
-
-  const handleLike = useCallback(
-    ({ target }, id) => {
-      if (!updatedState.authUser) {
-        history.push("/login");
-        return;
-      }
-
-      const nextSibling = target.nextElementSibling;
-      const likes = parseInt(nextSibling.textContent);
-      if (target.className === "black heart") {
-        target.src = likeRed;
-        target.className = "red heart";
-        nextSibling.textContent = likes + 1;
-
-        //about db
-        firebaseContext
-          .picture(updatedState.authUser.uid, id)
-          .set({ liked: true, likes: likes + 1 });
-      } else {
-        target.src = likeBlack;
-        target.className = "black heart";
-        nextSibling.textContent = likes - 1;
-
-        //about db
-        firebaseContext.picture(updatedState.authUser.uid, id).remove();
-      }
-    },
-    [firebaseContext, history, updatedState.authUser]
-  );
+  }, [getPictures, firebase]);
 
   const { searchAsked, authUser, pictures, error, menuAsked } = updatedState;
 
@@ -194,15 +92,11 @@ const Home = ({ search, history, location }) => {
       }
     >
       {searchAsked ? (
-        <Search
-          handleCloseSearch={handleCloseSearch}
-          handleSearchInput={handleSearchInput}
-        />
+        <Search dispatchFunct={dispatch} />
       ) : (
         <Headerhome
-          askForMenu={askForMenu}
-          handleSubscribeClick={handleSubscribeClick}
-          handleSearchIconClick={handleSearchIconClick}
+          dispatchFunct={dispatch}
+          history={history}
           authUser={authUser}
         />
       )}
@@ -210,8 +104,9 @@ const Home = ({ search, history, location }) => {
       {flatten(pictures).length > 0 ? (
         <Picturegrid
           pictures={pictures}
-          handlePictureClick={handlePictureClick}
-          handlePictureLike={handleLike}
+          history={history}
+          firebase={firebase}
+          updatedState={updatedState}
         />
       ) : (
         <div style={{ textAlign: "center", color: "black" }}>
@@ -222,10 +117,11 @@ const Home = ({ search, history, location }) => {
       <button className="more-btn">Load More</button>
 
       <Menu
+        dispatchFunct={dispatch}
         menuAsked={menuAsked}
-        closeMenu={closeMenu}
         authUser={menuAsked ? authUser : null}
-        singoutORsingin={singoutORsingin}
+        firebase={firebase}
+        history={history}
       />
     </div>
   );

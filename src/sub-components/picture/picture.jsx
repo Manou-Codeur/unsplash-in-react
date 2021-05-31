@@ -8,7 +8,7 @@ import downloadIcon from "../../assets/img/download.png";
 import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
-const Picture = ({ handlePictureLike, handlePictureClick, data }) => {
+const Picture = ({ data, history, firebase, updatedState }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
   const [authUser, setAuthUser] = useState(null);
@@ -56,19 +56,44 @@ const Picture = ({ handlePictureLike, handlePictureClick, data }) => {
     picture.current.style.transform = "";
   };
 
-  const handlePictureLikee = e => {
-    return handlePictureLike(e, data.id);
+  const handlePictureLike = ({ target }) => {
+    if (!updatedState.authUser) {
+      history.push("/login");
+      return;
+    }
+
+    const nextSibling = target.nextElementSibling;
+    const likes = parseInt(nextSibling.textContent);
+    if (target.className === "black heart") {
+      target.src = likeRed;
+      target.className = "red heart";
+      nextSibling.textContent = likes + 1;
+
+      //about db
+      firebase
+        .picture(updatedState.authUser.uid, data.id)
+        .set({ liked: true, likes: likes + 1 });
+    } else {
+      target.src = likeBlack;
+      target.className = "black heart";
+      nextSibling.textContent = likes - 1;
+
+      //about db
+      firebase.picture(updatedState.authUser.uid, data.id).remove();
+    }
   };
 
-  const handlePictureClickk = e => {
-    return handlePictureClick(data, e);
+  const handlePictureClick = ({ target }) => {
+    //redirect the user to the full picture page if he clicks in the picture card but not at the heart btn
+    if (!target.className.includes("heart"))
+      history.push("/picture/" + data.id);
   };
 
   const userPP = data.user.profile_image.large;
   return (
     <div
       className="picture"
-      onClick={handlePictureClickk}
+      onClick={handlePictureClick}
       style={{
         backgroundColor: data.color,
       }}
@@ -103,7 +128,7 @@ const Picture = ({ handlePictureLike, handlePictureClick, data }) => {
               src={liked ? likeRed : likeBlack}
               className={liked ? "red heart" : "black heart"}
               alt="heart icon"
-              onClick={handlePictureLikee}
+              onClick={handlePictureLike}
             />
             <p>{likes ? likes : data.likes}</p>
           </div>

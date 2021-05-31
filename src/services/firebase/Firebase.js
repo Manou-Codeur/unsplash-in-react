@@ -29,27 +29,21 @@ class Firebase {
 
   //auth methods
   //method to create new user
-  doCreateUserWithEmailAndPassword = (email, password) => {
-    return this.auth.createUserWithEmailAndPassword(email, password);
-  };
+  doCreateUserWithEmailAndPassword = (email, password) =>
+    this.auth.createUserWithEmailAndPassword(email, password);
 
   //method to singin a user
-  doSignInWithEmailAndPassword = (email, password) => {
-    return this.auth.signInWithEmailAndPassword(email, password);
-  };
+  doSignInWithEmailAndPassword = (email, password) =>
+    this.auth.signInWithEmailAndPassword(email, password);
 
   //method to singin a user with facebook
   doSignInWithFacebook = () => this.auth.signInWithPopup(this.facebookProvider);
 
   //method to singout a user
-  doSignOut = () => {
-    return this.auth.signOut();
-  };
+  doSignOut = () => this.auth.signOut();
 
   //method to get user data if he is authenticated
-  isUserAuthenticated = funct => {
-    return this.auth.onAuthStateChanged(funct);
-  };
+  isUserAuthenticated = funct => this.auth.onAuthStateChanged(funct);
 
   //get current user info
   deleteUser = () => {
