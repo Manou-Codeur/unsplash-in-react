@@ -19,6 +19,7 @@ const Fullimage = ({ match, userAuth, history }) => {
   const [linkToPicture, setLinkToPicture] = useState("");
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
+  const [existInDB, setExistInDB] = useState(null);
 
   const firebaseContext = useContext(FirebaseContext);
 
@@ -53,6 +54,8 @@ const Fullimage = ({ match, userAuth, history }) => {
           if (isMounted && usersObject) {
             setLiked(usersObject.liked);
             setLikes(usersObject.likes);
+          } else {
+            setExistInDB("no");
           }
         });
     }
@@ -102,7 +105,11 @@ const Fullimage = ({ match, userAuth, history }) => {
     infoLayout.current.className = "info";
   };
 
-  if (selectedPic && Object.keys(selectedPic).length > 0) {
+  if (
+    selectedPic &&
+    Object.keys(selectedPic).length > 0 &&
+    (liked || existInDB === "no")
+  ) {
     const date = selectedPic.created_at.split("T")[0];
 
     return (
