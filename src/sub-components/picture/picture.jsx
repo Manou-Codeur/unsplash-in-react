@@ -8,12 +8,12 @@ import downloadIcon from "../../assets/img/download.png";
 import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
-const Picture = ({ data, history, firebase, updatedState }) => {
+const Picture = ({ data, history }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
   const [authUser, setAuthUser] = useState(null);
 
-  const firebaseContext = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
 
   const picture = useRef();
   const user = useRef();
@@ -22,12 +22,12 @@ const Picture = ({ data, history, firebase, updatedState }) => {
   useEffect(() => {
     let _isMounted = true;
 
-    firebaseContext.isUserAuthenticated(userInfo => {
+    firebase.isUserAuthenticated(userInfo => {
       if (userInfo) {
-        firebaseContext.picture(userInfo.uid, data.id).on("value", snapshot => {
+        setAuthUser(userInfo);
+        firebase.picture(userInfo.uid, data.id).on("value", snapshot => {
           const usersObject = snapshot.val();
           if (_isMounted && usersObject) {
-            setAuthUser(userInfo);
             setLiked(usersObject.liked);
             setLikes(usersObject.likes);
           }
@@ -38,9 +38,9 @@ const Picture = ({ data, history, firebase, updatedState }) => {
     return () => {
       _isMounted = false;
 
-      if (authUser) firebaseContext.pictures(authUser.uid).off();
+      if (authUser) firebase.pictures(authUser.uid).off();
     };
-  }, [authUser, firebaseContext]);
+  }, [firebase]);
 
   const handleHover = () => {
     controlsRef.current.className = "controls";
@@ -57,7 +57,7 @@ const Picture = ({ data, history, firebase, updatedState }) => {
   };
 
   const handlePictureLike = ({ target }) => {
-    if (!updatedState.authUser) {
+    if (!authUser) {
       history.push("/login");
       return;
     }
@@ -71,7 +71,7 @@ const Picture = ({ data, history, firebase, updatedState }) => {
 
       //about db
       firebase
-        .picture(updatedState.authUser.uid, data.id)
+        .picture(authUser.uid, data.id)
         .set({ liked: true, likes: likes + 1 });
     } else {
       target.src = likeBlack;
@@ -79,7 +79,7 @@ const Picture = ({ data, history, firebase, updatedState }) => {
       nextSibling.textContent = likes - 1;
 
       //about db
-      firebase.picture(updatedState.authUser.uid, data.id).remove();
+      firebase.picture(authUser.uid, data.id).remove();
     }
   };
 

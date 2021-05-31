@@ -30,7 +30,7 @@ const reducerFunct = (currState, action) => {
   }
 };
 
-const Home = ({ history, location }) => {
+const Home = ({ history }) => {
   const initState = {
     menuAsked: false,
     pictures: [[], [], []],
@@ -102,12 +102,7 @@ const Home = ({ history, location }) => {
       )}
 
       {flatten(pictures).length > 0 ? (
-        <Picturegrid
-          pictures={pictures}
-          history={history}
-          firebase={firebase}
-          updatedState={updatedState}
-        />
+        <Picturegrid pictures={pictures} history={history} />
       ) : (
         <div style={{ textAlign: "center", color: "black" }}>
           {error ? <h1>{error}</h1> : <CircularProgress color="inherit" />}
