@@ -3,14 +3,14 @@ import "firebase/auth";
 import "firebase/database";
 
 const config = {
-  apiKey: "AIzaSyDNEQsO4hgfxQs9FlkaduurXppNKeFNaGA",
-  authDomain: "myspash-18bb4.firebaseapp.com",
-  databaseURL: "https://myspash-18bb4.firebaseio.com",
-  projectId: "myspash-18bb4",
-  storageBucket: "myspash-18bb4.appspot.com",
-  messagingSenderId: "841099794065",
-  appId: "1:841099794065:web:16feb6fe7776030a7d1130",
-  measurementId: "G-RBVJ8VHWBT",
+  apiKey: process.env.REACT_APP_APIKEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASEURL,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_APPID,
+  measurementId: process.env.REACT_APP_MEASUREMENTID,
 };
 
 class Firebase {
