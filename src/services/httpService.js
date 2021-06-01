@@ -15,8 +15,6 @@ axios.interceptors.response.use(null, error => {
     alert("There is an unexpected error, please reload and try again!");
   } else if (error.response && error.response.status === 403)
     alert("Sorry there is a lot of requests, please retry later!");
-
-  return Promise.reject(error);
 });
 
 export const callServer = async (query = ["people", "nature", "food"]) => {

@@ -2,7 +2,6 @@ import React, { useEffect, Fragment, useState, useContext } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 import FirebaseContext from "./services/firebase/firebaseContext";
-
 import Home from "./components/home/home";
 import Userprofile from "./components/user-profile/userProfile";
 import Fullimage from "./components/full-image/fullImage";

@@ -1,19 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+import App from "./App";
 import Firebase, { FirebaseContext } from "./services/firebase/indexx";
+import FetchError from "./errorBoundaries/fetchErrors";
+
+import "./index.css";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <FirebaseContext.Provider value={new Firebase()}>
-        <App />
-      </FirebaseContext.Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <FirebaseContext.Provider value={new Firebase()}>
+      {/* <FetchError> */}
+      <App />
+      {/* </FetchError> */}
+    </FirebaseContext.Provider>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

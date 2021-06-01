@@ -11,6 +11,7 @@ import "./singup.scss";
 const Singup = ({ history, location }) => {
   const myContext = useContext(FirebaseContext);
   const [error, setError] = useState({});
+  const [singingUp, setSinginUp] = useState(false);
 
   const schema = {
     name: Yup.string().max(13).required("Name is required!").trim(),
@@ -27,25 +28,19 @@ const Singup = ({ history, location }) => {
       .required("Password confirm is required!"),
   };
 
-  const {
-    handleSubmit,
-    touched,
-    errors,
-    handleChange,
-    values,
-    handleBlur,
-  } = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
-    },
-    validationSchema: Yup.object(schema),
-    onSubmit: values => {
-      doSubmit(values);
-    },
-  });
+  const { handleSubmit, touched, errors, handleChange, values, handleBlur } =
+    useFormik({
+      initialValues: {
+        name: "",
+        email: "",
+        password: "",
+        password2: "",
+      },
+      validationSchema: Yup.object(schema),
+      onSubmit: values => {
+        doSubmit(values);
+      },
+    });
 
   const onFacebook = async () => {
     try {
@@ -68,6 +63,7 @@ const Singup = ({ history, location }) => {
   };
 
   const doSubmit = ({ email, password, name }) => {
+    setSinginUp(true);
     //test if the name is already used
     myContext.users().on("value", async snap => {
       const usersObject = snap.val();
@@ -84,6 +80,7 @@ const Singup = ({ history, location }) => {
               message:
                 "This name is already been used, please try another one!",
             });
+            setSinginUp(false);
             return;
           }
         }
@@ -100,6 +97,7 @@ const Singup = ({ history, location }) => {
       } catch (error) {
         setError(error);
       }
+      setSinginUp(false);
     });
   };
 
@@ -157,8 +155,8 @@ const Singup = ({ history, location }) => {
           handleInputBlur={handleBlur}
         />
 
-        <button className="submit-btn" type="submit">
-          Sing Up
+        <button className="submit-btn" type="submit" disabled={singingUp}>
+          {!singingUp ? "Sing Up" : "Singing Up..."}
         </button>
 
         {error && <div className="firebase-error">{error.message}</div>}

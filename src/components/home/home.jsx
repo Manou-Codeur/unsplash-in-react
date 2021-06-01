@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useCallback, useReducer } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useReducer,
+  useState,
+} from "react";
 import { callServer } from "../../services/httpService";
 import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -38,6 +44,8 @@ const Home = ({ history }) => {
     authUser: null,
     error: null,
   };
+
+  const [err, setErr] = useState(null);
 
   const [updatedState, dispatch] = useReducer(reducerFunct, initState);
 
@@ -84,6 +92,7 @@ const Home = ({ history }) => {
 
   const { searchAsked, authUser, pictures, error, menuAsked } = updatedState;
 
+  if (err) throw new Error(err);
   return (
     <div
       className="home"
