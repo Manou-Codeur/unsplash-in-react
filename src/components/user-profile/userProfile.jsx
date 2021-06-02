@@ -166,7 +166,7 @@ const Userprofile = ({ match, history, userAuth }) => {
       }
     >
       {searchAsked ? (
-        <Search dispatchFunct={dispatch} />
+        <Search dispatchFunct={dispatch} extraProps={handleGetUserPhotos} />
       ) : (
         <HeaderProfile
           dispatchFunct={dispatch}

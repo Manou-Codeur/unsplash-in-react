@@ -5,7 +5,7 @@ import Picture from "./../picture/picture";
 import "./pictureGrid.scss";
 
 const Picturegrid = React.memo(({ pictures, history }) => {
-  const amount = pictures.length / 3;
+  const amount = Math.ceil(pictures.length / 3);
 
   return (
     <div id="start" className="picture-grid">

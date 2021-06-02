@@ -19,6 +19,7 @@ const HeaderProfile = React.memo(
 
     const showSearch = () => {
       dispatchFunct({ type: "SEARCH-ASKED", val: true });
+      dispatchFunct({ type: "COLLECTIONS-ASKED", val: false });
     };
 
     if (userInfo) {

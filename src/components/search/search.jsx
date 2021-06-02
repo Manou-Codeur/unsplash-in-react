@@ -6,7 +6,7 @@ import "./search.scss";
 import cameraIcon from "../../assets/img/camera.svg";
 import closeBlack from "../../assets/img/close-black.svg";
 
-const Search = ({ dispatchFunct }) => {
+const Search = ({ dispatchFunct, extraProps }) => {
   const [searchVal, setSearchVal] = useState("");
 
   //i've written it this way to avoid creating new funct each time a render method runs
@@ -21,6 +21,13 @@ const Search = ({ dispatchFunct }) => {
 
   const handleCloseSearch = () => {
     dispatchFunct({ type: "SEARCH-ASKED", val: false });
+    //simulate the "photos" btn click on the <HeaderProfile />
+    const target = {
+      parentNode: {
+        className: "link",
+      },
+    };
+    extraProps({ target });
   };
 
   const handleSearchInput = async ({ keyCode, target }, val) => {
