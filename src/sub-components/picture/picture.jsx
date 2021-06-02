@@ -9,6 +9,8 @@ import addIcon from "../../assets/img/add.svg";
 import "./picture.scss";
 
 const Picture = ({ data, history }) => {
+  // console.log(data);
+
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
   const [authUser, setAuthUser] = useState(null);

@@ -26,14 +26,17 @@ const Search = ({ dispatchFunct }) => {
   const handleSearchInput = async ({ keyCode, target }, val) => {
     //update the state
     if (keyCode === 13 && val !== "") {
-      dispatchFunct({ type: "PICTURES", data: [[], [], []] });
+      dispatchFunct({ type: "PICTURES", data: [] });
       dispatchFunct({ type: "ERROR", message: null });
       const data = await callServer(val);
       if (data[0].length === 0) {
         dispatchFunct({ type: "ERROR", message: "Picture not found!" });
         return;
       }
-      dispatchFunct({ type: "PICTURES", data: data });
+      dispatchFunct({
+        type: "PICTURES",
+        data: [...data[0], ...data[1], ...data[2]],
+      });
       window.query = val;
       target.value = "";
       target.focus();

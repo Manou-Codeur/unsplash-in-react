@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { callServer } from "../../services/httpService";
-import { flatten } from "../../services/helperFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { FirebaseContext } from "./../../services/firebase/indexx";
@@ -39,13 +38,11 @@ const reducerFunct = (currState, action) => {
 const Home = ({ history }) => {
   const initState = {
     menuAsked: false,
-    pictures: [[], [], []],
+    pictures: [],
     searchAsked: false,
     authUser: null,
     error: null,
   };
-
-  const [err, setErr] = useState(null);
 
   const [updatedState, dispatch] = useReducer(reducerFunct, initState);
 
@@ -81,7 +78,11 @@ const Home = ({ history }) => {
     });
 
     getPictures().then(pictures => {
-      if (_isMounted) dispatch({ type: "PICTURES", data: pictures });
+      if (_isMounted)
+        dispatch({
+          type: "PICTURES",
+          data: [...pictures[0], ...pictures[1], ...pictures[2]],
+        });
     });
 
     return () => {
@@ -92,7 +93,6 @@ const Home = ({ history }) => {
 
   const { searchAsked, authUser, pictures, error, menuAsked } = updatedState;
 
-  if (err) throw new Error(err);
   return (
     <div
       className="home"
@@ -110,7 +110,7 @@ const Home = ({ history }) => {
         />
       )}
 
-      {flatten(pictures).length > 0 ? (
+      {pictures.length > 0 ? (
         <Picturegrid pictures={pictures} history={history} />
       ) : (
         <div style={{ textAlign: "center", color: "black" }}>

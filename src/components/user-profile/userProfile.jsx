@@ -1,7 +1,6 @@
 import React, { useReducer, useEffect, useContext, useCallback } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { flatten } from "../../services/helperFunctions";
 import {
   getUserPhotos,
   getUserLikes,
@@ -44,7 +43,7 @@ const Userprofile = ({ match, history, userAuth }) => {
   const initState = {
     menuAsked: false,
     searchAsked: false,
-    pictures: [[], [], []],
+    pictures: [],
     collections: [],
     collectionsAsked: false,
     currentUser: null,
@@ -64,7 +63,10 @@ const Userprofile = ({ match, history, userAuth }) => {
 
     getUserPhotos(username).then(pictures => {
       if (_isMounted) {
-        dispatch({ type: "PICTURES", data: pictures });
+        dispatch({
+          type: "PICTURES",
+          data: [...pictures[0], ...pictures[1], ...pictures[2]],
+        });
         dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
       }
     });
@@ -82,14 +84,17 @@ const Userprofile = ({ match, history, userAuth }) => {
 
       //init some state props
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
-      dispatch({ type: "PICTURES", data: [[], [], []] });
+      dispatch({ type: "PICTURES", data: [] });
 
       //updating the styles
       node.className = "links one";
 
       //calling the server
       const pictures = await getUserPhotos(username);
-      dispatch({ type: "PICTURES", data: pictures });
+      dispatch({
+        type: "PICTURES",
+        data: [...pictures[0], ...pictures[1], ...pictures[2]],
+      });
     },
     [username]
   );
@@ -102,16 +107,20 @@ const Userprofile = ({ match, history, userAuth }) => {
 
       //init some state props
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
-      dispatch({ type: "PICTURES", data: [[], [], []] });
+      dispatch({ type: "PICTURES", data: [] });
 
       //updating the styles
       node.className = "links two";
 
       //calling the server
       const pictures = await getUserLikes(username);
-      if (flatten(pictures).length === 0)
+      if (pictures.length === 0)
         dispatch({ type: "ERROR", message: "User hasn't liked any picture!" });
-      else dispatch({ type: "PICTURES", data: pictures });
+      else
+        dispatch({
+          type: "PICTURES",
+          data: [...pictures[0], ...pictures[1], ...pictures[2]],
+        });
     },
     [username]
   );
@@ -169,7 +178,7 @@ const Userprofile = ({ match, history, userAuth }) => {
       )}
 
       {/* handle nonCollection error */}
-      {!error && flatten(pictures).length === 0 ? (
+      {!error && pictures.length === 0 ? (
         <div style={{ textAlign: "center", color: "black" }}>
           <CircularProgress color="inherit" />
         </div>
@@ -202,7 +211,7 @@ const Userprofile = ({ match, history, userAuth }) => {
         </div>
       ) : null}
 
-      {!collectionsAsked && flatten(pictures).length > 0 ? (
+      {!collectionsAsked && pictures.length > 0 ? (
         <Picturegrid pictures={pictures} history={history} />
       ) : null}
 

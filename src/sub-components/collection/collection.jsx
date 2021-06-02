@@ -14,7 +14,10 @@ const Collection = React.memo(({ data, dispatchFunct }) => {
 
     if (flatten(pictures).length > 0) {
       dispatchFunct({ type: "COLLECTIONS-ASKED", val: false });
-      dispatchFunct({ type: "PICTURES", data: pictures });
+      dispatchFunct({
+        type: "PICTURES",
+        data: [...pictures[0], ...pictures[1], ...pictures[2]],
+      });
     }
   };
 
