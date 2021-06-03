@@ -12,9 +12,9 @@ import "./index.css";
 ReactDOM.render(
   <BrowserRouter>
     <FirebaseContext.Provider value={new Firebase()}>
-      {/* <FetchError> */}
-      <App />
-      {/* </FetchError> */}
+      <FetchError>
+        <App />
+      </FetchError>
     </FirebaseContext.Provider>
   </BrowserRouter>,
   document.getElementById("root")

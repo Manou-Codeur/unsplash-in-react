@@ -1,4 +1,10 @@
-import React, { useReducer, useEffect, useContext, useCallback } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  useContext,
+  useCallback,
+  useState,
+} from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
@@ -50,6 +56,7 @@ const Userprofile = ({ match, history, userAuth }) => {
     error: null,
     collectionError: null,
   };
+  const [httpErrors, setHttpErrors] = useState(null);
 
   const [updatedState, dispatch] = useReducer(reducerFunction, initState);
 
@@ -61,15 +68,19 @@ const Userprofile = ({ match, history, userAuth }) => {
   useEffect(() => {
     let _isMounted = true;
 
-    getUserPhotos(username).then(pictures => {
-      if (_isMounted) {
-        dispatch({
-          type: "PICTURES",
-          data: [...pictures[0], ...pictures[1], ...pictures[2]],
-        });
-        dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
-      }
-    });
+    getUserPhotos(username)
+      .then(pictures => {
+        if (_isMounted) {
+          dispatch({
+            type: "PICTURES",
+            data: [...pictures[0], ...pictures[1], ...pictures[2]],
+          });
+          dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
+        }
+      })
+      .catch(err => {
+        setHttpErrors(err);
+      });
 
     return () => {
       _isMounted = false;
@@ -90,11 +101,15 @@ const Userprofile = ({ match, history, userAuth }) => {
       node.className = "links one";
 
       //calling the server
-      const pictures = await getUserPhotos(username);
-      dispatch({
-        type: "PICTURES",
-        data: [...pictures[0], ...pictures[1], ...pictures[2]],
-      });
+      try {
+        const pictures = await getUserPhotos(username);
+        dispatch({
+          type: "PICTURES",
+          data: [...pictures[0], ...pictures[1], ...pictures[2]],
+        });
+      } catch (error) {
+        setHttpErrors(error);
+      }
     },
     [username]
   );
@@ -113,14 +128,21 @@ const Userprofile = ({ match, history, userAuth }) => {
       node.className = "links two";
 
       //calling the server
-      const pictures = await getUserLikes(username);
-      if (pictures.length === 0)
-        dispatch({ type: "ERROR", message: "User hasn't liked any picture!" });
-      else
-        dispatch({
-          type: "PICTURES",
-          data: [...pictures[0], ...pictures[1], ...pictures[2]],
-        });
+      try {
+        const pictures = await getUserLikes(username);
+        if (pictures.length === 0)
+          dispatch({
+            type: "ERROR",
+            message: "User hasn't liked any picture!",
+          });
+        else
+          dispatch({
+            type: "PICTURES",
+            data: [...pictures[0], ...pictures[1], ...pictures[2]],
+          });
+      } catch (error) {
+        setHttpErrors(error);
+      }
     },
     [username]
   );
@@ -132,13 +154,17 @@ const Userprofile = ({ match, history, userAuth }) => {
       if (node.className.includes("three")) return;
 
       //calling the server
-      const collections = await getUserCollections(username);
-      if (collections.length === 0)
-        dispatch({
-          type: "COLLECTIONS-ERROR",
-          message: "User doesn't has any collection!",
-        });
-      else dispatch({ type: "COLLECTIONS", data: collections });
+      try {
+        const collections = await getUserCollections(username);
+        if (collections.length === 0)
+          dispatch({
+            type: "COLLECTIONS-ERROR",
+            message: "User doesn't has any collection!",
+          });
+        else dispatch({ type: "COLLECTIONS", data: collections });
+      } catch (error) {
+        setHttpErrors(error);
+      }
 
       //updating the styles
       node.className = "links three";
@@ -158,6 +184,7 @@ const Userprofile = ({ match, history, userAuth }) => {
     menuAsked,
   } = updatedState;
 
+  if (httpErrors) throw new Error(httpErrors);
   return (
     <div
       className="User-profile"

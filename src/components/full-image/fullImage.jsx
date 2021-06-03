@@ -20,6 +20,7 @@ const Fullimage = ({ match, userAuth, history }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
   const [existInDB, setExistInDB] = useState(null);
+  const [httpErrors, setHttpErrors] = useState(null);
 
   const firebaseContext = useContext(FirebaseContext);
 
@@ -30,12 +31,21 @@ const Fullimage = ({ match, userAuth, history }) => {
   useEffect(() => {
     let isMounted = true;
 
-    getPicture(match.params.id).then(picture => {
-      if (isMounted) setSelectedPic(picture);
-    });
-    download(match.params.id).then(link => {
-      if (isMounted) setLinkToPicture(link);
-    });
+    getPicture(match.params.id)
+      .then(picture => {
+        if (isMounted) setSelectedPic(picture);
+      })
+      .catch(err => {
+        setHttpErrors(err);
+      });
+
+    download(match.params.id)
+      .then(link => {
+        if (isMounted) setLinkToPicture(link);
+      })
+      .catch(err => {
+        setHttpErrors(err);
+      });
 
     return () => {
       isMounted = false;
@@ -105,7 +115,8 @@ const Fullimage = ({ match, userAuth, history }) => {
     infoLayout.current.className = "info";
   };
 
-  if (
+  if (httpErrors) throw new Error(httpErrors);
+  else if (
     selectedPic &&
     Object.keys(selectedPic).length > 0 &&
     (liked || existInDB === "no")

@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { getCollectionPhotos } from "../../services/httpService";
-import { flatten } from "./../../services/helperFunctions";
 
 import "./collection.scss";
 
 const Collection = React.memo(({ data, dispatchFunct }) => {
+  const [httpErrors, setHttpErrors] = useState(null);
+
   const { preview_photos } = data;
 
   const handleOnClick = async () => {
     //call the server to get photos
-    const pictures = await getCollectionPhotos(data.id);
+    try {
+      var pictures = await getCollectionPhotos(data.id);
+    } catch (error) {
+      setHttpErrors(error);
+    }
 
-    if (flatten(pictures).length > 0) {
+    if (pictures[0].length > 0) {
       dispatchFunct({ type: "COLLECTIONS-ASKED", val: false });
       dispatchFunct({
         type: "PICTURES",
@@ -21,6 +26,7 @@ const Collection = React.memo(({ data, dispatchFunct }) => {
     }
   };
 
+  if (httpErrors) throw new Error(httpErrors);
   return (
     <div className="collection" onClick={handleOnClick}>
       {preview_photos ? (

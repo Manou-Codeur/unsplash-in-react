@@ -44,6 +44,8 @@ const Home = ({ history }) => {
     error: null,
   };
 
+  const [httpErrors, setHttpErrors] = useState(null);
+
   const [updatedState, dispatch] = useReducer(reducerFunct, initState);
 
   //context API
@@ -77,13 +79,17 @@ const Home = ({ history }) => {
       if (_isMounted) dispatch({ type: "AUTH-USER", userInfo: userInfo });
     });
 
-    getPictures().then(pictures => {
-      if (_isMounted)
-        dispatch({
-          type: "PICTURES",
-          data: [...pictures[0], ...pictures[1], ...pictures[2]],
-        });
-    });
+    getPictures()
+      .then(pictures => {
+        if (_isMounted)
+          dispatch({
+            type: "PICTURES",
+            data: [...pictures[0], ...pictures[1], ...pictures[2]],
+          });
+      })
+      .catch(err => {
+        setHttpErrors(err);
+      });
 
     return () => {
       _isMounted = false;
@@ -93,6 +99,7 @@ const Home = ({ history }) => {
 
   const { searchAsked, authUser, pictures, error, menuAsked } = updatedState;
 
+  if (httpErrors) throw new Error(httpErrors);
   return (
     <div
       className="home"
