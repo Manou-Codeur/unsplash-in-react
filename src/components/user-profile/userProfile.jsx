@@ -65,6 +65,23 @@ const Userprofile = ({ match, history, userAuth }) => {
   //I defined it here coz it will be used many times
   const username = match.params.username;
 
+  //cleanup for memory leak reason
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: "PICTURES",
+        data: [],
+      });
+      dispatch({ type: "CURRENT-USER", data: null });
+      dispatch({
+        type: "ERROR",
+        message: null,
+      });
+      dispatch({ type: "COLLECTIONS", data: [] });
+      dispatch({ type: "COLLECTIONS-ERROR", data: null });
+    };
+  }, []);
+
   useEffect(() => {
     let _isMounted = true;
 
