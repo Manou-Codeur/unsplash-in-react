@@ -56,6 +56,11 @@
       outline: none;
       cursor: pointer;
 
+      &:disabled {
+        cursor: 0.4;
+        cursor: not-allowed;
+      }
+
       &:hover {
         background-color: black;
       }

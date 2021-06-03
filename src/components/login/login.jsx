@@ -14,6 +14,7 @@ const Login = ({ history, userAuth, location }) => {
   const [error, setError] = useState({});
   const [goSingUp, setGoSingUp] = useState(false);
   const [fb, setFB] = useState(false);
+  const [singing, setSinging] = useState(false);
 
   useEffect(() => {
     //redirect to where the user comes from if he's already authed
@@ -32,25 +33,20 @@ const Login = ({ history, userAuth, location }) => {
       .required("Password is required!"),
   };
 
-  const {
-    handleSubmit,
-    touched,
-    errors,
-    handleChange,
-    values,
-    handleBlur,
-  } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: Yup.object(schema),
-    onSubmit: values => {
-      doSubmit(values);
-    },
-  });
+  const { handleSubmit, touched, errors, handleChange, values, handleBlur } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: Yup.object(schema),
+      onSubmit: values => {
+        doSubmit(values);
+      },
+    });
 
   const doSubmit = async ({ email, password }) => {
+    setSinging(true);
     try {
       await myContext.doSignInWithEmailAndPassword(email, password);
       setFB(true);
@@ -60,6 +56,7 @@ const Login = ({ history, userAuth, location }) => {
     } catch (error) {
       setError(error);
     }
+    setSinging(false);
   };
 
   const redirectToSingup = () => {
@@ -132,8 +129,8 @@ const Login = ({ history, userAuth, location }) => {
           handleInputBlur={handleBlur}
         />
 
-        <button className="submit-btn" type="submit">
-          Login
+        <button className="submit-btn" type="submit" disabled={singing}>
+          {!singing ? "Sing In" : "Singing..."}
         </button>
 
         {error && <div className="firebase-error">{error.message}</div>}

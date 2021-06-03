@@ -18,7 +18,12 @@ const Fullimage = ({ match, userAuth, history }) => {
   const [linkToPicture, setLinkToPicture] = useState("");
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(null);
+<<<<<<< HEAD
   const [error, setError] = useState(null);
+=======
+  const [existInDB, setExistInDB] = useState(null);
+  const [httpErrors, setHttpErrors] = useState(null);
+>>>>>>> hooks-version-2
 
   const firebaseContext = useContext(FirebaseContext);
   const myErrorContext = useContext(errorContext);
@@ -38,12 +43,25 @@ const Fullimage = ({ match, userAuth, history }) => {
       .then(picture => {
         if (isMounted) setSelectedPic(picture);
       })
+<<<<<<< HEAD
       .catch(err => setError("Network Error!"));
+=======
+      .catch(err => {
+        setHttpErrors(err);
+      });
+
+>>>>>>> hooks-version-2
     download(match.params.id)
       .then(link => {
         if (isMounted) setLinkToPicture(link);
       })
+<<<<<<< HEAD
       .catch(err => setError("Network Error!"));
+=======
+      .catch(err => {
+        setHttpErrors(err);
+      });
+>>>>>>> hooks-version-2
 
     return () => {
       isMounted = false;
@@ -62,6 +80,8 @@ const Fullimage = ({ match, userAuth, history }) => {
           if (isMounted && usersObject) {
             setLiked(usersObject.liked);
             setLikes(usersObject.likes);
+          } else {
+            setExistInDB("no");
           }
         });
     }
@@ -111,7 +131,16 @@ const Fullimage = ({ match, userAuth, history }) => {
     infoLayout.current.className = "info";
   };
 
+<<<<<<< HEAD
   if (selectedPic) {
+=======
+  if (httpErrors) throw new Error(httpErrors);
+  else if (
+    selectedPic &&
+    Object.keys(selectedPic).length > 0 &&
+    (liked || existInDB === "no")
+  ) {
+>>>>>>> hooks-version-2
     const date = selectedPic.created_at.split("T")[0];
 
     return (

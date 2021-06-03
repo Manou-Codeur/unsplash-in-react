@@ -7,13 +7,24 @@ import "./headerProfile.scss";
 
 const HeaderProfile = React.memo(
   ({
-    showMenu,
-    showSearch,
+    dispatchFunct,
     getUserPhotos,
     getUserLikes,
     getUserCollection,
     userInfo,
   }) => {
+<<<<<<< HEAD
+=======
+    const showMenu = () => {
+      dispatchFunct({ type: "MENU-ASKED", val: true });
+    };
+
+    const showSearch = () => {
+      dispatchFunct({ type: "SEARCH-ASKED", val: true });
+      dispatchFunct({ type: "COLLECTIONS-ASKED", val: false });
+    };
+
+>>>>>>> hooks-version-2
     if (userInfo) {
       const { user } = userInfo;
 

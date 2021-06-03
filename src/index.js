@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+import App from "./App";
 import Firebase, { FirebaseContext } from "./services/firebase/indexx";
+<<<<<<< HEAD
 import ErrorContext from "./services/httpService";
 
 ReactDOM.render(
@@ -17,6 +18,20 @@ ReactDOM.render(
       </ErrorContext>
     </BrowserRouter>
   </React.StrictMode>,
+=======
+import FetchError from "./errorBoundaries/fetchErrors";
+
+import "./index.css";
+
+ReactDOM.render(
+  <BrowserRouter>
+    <FirebaseContext.Provider value={new Firebase()}>
+      <FetchError>
+        <App />
+      </FetchError>
+    </FirebaseContext.Provider>
+  </BrowserRouter>,
+>>>>>>> hooks-version-2
   document.getElementById("root")
 );
 

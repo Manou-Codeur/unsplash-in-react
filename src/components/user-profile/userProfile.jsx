@@ -1,29 +1,38 @@
-import React, { useReducer, useEffect, useContext, useCallback } from "react";
-import { flatten } from "../../services/helperFunctions";
+import React, {
+  useReducer,
+  useEffect,
+  useContext,
+  useCallback,
+  useState,
+} from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import {
   getUserPhotos,
   getUserLikes,
   getUserCollections,
+<<<<<<< HEAD
   getCollectionPhotos,
   errorContext,
+=======
+>>>>>>> hooks-version-2
 } from "../../services/httpService";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
+import Search from "./../search/search";
 import FirebaseContext from "./../../services/firebase/firebaseContext";
-
 import HeaderProfile from "./../../sub-components/header-profile/headerProfile";
 import Menu from "./../../sub-components/menu/menu";
 import Picturegrid from "./../../sub-components/picture-grid/pictureGrid";
 import Collection from "./../../sub-components/collection/collection";
 
 import "./userProfile.scss";
-import likeBlack from "../../assets/img/favorite-white.svg";
-import likeRed from "../../assets/img/favorite-red.png";
 
 const reducerFunction = (currState, action) => {
   switch (action.type) {
     case "MENU-ASKED":
       return { ...currState, menuAsked: action.val };
+    case "SEARCH-ASKED":
+      return { ...currState, searchAsked: action.val };
     case "PICTURES":
       return { ...currState, pictures: action.data };
     case "ERROR":
@@ -44,21 +53,44 @@ const reducerFunction = (currState, action) => {
 const Userprofile = ({ match, history, userAuth }) => {
   const initState = {
     menuAsked: false,
-    pictures: [[], [], []],
+    searchAsked: false,
+    pictures: [],
     collections: [],
     collectionsAsked: false,
-    currentUser: "",
+    currentUser: null,
     error: null,
     collectionError: null,
   };
+  const [httpErrors, setHttpErrors] = useState(null);
 
   const [updatedState, dispatch] = useReducer(reducerFunction, initState);
 
+<<<<<<< HEAD
   const firebaseContext = useContext(FirebaseContext);
   const myErrorContext = useContext(errorContext);
+=======
+  const firebase = useContext(FirebaseContext);
+>>>>>>> hooks-version-2
 
   //I defined username here coz it will be used many times
   const username = match.params.username;
+
+  //cleanup for memory leak reason
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: "PICTURES",
+        data: [],
+      });
+      dispatch({ type: "CURRENT-USER", data: null });
+      dispatch({
+        type: "ERROR",
+        message: null,
+      });
+      dispatch({ type: "COLLECTIONS", data: [] });
+      dispatch({ type: "COLLECTIONS-ERROR", data: null });
+    };
+  }, []);
 
   useEffect(() => {
     if (myErrorContext.error) {
@@ -73,11 +105,24 @@ const Userprofile = ({ match, history, userAuth }) => {
     getUserPhotos(username)
       .then(pictures => {
         if (_isMounted) {
+<<<<<<< HEAD
           dispatch({ type: "PICTURES", data: pictures });
           dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
         }
       })
       .catch(err => dispatch({ type: "ERROR", message: "Network Error!" }));
+=======
+          dispatch({
+            type: "PICTURES",
+            data: [...pictures[0], ...pictures[1], ...pictures[2]],
+          });
+          dispatch({ type: "CURRENT-USER", data: pictures[0][0] });
+        }
+      })
+      .catch(err => {
+        setHttpErrors(err);
+      });
+>>>>>>> hooks-version-2
 
     return () => {
       _isMounted = false;
@@ -92,7 +137,7 @@ const Userprofile = ({ match, history, userAuth }) => {
 
       //init some state props
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
-      dispatch({ type: "PICTURES", data: [[], [], []] });
+      dispatch({ type: "PICTURES", data: [] });
 
       //updating the styles
       node.className = "links one";
@@ -100,9 +145,18 @@ const Userprofile = ({ match, history, userAuth }) => {
       //calling the server
       try {
         const pictures = await getUserPhotos(username);
+<<<<<<< HEAD
         dispatch({ type: "PICTURES", data: pictures });
       } catch (error) {
         dispatch({ type: "ERROR", message: "Network Error!" });
+=======
+        dispatch({
+          type: "PICTURES",
+          data: [...pictures[0], ...pictures[1], ...pictures[2]],
+        });
+      } catch (error) {
+        setHttpErrors(error);
+>>>>>>> hooks-version-2
       }
     },
     [username]
@@ -116,7 +170,7 @@ const Userprofile = ({ match, history, userAuth }) => {
 
       //init some state props
       dispatch({ type: "COLLECTIONS-ASKED", val: false });
-      dispatch({ type: "PICTURES", data: [[], [], []] });
+      dispatch({ type: "PICTURES", data: [] });
 
       //updating the styles
       node.className = "links two";
@@ -124,14 +178,28 @@ const Userprofile = ({ match, history, userAuth }) => {
       //calling the server
       try {
         const pictures = await getUserLikes(username);
+<<<<<<< HEAD
         if (flatten(pictures).length === 0)
+=======
+        if (pictures.length === 0)
+>>>>>>> hooks-version-2
           dispatch({
             type: "ERROR",
             message: "User hasn't liked any picture!",
           });
+<<<<<<< HEAD
         else dispatch({ type: "PICTURES", data: pictures });
       } catch (error) {
         dispatch({ type: "ERROR", message: "Network Error!" });
+=======
+        else
+          dispatch({
+            type: "PICTURES",
+            data: [...pictures[0], ...pictures[1], ...pictures[2]],
+          });
+      } catch (error) {
+        setHttpErrors(error);
+>>>>>>> hooks-version-2
       }
     },
     [username]
@@ -149,11 +217,19 @@ const Userprofile = ({ match, history, userAuth }) => {
         if (collections.length === 0)
           dispatch({
             type: "COLLECTIONS-ERROR",
+<<<<<<< HEAD
             message: "User doesn't have any collection!",
           });
         else dispatch({ type: "COLLECTIONS", data: collections });
       } catch (error) {
         dispatch({ type: "ERROR", message: "Network Error!" });
+=======
+            message: "User doesn't has any collection!",
+          });
+        else dispatch({ type: "COLLECTIONS", data: collections });
+      } catch (error) {
+        setHttpErrors(error);
+>>>>>>> hooks-version-2
       }
 
       //updating the styles
@@ -163,6 +239,7 @@ const Userprofile = ({ match, history, userAuth }) => {
     [username]
   );
 
+<<<<<<< HEAD
   const closeMenuu = useCallback(() => {
     dispatch({ type: "MENU-ASKED", val: false });
   }, []);
@@ -235,8 +312,11 @@ const Userprofile = ({ match, history, userAuth }) => {
     [firebaseContext, userAuth]
   );
 
+=======
+>>>>>>> hooks-version-2
   const {
     pictures,
+    searchAsked,
     collectionsAsked,
     collections,
     error,
@@ -245,21 +325,28 @@ const Userprofile = ({ match, history, userAuth }) => {
     menuAsked,
   } = updatedState;
 
+  if (httpErrors) throw new Error(httpErrors);
   return (
-    <div className="User-profile">
-      {currentUser ? (
+    <div
+      className="User-profile"
+      style={
+        searchAsked ? { backgroundColor: "white" } : { backgroundColor: "" }
+      }
+    >
+      {searchAsked ? (
+        <Search dispatchFunct={dispatch} extraProps={handleGetUserPhotos} />
+      ) : (
         <HeaderProfile
-          showMenu={handleShowMenu}
-          showSearch={handleShowSearch}
+          dispatchFunct={dispatch}
           getUserPhotos={handleGetUserPhotos}
           getUserLikes={handleGetUserLikes}
           getUserCollection={handleGetUserCollection}
           userInfo={currentUser}
         />
-      ) : null}
+      )}
 
       {/* handle nonCollection error */}
-      {!error && flatten(pictures).length === 0 ? (
+      {!error && pictures.length === 0 ? (
         <div style={{ textAlign: "center", color: "black" }}>
           <CircularProgress color="inherit" />
         </div>
@@ -286,25 +373,22 @@ const Userprofile = ({ match, history, userAuth }) => {
             <Collection
               key={collection.id}
               data={collection}
-              handleOnclick={handleCollectioClick}
+              dispatchFunct={dispatch}
             />
           ))}
         </div>
       ) : null}
 
-      {!collectionsAsked && flatten(pictures).length > 0 ? (
-        <Picturegrid
-          pictures={pictures}
-          handlePictureClick={handlePictureClick}
-          handlePictureLike={handleLike}
-        />
+      {!collectionsAsked && pictures.length > 0 ? (
+        <Picturegrid pictures={pictures} history={history} />
       ) : null}
 
       <Menu
         menuAsked={menuAsked}
-        closeMenu={closeMenuu}
         authUser={userAuth}
-        singoutORsingin={singoutORsingin}
+        dispatchFunct={dispatch}
+        history={history}
+        firebase={firebase}
       />
     </div>
   );

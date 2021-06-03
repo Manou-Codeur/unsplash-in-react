@@ -1,10 +1,15 @@
 import axios from "axios";
 import React, { createContext, useState } from "react";
 
+<<<<<<< HEAD
 export const errorContext = createContext({
   error: null,
   updateError: () => {},
 });
+=======
+axios.defaults.headers.common["Authorization"] =
+  process.env.REACT_APP_UNSPLASH_AUTH;
+>>>>>>> hooks-version-2
 
 //anonymous component to pass down the error object to all the components that call the server
 export default props => {
@@ -14,6 +19,7 @@ export default props => {
     "Authorization"
   ] = `Client-ID ${process.env.REACT_APP_UNSPLASH_KEY}`;
 
+<<<<<<< HEAD
   axios.defaults.baseURL = "https://api.unsplash.com";
 
   axios.interceptors.response.use(null, error => {
@@ -42,6 +48,17 @@ export default props => {
     </errorContext.Provider>
   );
 };
+=======
+  if (!expectedError) {
+    return Promise.reject(
+      "There is an unexpected error, please reload and try again!"
+    );
+  } else if (error.response && error.response.status === 403)
+    return Promise.reject(
+      "Sorry there is a lot of requests, please retry later!"
+    );
+});
+>>>>>>> hooks-version-2
 
 export const callServer = async (query = ["people", "nature", "food"]) => {
   const data = await axios.all([

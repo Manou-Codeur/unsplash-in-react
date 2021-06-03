@@ -4,43 +4,28 @@ import Picture from "./../picture/picture";
 
 import "./pictureGrid.scss";
 
-const Picturegrid = React.memo(
-  ({ pictures, handlePictureClick, handlePictureLike }) => {
-    return (
-      <div id="start" className="picture-grid">
-        <div className="col-one col">
-          {pictures[0].map(picture => (
-            <Picture
-              handlePictureClick={handlePictureClick}
-              handlePictureLike={handlePictureLike}
-              key={picture.id}
-              data={picture}
-            />
-          ))}
-        </div>
-        <div className="col-two col">
-          {pictures[1].map(picture => (
-            <Picture
-              handlePictureClick={handlePictureClick}
-              handlePictureLike={handlePictureLike}
-              key={picture.id}
-              data={picture}
-            />
-          ))}
-        </div>
-        <div className="col-three col">
-          {pictures[2].map(picture => (
-            <Picture
-              handlePictureClick={handlePictureClick}
-              handlePictureLike={handlePictureLike}
-              key={picture.id}
-              data={picture}
-            />
-          ))}
-        </div>
+const Picturegrid = React.memo(({ pictures, history }) => {
+  const amount = Math.ceil(pictures.length / 3);
+
+  return (
+    <div id="start" className="picture-grid">
+      <div className="col-one col">
+        {pictures.slice(0, amount).map(picture => (
+          <Picture history={history} key={picture.id} data={picture} />
+        ))}
       </div>
-    );
-  }
-);
+      <div className="col-two col">
+        {pictures.slice(amount, amount * 2).map(picture => (
+          <Picture history={history} key={picture.id} data={picture} />
+        ))}
+      </div>
+      <div className="col-three col">
+        {pictures.slice(amount * 2).map(picture => (
+          <Picture history={history} key={picture.id} data={picture} />
+        ))}
+      </div>
+    </div>
+  );
+});
 
 export default Picturegrid;
