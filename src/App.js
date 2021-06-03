@@ -1,5 +1,6 @@
 import React, { useEffect, Fragment, useState, useContext } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import FirebaseContext from "./services/firebase/firebaseContext";
 import Home from "./components/home/home";
@@ -10,16 +11,25 @@ import Singup from "./components/singup/singup";
 import Notfound from "./components/not-found/notFound";
 
 const App = props => {
+  console.log("app--render");
   const [userAuth, setUserAuth] = useState(null);
+  const [wait, setWait] = useState(true);
 
   const firebase = useContext(FirebaseContext);
 
   useEffect(() => {
     firebase.isUserAuthenticated(userInfo => {
       setUserAuth(userInfo);
+      setWait(false);
     });
   }, []);
 
+  if (wait)
+    return (
+      <div className="full-pic-loading">
+        <CircularProgress color="inherit" />
+      </div>
+    );
   return (
     <Fragment>
       <Switch>
