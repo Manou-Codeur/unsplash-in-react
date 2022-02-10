@@ -13,7 +13,7 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "firebase": "^7.16.0",
     "formik": "^2.1.5",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-error-boundary": "^3.1.3",
